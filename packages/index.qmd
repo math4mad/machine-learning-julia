@@ -1,0 +1,9 @@
+---
+title: "Packages"
+author: math4mad
+code-fold: true
+---
+
+# List
+
+- [`GLM.jl`](http://127.0.0.1:8000/GLM.jl/doc/index.html)

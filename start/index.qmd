@@ -1,0 +1,7 @@
+---
+title: "Start"
+author: math4mad
+code-fold: true
+---
+
+# Start

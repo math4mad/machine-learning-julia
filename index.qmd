@@ -1,0 +1,14 @@
+---
+title: "Julia Machine Learning"
+toc: false
+---
+
+## Introduction 
+
+This is a Compinion with MLJ.jl  meta  Package
+
+![](/imgs/24-classifier-comparison.jpg){width=50%}
+
+To learn more about MLJ websites visit <https://alan-turing-institute.github.io/MLJ.jl/dev/>.
+
+

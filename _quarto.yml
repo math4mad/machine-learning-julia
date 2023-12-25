@@ -1,0 +1,65 @@
+project:
+  type: website
+  title: "Julia Machine Learning"
+  output-dir: docs
+  render:
+    - "*.qmd"
+  
+  resources:
+    - "data/iris.csv"
+website:
+  title: " Machine-Learning Julia"
+  navbar:
+    right:
+      - href: index.qmd
+        text: Home
+      - about.qmd
+      - href: start/index.qmd
+        text: "Start"
+      - href: start/index.qmd
+        text: "Workflow"
+      - href: packages/index.qmd
+        text: "Packages"
+      - href: learn/index.qmd
+        text: "Learn"
+      - href: dataset/index.qmd
+        text: "Dataset"
+  sidebar:
+    - id: get-started
+      style: "floating"
+      contents:
+        - text: "GET STARTED"
+          href: start/index.qmd
+    - id: learn
+      collapse-level: 1
+      contents:
+        - text: "Learn"
+          href: learn/index.qmd 
+    - id: packages
+      collapse-level: 1
+      contents:
+        - text: "GLM"
+          href: packages/glm.qmd 
+    - id: dataset
+      collapse-level: 1
+      contents:
+        - text: "intro"
+          href: dataset/index.qmd 
+        - text: "1.iris"
+          href: dataset/iris.qmd 
+    
+format:
+  html:
+    quarto-required: ">= 1.3.353"
+    toc: true
+    linestretch: 1.6
+    grid:
+      body-width: 840px
+
+theme:
+  - cosmo
+  - styles.scss
+  
+execute:
+  freeze: auto
+  keep-md: false

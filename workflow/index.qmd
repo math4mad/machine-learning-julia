@@ -1,0 +1,31 @@
+---
+title: "MLJ workflow"
+---
+
+##  Common Workflow
+
+```{mermaid}
+%%| label: fig-mlj-workflow
+%%| fig-cap: "MLJ  main work flow"
+%%| fig-width: 6.5
+%%| echo: true
+graph TD
+    A[(Data)] -->|Tidy Data| B(Ingestion)
+    B --> C{Model Search}
+    C -->|One| D[Regression]
+    C -->|Two| E[Classification]
+    C -->|Three| F[Dimension Reduction]
+    C -->|Four| G[Ensemble Models]
+    C -->|Five| H[Other Models]
+    D-->J(Instantiating Model)
+    E-->J
+    F-->J
+    G-->J
+    H-->J
+    J-->K(Evaluating Model)
+    K-->L(Inspecting training results)
+    L-->M(hyperparameter tuning)
+    M-->N(Constructing linear pipelines)
+    N-->O(ensemble of models) 
+    O-->P(Performance curves)
+```

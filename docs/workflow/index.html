@@ -6,9 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="math4mad">
 
-<title>Machine-Learning Julia - Leanring</title>
+<title>Machine-Learning Julia - MLJ workflow</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,6 +19,40 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -66,6 +99,10 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<meta name="mermaid-theme" content="forest">
+<script src="../site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="../site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 
 
 </head>
@@ -103,15 +140,15 @@ ul.task-list li input[type="checkbox"] {
 <span class="menu-text">Start</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../start/index.html"> 
+    <a class="nav-link active" href="../workflow/index.html" aria-current="page"> 
 <span class="menu-text">Workflow</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../workflow/index.html"> 
+    <a class="nav-link" href="../packages/index.html"> 
 <span class="menu-text">Packages</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="../learn/index.html" aria-current="page"> 
+    <a class="nav-link" href="../learn/index.html"> 
 <span class="menu-text">Learn</span></a>
   </li>  
   <li class="nav-item">
@@ -129,7 +166,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../learn/index.html">Learn</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../workflow/index.html">flowchart</a></li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -143,8 +180,8 @@ ul.task-list li input[type="checkbox"] {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../learn/index.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Learn</span></a>
+  <a href="../workflow/index.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">flowchart</span></a>
   </div>
 </li>
     </ul>
@@ -157,7 +194,7 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#learn" id="toc-learn" class="nav-link active" data-scroll-target="#learn">Learn</a></li>
+  <li><a href="#common-workflow" id="toc-common-workflow" class="nav-link active" data-scroll-target="#common-workflow">Common Workflow</a></li>
   </ul>
 </nav>
     </div>
@@ -166,19 +203,13 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Leanring</h1>
+<h1 class="title">MLJ workflow</h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p>math4mad </p>
-          </div>
-  </div>
     
   
     
@@ -189,8 +220,62 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="learn" class="level1">
-<h1>Learn</h1>
+<section id="common-workflow" class="level2">
+<h2 class="anchored" data-anchor-id="common-workflow">Common Workflow</h2>
+<div class="cell" data-fig-width="6.5">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>graph TD</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    A[(Data)] --&gt;|Tidy Data| B(Ingestion)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    B --&gt; C{Model Search}</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    C --&gt;|One| D[Regression]</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    C --&gt;|Two| E[Classification]</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    C --&gt;|Three| F[Dimension Reduction]</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    C --&gt;|Four| G[Ensemble Models]</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    C --&gt;|Five| H[Other Models]</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    D--&gt;J(Instantiating Model)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    E--&gt;J</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    F--&gt;J</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    G--&gt;J</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    H--&gt;J</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    J--&gt;K(Evaluating Model)</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    K--&gt;L(Inspecting training results)</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    L--&gt;M(hyperparameter tuning)</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    M--&gt;N(Constructing linear pipelines)</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    N--&gt;O(ensemble of models) </span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    O--&gt;P(Performance curves)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-mlj-workflow" class="quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-mlj-workflow-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div>
+<pre class="mermaid mermaid-js" data-label="fig-mlj-workflow">graph TD
+    A[(Data)] --&gt;|Tidy Data| B(Ingestion)
+    B --&gt; C{Model Search}
+    C --&gt;|One| D[Regression]
+    C --&gt;|Two| E[Classification]
+    C --&gt;|Three| F[Dimension Reduction]
+    C --&gt;|Four| G[Ensemble Models]
+    C --&gt;|Five| H[Other Models]
+    D--&gt;J(Instantiating Model)
+    E--&gt;J
+    F--&gt;J
+    G--&gt;J
+    H--&gt;J
+    J--&gt;K(Evaluating Model)
+    K--&gt;L(Inspecting training results)
+    L--&gt;M(hyperparameter tuning)
+    M--&gt;N(Constructing linear pipelines)
+    N--&gt;O(ensemble of models) 
+    O--&gt;P(Performance curves)
+</pre>
+</div>
+</div>
+<figcaption class="figure quarto-float-caption quarto-float-fig" id="fig-mlj-workflow-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: MLJ main work flow
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
 
 
 </section>

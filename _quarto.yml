@@ -1,6 +1,7 @@
 project:
   type: website
   title: "Julia Machine Learning"
+  
   output-dir: docs
   render:
     - "*.qmd"
@@ -8,15 +9,16 @@ project:
   resources:
     - "data/iris.csv"
 website:
-  title: " Machine-Learning Julia"
+  title: "Machine-Learning Julia"
   navbar:
+    logo:  imgs/logo.png
     right:
       - href: index.qmd
         text: Home
       - about.qmd
       - href: start/index.qmd
         text: "Start"
-      - href: start/index.qmd
+      - href:  workflow/index.qmd
         text: "Workflow"
       - href: packages/index.qmd
         text: "Packages"
@@ -40,6 +42,11 @@ website:
       contents:
         - text: "GLM"
           href: packages/glm.qmd 
+    - id: workflow
+      collapse-level: 1
+      contents:
+        - text: "flowchart"
+          href:  workflow/index.qmd 
     - id: dataset
       collapse-level: 1
       contents:
@@ -55,11 +62,19 @@ format:
     linestretch: 1.6
     grid:
       body-width: 840px
+    mermaid:
+      theme: forest
 
 theme:
   - cosmo
-  - styles.scss
-  
+  #- features.css
+  -  styles.scss
+  -  theme.css
+  -  feaures.css
+  #- components.min.scss
 execute:
   freeze: auto
   keep-md: false
+
+filters:
+  - _extensions/qreacto/qreacto.lua

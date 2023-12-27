@@ -1,0 +1,48 @@
+---
+title: "embedding tailwind css"
+toc: false
+collapse-level: 4
+---
+
+
+
+test tailwind css 
+
+<h1>Example heading <span class="badge bg-secondary">New</span></h1>
+
+<button type="button" class="btn btn-primary">
+  Notifications <span class="badge text-bg-secondary">4</span>
+</button>
+
+
+<div class="w3-xxlarge">
+&#x2776; &#x2777; &#x2778; &#x2779; &#x277A; &#x2785; &#x2786; &#x2787; &#x2788; &#x2789;
+</div>
+<div class="w3-xxlarge w3-text-red">
+&#x2776; &#x2777; &#x2778; &#x2779; &#x277A; &#x2785; &#x2786; &#x2787; &#x2788; &#x2789;
+</div>
+
+
+<table class="w3-table w3-striped w3-hover-green">
+<tr>
+  <th>First Name</th>
+  <th>Last Name</th>
+  <th>Points</th>
+</tr>
+<tr>
+  <td>Jill</td>
+  <td>Smith</td>
+  <td>50</td>
+</tr>
+<tr>
+  <td>Jill</td>
+  <td>Smith</td>
+  <td>50</td>
+</tr>
+<tr>
+  <td>Jill</td>
+  <td>Smith</td>
+  <td>50</td>
+</tr>
+</table>
+

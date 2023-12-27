@@ -1,5 +1,9 @@
 ---
-title: "DataSet List"
+title: "Make friends with data!"
 ---
+
+ first step to start data science   is  recognize your data
+ only  you get familiar with the data , then make flow work
+
 
 

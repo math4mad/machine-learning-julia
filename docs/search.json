@@ -29,16 +29,16 @@
   {
     "objectID": "index.html",
     "href": "index.html",
-    "title": "Julia Machine Learning",
+    "title": "Features examples",
     "section": "",
-    "text": "This is a Compinion with MLJ.jl meta Package\n\nTo learn more about MLJ websites visit https://alan-turing-institute.github.io/MLJ.jl/dev/."
+    "text": "Features examples\n\n  \n    Columns with icons\n    \n      \n        \n          \n        \n        Featured title\n        Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and probably just keep going until we run out of words.\n        \n          Call to action\n          \n        \n      \n      \n        \n          \n        \n        Featured title\n        Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and probably just keep going until we run out of words.\n        \n          Call to action\n          \n        \n      \n      \n        \n          \n        \n        Featured title\n        Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and probably just keep going until we run out of words.\n        \n          Call to action\n          \n        \n      \n    \n  \n\n  \n\n  \n    Hanging icons\n    \n      \n        \n          \n        \n        \n          Featured title\n          Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and probably just keep going until we run out of words.\n          \n            Primary button\n          \n        \n      \n      \n        \n          \n        \n        \n          Featured title\n          Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and probably just keep going until we run out of words.\n          \n            Primary button\n          \n        \n      \n      \n        \n          \n        \n        \n          Featured title\n          Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and probably just keep going until we run out of words.\n          \n            Primary button\n          \n        \n      \n    \n  \n\n  \n\n  \n    Custom cards\n\n    \n      \n        \n          \n            Short title, long jacket\n            \n              \n                \n              \n              \n                \n                Earth\n              \n              \n                \n                3d\n              \n            \n          \n        \n      \n\n      \n        \n          \n            Much longer title that wraps to multiple lines\n            \n              \n                \n              \n              \n                \n                Pakistan\n              \n              \n                \n                4d\n              \n            \n          \n        \n      \n\n      \n        \n          \n            Another longer title belongs here\n            \n              \n                \n              \n              \n                \n                California\n              \n              \n                \n                5d\n              \n            \n          \n        \n      \n    \n  \n\n  \n\n  \n    Icon grid\n\n    \n      \n        \n        \n          Featured title\n          Paragraph of text beneath the heading to explain the heading.\n        \n      \n      \n        \n        \n          Featured title\n          Paragraph of text beneath the heading to explain the heading.\n        \n      \n      \n        \n        \n          Featured title\n          Paragraph of text beneath the heading to explain the heading.\n        \n      \n      \n        \n        \n          Featured title\n          Paragraph of text beneath the heading to explain the heading.\n        \n      \n      \n        \n        \n          Featured title\n          Paragraph of text beneath the heading to explain the heading.\n        \n      \n      \n        \n        \n          Featured title\n          Paragraph of text beneath the heading to explain the heading.\n        \n      \n      \n        \n        \n          Featured title\n          Paragraph of text beneath the heading to explain the heading.\n        \n      \n      \n        \n        \n          Featured title\n          Paragraph of text beneath the heading to explain the heading.\n        \n      \n    \n  \n\n  \n\n  \n    Features with title\n\n    \n      \n        Left-aligned title explaining these awesome features\n        Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and probably just keep going until we run out of words.\n        Primary button\n      \n\n      \n        \n          \n            \n              \n                \n              \n            \n            Featured title\n            Paragraph of text beneath the heading to explain the heading.\n          \n\n          \n            \n              \n                \n              \n            \n            Featured title\n            Paragraph of text beneath the heading to explain the heading.\n          \n\n          \n            \n              \n                \n              \n            \n            Featured title\n            Paragraph of text beneath the heading to explain the heading.\n          \n\n          \n            \n              \n                \n              \n            \n            Featured title\n            Paragraph of text beneath the heading to explain the heading."
   },
   {
     "objectID": "index.html#introduction",
     "href": "index.html#introduction",
-    "title": "Julia Machine Learning",
-    "section": "",
-    "text": "This is a Compinion with MLJ.jl meta Package\n\nTo learn more about MLJ websites visit https://alan-turing-institute.github.io/MLJ.jl/dev/."
+    "title": "Machine-Learning Julia",
+    "section": "Introduction",
+    "text": "Introduction"
   },
   {
     "objectID": "about.html",
@@ -52,7 +52,7 @@
     "href": "dataset/iris.html",
     "title": "🌺🌸Iris dataset",
     "section": "",
-    "text": "info\n\n\n\nIRIS is a an famous dataset for statistics and data science. t has long history. we will use it angain and agian.rery time wo use iris dataset we can get new knowledget is like exercies for running\n\n\n\n1. load csv\n\n using CSV,DataFrames,Tidier\n using CairoMakie,AlgebraOfGraphics\n\n #df=download(\"http://localhost:5220/data/iris.csv\")|&gt;CSV.File|&gt;DataFrame;\n df=CSV.File(\"../data/iris.csv\")|&gt;DataFrame\n first(df,5)\n\n5×5 DataFrame\n\n\n\nRow\nsepal_length\nsepal_width\npetal_length\npetal_width\nspecies\n\n\n\nFloat64\nFloat64\nFloat64\nFloat64\nString15\n\n\n\n\n1\n5.1\n3.5\n1.4\n0.2\nsetosa\n\n\n2\n4.9\n3.0\n1.4\n0.2\nsetosa\n\n\n3\n4.7\n3.2\n1.3\n0.2\nsetosa\n\n\n4\n4.6\n3.1\n1.5\n0.2\nsetosa\n\n\n5\n5.0\n3.6\n1.4\n0.2\nsetosa\n\n\n\n\n\n\nCSV,DataFrames,Tidier 用于数据框处理\nCairoMakie,AlgebraOfGraphics用于绘图\n\n\n2. describe dataframe\n\ndescribe(df)\n\n5×7 DataFrame\n\n\n\nRow\nvariable\nmean\nmin\nmedian\nmax\nnmissing\neltype\n\n\n\nSymbol\nUnion…\nAny\nUnion…\nAny\nInt64\nDataType\n\n\n\n\n1\nsepal_length\n5.84333\n4.3\n5.8\n7.9\n0\nFloat64\n\n\n2\nsepal_width\n3.054\n2.0\n3.0\n4.4\n0\nFloat64\n\n\n3\npetal_length\n3.75867\n1.0\n4.35\n6.9\n0\nFloat64\n\n\n4\npetal_width\n1.19867\n0.1\n1.3\n2.5\n0\nFloat64\n\n\n5\nspecies\n\nsetosa\n\nvirginica\n0\nString15\n\n\n\n\n\n\n\n\n3. EDA\n\n\n3.1 density plot\n\npalette = (color=tuple.([\"#FC7808\", \"#8C00EC\", \"#107A78\"], 0.65),\n           marker=[:circle, :utriangle, :rect])\ncycle = Cycle([:color, :marker], covary=true)\n\n\ndatalayer=data(df)\nmappinglayer1=mapping(:sepal_length,:sepal_width,color=:species)\nmappinglayer2=mapping(:sepal_length,color=:species)\nmappinglayer3=mapping(:sepal_width,color=:species)\n\nvisuallayer1=visual(Scatter,strokewidth=1,storkecolor=:black)\nvisuallayer2=visual(Density)\nvisuallayer3=visual(Density,direction=:y)\nplc=datalayer*mappinglayer1*visuallayer1  # top pic\nplt=datalayer*mappinglayer2*visuallayer2  # main pic\nplr=datalayer*mappinglayer3*visuallayer3  # right pic\n\nwith_theme(theme_light(),resolution = (600,400), palette=palette, Scatter=(cycle=cycle,)) do\n        fig = Figure()\n        axs = [Axis(fig[2,1], xlabel = \"sepal_length\", ylabel = \"sepal_width\"),\n            Axis(fig[1,1]), Axis(fig[2,2])]\n        dots = draw!(axs[1], plc)  # bject for lengend extract species info\n        draw!(axs[2], plt)\n        draw!(axs[3], plr)\n        # getting the right layout aspect\n        colsize!(fig.layout, 1, Auto(4.0))\n        rowsize!(fig.layout, 1, Auto(1/3))\n        colgap!(fig.layout,3)\n        rowgap!(fig.layout, 3)\n        linkxaxes!(axs[1], axs[2])\n        linkyaxes!(axs[1], axs[3])\n        hidedecorations!.(axs[2:3], grid=false)\n        \n        legend!(fig[1,2], dots)\n        fig\n    end\n\n\n\n\n\n\n\n\n\n3.2 pair plot\n\ncats=[\"sepal_length\", \"sepal_width\", \"petal_length\", \"petal_width\"]\nlen=length(cats)\ncats=Symbol.(cats)\n\n\ndata_layer=data(df)\n\nfunction make_layer(sy1::Symbol,sy2::Symbol)\n   mapping_layer=sy1==sy2 ? mapping(sy1,color=:species) : mapping(sy1,sy2,color=:species)\n   vis_layer=sy1==sy2 ? visual(Density,color=:species) : visual(Scatter,color=:species,strokewidth=1,storkecolor=:black)\n   return  data_layer*mapping_layer*vis_layer\nend\n\nwith_theme(theme_minimal(),resolution = (800,800), palette=palette, Scatter=(cycle=cycle,)) do\n        cl=0.1\n        fig = Figure()\n        for i in 1:len\n            for  j in 1:len\n                ax=Axis(fig[i,j])\n                j==1 ? ax.ylabel= String(cats[i]) : nothing\n                i==len ? ax.xlabel= String(cats[j]) : nothing\n                layer=make_layer(cats[i],cats[j])\n              [i,j]==[len,len] ? cl=draw!(ax,layer) : draw!(ax,layer)\n            end\n        end\n        legend!(fig[2:3,5], cl)\n        fig\nend\n\n\n\n\n\n\n\n\n\n\n3.3 box plot\ntransform four feature to attribute and value\n\nlong_data=@pivot_longer(df, 1:5, names_to = attribute, values_to = value,-species)\nfirst(long_data,5)\n\n5×3 DataFrame\n\n\n\nRow\nspecies\nattribute\nvalue\n\n\n\nString15\nString\nFloat64\n\n\n\n\n1\nsetosa\nsepal_length\n5.1\n\n\n2\nsetosa\nsepal_length\n4.9\n\n\n3\nsetosa\nsepal_length\n4.7\n\n\n4\nsetosa\nsepal_length\n4.6\n\n\n5\nsetosa\nsepal_length\n5.0\n\n\n\n\n\n\n\ndata(long_data) * visual(BoxPlot, show_notch=true) *\n    mapping(:attribute, :value, color=:species, dodge=:species) |&gt; draw\n\n\n\n\n\n\n\n\n\n\n\n3.4 correlation of numerical variables",
+    "text": "info\n\n\n\nIRIS is a an famous dataset for statistics and data science. t has long history. we will use it angain and agian.rery time wo use iris dataset we can get new knowledget is like exercies for running",
     "crumbs": [
       "1.iris"
     ]
@@ -87,5 +87,100 @@
     "title": "StatsBase.jl",
     "section": "",
     "text": "StatsBase.jl"
+  },
+  {
+    "objectID": "workflow/index.html",
+    "href": "workflow/index.html",
+    "title": "MLJ workflow",
+    "section": "",
+    "text": "graph TD\n    A[(Data)] --&gt;|Tidy Data| B(Ingestion)\n    B --&gt; C{Model Search}\n    C --&gt;|One| D[Regression]\n    C --&gt;|Two| E[Classification]\n    C --&gt;|Three| F[Dimension Reduction]\n    C --&gt;|Four| G[Ensemble Models]\n    C --&gt;|Five| H[Other Models]\n    D--&gt;J(Instantiating Model)\n    E--&gt;J\n    F--&gt;J\n    G--&gt;J\n    H--&gt;J\n    J--&gt;K(Evaluating Model)\n    K--&gt;L(Inspecting training results)\n    L--&gt;M(hyperparameter tuning)\n    M--&gt;N(Constructing linear pipelines)\n    N--&gt;O(ensemble of models) \n    O--&gt;P(Performance curves)\n\n\n\n\n\ngraph TD\n    A[(Data)] --&gt;|Tidy Data| B(Ingestion)\n    B --&gt; C{Model Search}\n    C --&gt;|One| D[Regression]\n    C --&gt;|Two| E[Classification]\n    C --&gt;|Three| F[Dimension Reduction]\n    C --&gt;|Four| G[Ensemble Models]\n    C --&gt;|Five| H[Other Models]\n    D--&gt;J(Instantiating Model)\n    E--&gt;J\n    F--&gt;J\n    G--&gt;J\n    H--&gt;J\n    J--&gt;K(Evaluating Model)\n    K--&gt;L(Inspecting training results)\n    L--&gt;M(hyperparameter tuning)\n    M--&gt;N(Constructing linear pipelines)\n    N--&gt;O(ensemble of models) \n    O--&gt;P(Performance curves)\n\n\n\n\nFigure 1: MLJ main work flow",
+    "crumbs": [
+      "flowchart"
+    ]
+  },
+  {
+    "objectID": "workflow/index.html#common-workflow",
+    "href": "workflow/index.html#common-workflow",
+    "title": "MLJ workflow",
+    "section": "",
+    "text": "graph TD\n    A[(Data)] --&gt;|Tidy Data| B(Ingestion)\n    B --&gt; C{Model Search}\n    C --&gt;|One| D[Regression]\n    C --&gt;|Two| E[Classification]\n    C --&gt;|Three| F[Dimension Reduction]\n    C --&gt;|Four| G[Ensemble Models]\n    C --&gt;|Five| H[Other Models]\n    D--&gt;J(Instantiating Model)\n    E--&gt;J\n    F--&gt;J\n    G--&gt;J\n    H--&gt;J\n    J--&gt;K(Evaluating Model)\n    K--&gt;L(Inspecting training results)\n    L--&gt;M(hyperparameter tuning)\n    M--&gt;N(Constructing linear pipelines)\n    N--&gt;O(ensemble of models) \n    O--&gt;P(Performance curves)\n\n\n\n\n\ngraph TD\n    A[(Data)] --&gt;|Tidy Data| B(Ingestion)\n    B --&gt; C{Model Search}\n    C --&gt;|One| D[Regression]\n    C --&gt;|Two| E[Classification]\n    C --&gt;|Three| F[Dimension Reduction]\n    C --&gt;|Four| G[Ensemble Models]\n    C --&gt;|Five| H[Other Models]\n    D--&gt;J(Instantiating Model)\n    E--&gt;J\n    F--&gt;J\n    G--&gt;J\n    H--&gt;J\n    J--&gt;K(Evaluating Model)\n    K--&gt;L(Inspecting training results)\n    L--&gt;M(hyperparameter tuning)\n    M--&gt;N(Constructing linear pipelines)\n    N--&gt;O(ensemble of models) \n    O--&gt;P(Performance curves)\n\n\n\n\nFigure 1: MLJ main work flow",
+    "crumbs": [
+      "flowchart"
+    ]
+  },
+  {
+    "objectID": "dataset/index.html",
+    "href": "dataset/index.html",
+    "title": "Make friends with data!",
+    "section": "",
+    "text": "first step to start data science is recognize your data only you get familiar with the data , then make flow work",
+    "crumbs": [
+      "intro"
+    ]
+  },
+  {
+    "objectID": "dataset/iris.html#load-csv",
+    "href": "dataset/iris.html#load-csv",
+    "title": "🌺🌸Iris dataset",
+    "section": "1. load csv",
+    "text": "1. load csv\n\n using CSV,DataFrames,Tidier\n using CairoMakie,AlgebraOfGraphics\n\n #df=download(\"http://localhost:5220/data/iris.csv\")|&gt;CSV.File|&gt;DataFrame;\n df=CSV.File(\"../data/iris.csv\")|&gt;DataFrame\n first(df,5)\n\n5×5 DataFrame\n\n\n\nRow\nsepal_length\nsepal_width\npetal_length\npetal_width\nspecies\n\n\n\nFloat64\nFloat64\nFloat64\nFloat64\nString15\n\n\n\n\n1\n5.1\n3.5\n1.4\n0.2\nsetosa\n\n\n2\n4.9\n3.0\n1.4\n0.2\nsetosa\n\n\n3\n4.7\n3.2\n1.3\n0.2\nsetosa\n\n\n4\n4.6\n3.1\n1.5\n0.2\nsetosa\n\n\n5\n5.0\n3.6\n1.4\n0.2\nsetosa\n\n\n\n\n\n\nCSV,DataFrames,Tidier 用于数据框处理\nCairoMakie,AlgebraOfGraphics用于绘图",
+    "crumbs": [
+      "1.iris"
+    ]
+  },
+  {
+    "objectID": "dataset/iris.html#describe-dataframe",
+    "href": "dataset/iris.html#describe-dataframe",
+    "title": "🌺🌸Iris dataset",
+    "section": "2. describe dataframe",
+    "text": "2. describe dataframe\n\ndescribe(df)\n\n5×7 DataFrame\n\n\n\nRow\nvariable\nmean\nmin\nmedian\nmax\nnmissing\neltype\n\n\n\nSymbol\nUnion…\nAny\nUnion…\nAny\nInt64\nDataType\n\n\n\n\n1\nsepal_length\n5.84333\n4.3\n5.8\n7.9\n0\nFloat64\n\n\n2\nsepal_width\n3.054\n2.0\n3.0\n4.4\n0\nFloat64\n\n\n3\npetal_length\n3.75867\n1.0\n4.35\n6.9\n0\nFloat64\n\n\n4\npetal_width\n1.19867\n0.1\n1.3\n2.5\n0\nFloat64\n\n\n5\nspecies\n\nsetosa\n\nvirginica\n0\nString15",
+    "crumbs": [
+      "1.iris"
+    ]
+  },
+  {
+    "objectID": "dataset/iris.html#eda",
+    "href": "dataset/iris.html#eda",
+    "title": "🌺🌸Iris dataset",
+    "section": "3. EDA",
+    "text": "3. EDA\n\n3.1 density plot\n\npalette = (color=tuple.([\"#FC7808\", \"#8C00EC\", \"#107A78\"], 0.65),\n           marker=[:circle, :utriangle, :rect])\ncycle = Cycle([:color, :marker], covary=true)\n\n\ndatalayer=data(df)\nmappinglayer1=mapping(:sepal_length,:sepal_width,color=:species)\nmappinglayer2=mapping(:sepal_length,color=:species)\nmappinglayer3=mapping(:sepal_width,color=:species)\n\nvisuallayer1=visual(Scatter,strokewidth=1,storkecolor=:black)\nvisuallayer2=visual(Density)\nvisuallayer3=visual(Density,direction=:y)\nplc=datalayer*mappinglayer1*visuallayer1  # top pic\nplt=datalayer*mappinglayer2*visuallayer2  # main pic\nplr=datalayer*mappinglayer3*visuallayer3  # right pic\n\nwith_theme(theme_light(),resolution = (600,400), palette=palette, Scatter=(cycle=cycle,)) do\n        fig = Figure()\n        axs = [Axis(fig[2,1], xlabel = \"sepal_length\", ylabel = \"sepal_width\"),\n            Axis(fig[1,1]), Axis(fig[2,2])]\n        dots = draw!(axs[1], plc)  # bject for lengend extract species info\n        draw!(axs[2], plt)\n        draw!(axs[3], plr)\n        # getting the right layout aspect\n        colsize!(fig.layout, 1, Auto(4.0))\n        rowsize!(fig.layout, 1, Auto(1/3))\n        colgap!(fig.layout,3)\n        rowgap!(fig.layout, 3)\n        linkxaxes!(axs[1], axs[2])\n        linkyaxes!(axs[1], axs[3])\n        hidedecorations!.(axs[2:3], grid=false)\n        \n        legend!(fig[1,2], dots)\n        fig\n    end\n\n\n\n\n\n\n\n\n\n\n3.2 pair plot\n\ncats=[\"sepal_length\", \"sepal_width\", \"petal_length\", \"petal_width\"]\nlen=length(cats)\ncats=Symbol.(cats)\n\n\ndata_layer=data(df)\n\nfunction make_layer(sy1::Symbol,sy2::Symbol)\n   mapping_layer=sy1==sy2 ? mapping(sy1,color=:species) : mapping(sy1,sy2,color=:species)\n   vis_layer=sy1==sy2 ? visual(Density,color=:species) : visual(Scatter,color=:species,strokewidth=1,storkecolor=:black)\n   return  data_layer*mapping_layer*vis_layer\nend\n\nwith_theme(theme_minimal(),resolution = (800,800), palette=palette, Scatter=(cycle=cycle,)) do\n        cl=0.1\n        fig = Figure()\n        for i in 1:len\n            for  j in 1:len\n                ax=Axis(fig[i,j])\n                j==1 ? ax.ylabel= String(cats[i]) : nothing\n                i==len ? ax.xlabel= String(cats[j]) : nothing\n                layer=make_layer(cats[i],cats[j])\n              [i,j]==[len,len] ? cl=draw!(ax,layer) : draw!(ax,layer)\n            end\n        end\n        legend!(fig[2:3,5], cl)\n        fig\nend\n\n\n\n\n\n\n\n\n\n\n3.3 box plot\ntransform four feature to attribute and value\n\nlong_data=@pivot_longer(df, 1:5, names_to = attribute, values_to = value,-species)\nfirst(long_data,5)\n\n5×3 DataFrame\n\n\n\nRow\nspecies\nattribute\nvalue\n\n\n\nString15\nString\nFloat64\n\n\n\n\n1\nsetosa\nsepal_length\n5.1\n\n\n2\nsetosa\nsepal_length\n4.9\n\n\n3\nsetosa\nsepal_length\n4.7\n\n\n4\nsetosa\nsepal_length\n4.6\n\n\n5\nsetosa\nsepal_length\n5.0\n\n\n\n\n\n\n\ndata(long_data) * visual(BoxPlot, show_notch=true) *\n    mapping(:attribute, :value, color=:species, dodge=:species) |&gt; draw\n\n\n\n\n\n\n\n\n\n\n3.4 correlation of numerical variables",
+    "crumbs": [
+      "1.iris"
+    ]
+  },
+  {
+    "objectID": "workflow/tailwindcss.html",
+    "href": "workflow/tailwindcss.html",
+    "title": "embedding tailwind css",
+    "section": "",
+    "text": "test tailwind css\n\nExample heading New\n\n\nNotifications 4\n\n\n❶ ❷ ❸ ❹ ❺ ➅ ➆ ➇ ➈ ➉\n\n\n❶ ❷ ❸ ❹ ❺ ➅ ➆ ➇ ➈ ➉\n\n\n\n\nFirst Name\n\n\nLast Name\n\n\nPoints\n\n\n\n\nJill\n\n\nSmith\n\n\n50\n\n\n\n\nJill\n\n\nSmith\n\n\n50\n\n\n\n\nJill\n\n\nSmith\n\n\n50"
+  },
+  {
+    "objectID": "learn/example.html",
+    "href": "learn/example.html",
+    "title": "Code-insertion Example",
+    "section": "",
+    "text": "quoted block added before the post"
+  },
+  {
+    "objectID": "learn/example.html#heading",
+    "href": "learn/example.html#heading",
+    "title": "Code-insertion Example",
+    "section": "Heading",
+    "text": "Heading\nThis filter adds code immediately before and after the post."
+  },
+  {
+    "objectID": "learn/example.html#appended-section-after-the-post",
+    "href": "learn/example.html#appended-section-after-the-post",
+    "title": "Code-insertion Example",
+    "section": "Appended Section After the Post",
+    "text": "Appended Section After the Post"
+  },
+  {
+    "objectID": "index.html#include-after-body-featuregrid.html",
+    "href": "index.html#include-after-body-featuregrid.html",
+    "title": "Machine-Learning Julia",
+    "section": "include-after-body: featuregrid.html",
+    "text": "include-after-body: featuregrid.html"
   }
 ]

@@ -1,0 +1,25 @@
+
+
+
+:::: {.grid .container-fluid .mlj-landing-bg .py-3 .mlj-landing-container }
+
+::: {.g-col-6 }
+  <h1 class="mlj-landing-header text-white text-monospace">MLJ</h1>
+  <h4 class="mlj-landing-subheader text-white font-italic mb-3">Machine Learning in Julia</h4>
+  <a class="btn mlj-landing-btn mb-1" href="getting_started.html" role="button">Getting Started</a>
+  <a class="btn mlj-landing-btn mb-1" href="https://github.com/scikit-learn/scikit-learn" role="button">GitHub</a>
+:::
+
+::: {.g-col-4 .d-flex}
+  <ul class="mlj-landing-header-body">
+            <li>Simple and efficient tools for predictive data analysis</li>
+            <li>Accessible to everybody, and reusable in various contexts</li>
+            <li>Built on NumPy, SciPy, and matplotlib</li>
+            <li>Open source, commercially usable - BSD license</li>
+  </ul>
+      
+:::
+
+::::
+
+

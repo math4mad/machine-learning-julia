@@ -11,7 +11,7 @@ it is like exercies for running
 
 :::
 
-### 1. load csv
+## 1. load csv
 ```{julia}
  using CSV,DataFrames,Tidier
  using CairoMakie,AlgebraOfGraphics
@@ -27,12 +27,12 @@ it is like exercies for running
 
 
 
-### 2.  describe dataframe
+## 2.  describe dataframe
 ```{julia}
 describe(df)
 ```
 
-### 3.  EDA 
+## 3.  EDA 
 
 ### 3.1 density plot
 
@@ -77,7 +77,7 @@ with_theme(theme_light(),resolution = (600,400), palette=palette, Scatter=(cycle
 
 ```
 
-#### 3.2 pair plot 
+### 3.2 pair plot 
 ```{julia}
 cats=["sepal_length", "sepal_width", "petal_length", "petal_width"]
 len=length(cats)
@@ -110,7 +110,7 @@ end
 
 
 ```
-#### 3.3 box plot 
+### 3.3 box plot 
 
 **transform four feature to attribute and value**
 ```{julia}

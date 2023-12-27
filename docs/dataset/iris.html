@@ -113,6 +113,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
+    <a href="../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../imgs/logo.png" alt="" class="navbar-logo">
+    </a>
     <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">Machine-Learning Julia</span>
     </a>
@@ -140,7 +143,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span class="menu-text">Workflow</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../packages/index.html"> 
+    <a class="nav-link" href="../workflow/index.html"> 
 <span class="menu-text">Packages</span></a>
   </li>  
   <li class="nav-item">
@@ -198,9 +201,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul>
   <li><a href="#load-csv" id="toc-load-csv" class="nav-link active" data-scroll-target="#load-csv">1. load csv</a></li>
   <li><a href="#describe-dataframe" id="toc-describe-dataframe" class="nav-link" data-scroll-target="#describe-dataframe">2. describe dataframe</a></li>
-  <li><a href="#eda" id="toc-eda" class="nav-link" data-scroll-target="#eda">3. EDA</a></li>
+  <li><a href="#eda" id="toc-eda" class="nav-link" data-scroll-target="#eda">3. EDA</a>
+  <ul class="collapse">
   <li><a href="#density-plot" id="toc-density-plot" class="nav-link" data-scroll-target="#density-plot">3.1 density plot</a></li>
+  <li><a href="#pair-plot" id="toc-pair-plot" class="nav-link" data-scroll-target="#pair-plot">3.2 pair plot</a></li>
+  <li><a href="#box-plot" id="toc-box-plot" class="nav-link" data-scroll-target="#box-plot">3.3 box plot</a></li>
   <li><a href="#correlation-of-numerical-variables" id="toc-correlation-of-numerical-variables" class="nav-link" data-scroll-target="#correlation-of-numerical-variables">3.4 correlation of numerical variables</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -239,9 +246,9 @@ info
 <p><code>IRIS</code> is a an famous dataset for statistics and data science. t has long history. we will use it angain and agian.rery time wo use iris dataset we can get new knowledget is like exercies for running</p>
 </div>
 </div>
-<section id="load-csv" class="level3">
-<h3 class="anchored" data-anchor-id="load-csv">1. load csv</h3>
-<div id="3e33d4f6" class="cell" data-execution_count="1">
+<section id="load-csv" class="level2">
+<h2 class="anchored" data-anchor-id="load-csv">1. load csv</h2>
+<div id="4d6f3446" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a> <span class="im">using</span> <span class="bu">CSV</span>,<span class="bu">DataFrames</span>,<span class="bu">Tidier</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a> <span class="im">using</span> <span class="bu">CairoMakie</span>,<span class="bu">AlgebraOfGraphics</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -318,9 +325,9 @@ info
 <p><code>CSV,DataFrames,Tidier</code> 用于数据框处理</p>
 <p><code>CairoMakie,AlgebraOfGraphics</code>用于绘图</p>
 </section>
-<section id="describe-dataframe" class="level3">
-<h3 class="anchored" data-anchor-id="describe-dataframe">2. describe dataframe</h3>
-<div id="d2416a4d" class="cell" data-execution_count="2">
+<section id="describe-dataframe" class="level2">
+<h2 class="anchored" data-anchor-id="describe-dataframe">2. describe dataframe</h2>
+<div id="be1d9c63" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">describe</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="3">
 <div><div style="float: left;"><span>5×7 DataFrame</span></div><div style="clear: both;"></div></div><div class="data-frame" style="overflow-x: scroll;">
@@ -404,12 +411,11 @@ info
 </div>
 </div>
 </section>
-<section id="eda" class="level3">
-<h3 class="anchored" data-anchor-id="eda">3. EDA</h3>
-</section>
+<section id="eda" class="level2">
+<h2 class="anchored" data-anchor-id="eda">3. EDA</h2>
 <section id="density-plot" class="level3">
 <h3 class="anchored" data-anchor-id="density-plot">3.1 density plot</h3>
-<div id="230ac6ee" class="cell" data-execution_count="3">
+<div id="7acf292c" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>palette <span class="op">=</span> (color<span class="op">=</span><span class="fu">tuple</span>.([<span class="st">"#FC7808"</span>, <span class="st">"#8C00EC"</span>, <span class="st">"#107A78"</span>], <span class="fl">0.65</span>),</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>           marker<span class="op">=</span>[<span class="op">:</span>circle, <span class="op">:</span>utriangle, <span class="op">:</span>rect])</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>cycle <span class="op">=</span> <span class="fu">Cycle</span>([<span class="op">:</span>color, <span class="op">:</span>marker], covary<span class="op">=</span><span class="cn">true</span>)</span>
@@ -454,9 +460,10 @@ info
 </div>
 </div>
 </div>
-<section id="pair-plot" class="level4">
-<h4 class="anchored" data-anchor-id="pair-plot">3.2 pair plot</h4>
-<div id="ca638313" class="cell" data-execution_count="4">
+</section>
+<section id="pair-plot" class="level3">
+<h3 class="anchored" data-anchor-id="pair-plot">3.2 pair plot</h3>
+<div id="d1383d91" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>cats<span class="op">=</span>[<span class="st">"sepal_length"</span>, <span class="st">"sepal_width"</span>, <span class="st">"petal_length"</span>, <span class="st">"petal_width"</span>]</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>len<span class="op">=</span><span class="fu">length</span>(cats)</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>cats<span class="op">=</span><span class="fu">Symbol</span>.(cats)</span>
@@ -494,10 +501,10 @@ info
 </div>
 </div>
 </section>
-<section id="box-plot" class="level4">
-<h4 class="anchored" data-anchor-id="box-plot">3.3 box plot</h4>
+<section id="box-plot" class="level3">
+<h3 class="anchored" data-anchor-id="box-plot">3.3 box plot</h3>
 <p><strong>transform four feature to attribute and value</strong></p>
-<div id="8658c4c3" class="cell" data-execution_count="5">
+<div id="4a8b8c63" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>long_data<span class="op">=</span><span class="pp">@pivot_longer</span>(df, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, names_to <span class="op">=</span> attribute, values_to <span class="op">=</span> value,<span class="op">-</span>species)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">first</span>(long_data,<span class="fl">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="6">
@@ -553,7 +560,7 @@ info
 </div>
 </div>
 </div>
-<div id="df36d890" class="cell" data-execution_count="6">
+<div id="4be12c70" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(long_data) <span class="op">*</span> <span class="fu">visual</span>(BoxPlot, show_notch<span class="op">=</span><span class="cn">true</span>) <span class="op">*</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mapping</span>(<span class="op">:</span>attribute, <span class="op">:</span>value, color<span class="op">=:</span>species, dodge<span class="op">=:</span>species) <span class="op">|&gt;</span> draw</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="7">
@@ -565,11 +572,11 @@ info
 </div>
 </div>
 </section>
-</section>
 <section id="correlation-of-numerical-variables" class="level3">
 <h3 class="anchored" data-anchor-id="correlation-of-numerical-variables">3.4 correlation of numerical variables</h3>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->

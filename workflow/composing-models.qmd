@@ -1,0 +1,17 @@
+---
+title: "Composing Models"
+---
+
+MLJ 中组合模型有三种形式
+
+```{mermaid}
+    %%| label: fig-mlj-composing model
+    %%| fig-cap: "MLJ  composing model"
+    %%| fig-width: 6.5
+    %%| echo: true
+    graph TD
+        C(Composing Models)
+        C -->|One| D([Pipeline Model ])
+        C -->|Two| E([Ensemble Model])
+        C -->|Three| F([Stack Model])
+```

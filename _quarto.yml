@@ -26,12 +26,19 @@ website:
         text: "Learn"
       - href: dataset/index.qmd
         text: "Dataset"
+      - text: "More"
+        menu:
+          - about.qmd
+          - reference.qmd 
   sidebar:
     - id: get-started
       style: "floating"
       contents:
         - text: "GET STARTED"
-          href: start/index.qmd
+          href:  start/index.qmd
+        - text: "build first model"
+          href: start/getting-start.qmd
+          
     - id: learn
       collapse-level: 1
       contents:
@@ -47,6 +54,8 @@ website:
       contents:
         - text: "flowchart"
           href:  workflow/index.qmd 
+        - text: "composing models"
+          href:  workflow/composing-models.qmd 
     - id: dataset
       collapse-level: 1
       contents:
@@ -54,6 +63,10 @@ website:
           href: dataset/index.qmd 
         - text: "1.iris"
           href: dataset/iris.qmd 
+        - text: "2.penguins"
+          href: dataset/penguins.qmd 
+        - text: "3.boston housing"
+          href: dataset/boston-house.qmd
     
 format:
   html:

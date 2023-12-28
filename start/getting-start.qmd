@@ -1,0 +1,125 @@
+---
+title: "Build first MLJ machine learning model"
+
+---
+
+##  Getting Start 
+
+we followed [`workflow`](../workflow/index.qmd), step by step 
+
+### 1.loading data, tidy data 
+
+for  `iris` dataset  ref: [`Iris Dataset EDA`](../dataset/iris.qmd)
+
+
+```{julia}
+using Pipe
+using CSV,DataFrames
+using MLJ
+df=CSV.File("../data/iris.csv")|>DataFrame;
+```
+```{julia}
+schema(df)
+```
+
+for `species` need transform to Categorical type
+
+```{julia}
+df.species= coerce(df.species,Multiclass);
+schema(df)
+```
+
+now we need to split data 
+```{julia}
+y, X = unpack(df, ==(:species); rng=123)
+```
+
+### 2. search models for data 
+```{julia}
+res=@pipe models(matching(X,y))|> DataFrame|>select(_,[:name,:package_name])
+```
+
+simple way to look into model details:
+```julia
+doc($name, pkg=$package_name)
+```
+
+```{julia}
+doc("AdaBoostStumpClassifier", pkg="DecisionTree")
+```
+
+
+### 3. load model 
+there are too many models, so you just add code
+if repel notice missing package , you just install 
+packages. 
+```{julia}
+Tree = @load DecisionTreeClassifier pkg=DecisionTree
+```
+
+### 4. instanite model
+```{julia}
+ tree=Tree()
+```
+
+### 5. evalute model
+```{julia}
+evaluate(tree, X, y,
+         resampling=CV(shuffle=true),
+         measures=[log_loss, accuracy],
+         verbosity=0)
+```
+
+
+### 6. fit and perdict 
+
+ fill model and data to `machine`
+ 
+```{julia}
+mach=machine(tree, X,y)
+```
+
+### 7. split data by index 
+
+```{julia}
+train, test = partition(eachindex(y), 0.7); 
+```
+
+### 8. fitting model
+use train index to inform model to 
+we must not use all data!!!
+```{julia}
+fit!(mach, rows=train)
+```
+
+### 9. predict 
+same with other julia stats model , 
+X must be a matrix ,even if it is one row and one column 
+data 
+
+```{julia}
+yhat = predict_mode(mach, X[test,:])
+```
+
+### 10. plot descision bundary
+```{julia}
+accuracy(yhat,y[test])
+```
+
+```{julia}
+levels(yhat)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+

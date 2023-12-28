@@ -127,9 +127,7 @@ data(long_data) * visual(BoxPlot, show_notch=true) *
 
 ### 3.4  correlation of numerical variables
 
-```{julia}
 
-```
 
 
 

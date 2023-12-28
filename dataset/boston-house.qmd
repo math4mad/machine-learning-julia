@@ -1,0 +1,18 @@
+---
+title: "🏠🏡🏣 Boston Housing dataset"
+---
+
+:::{.callout-note title="info"}
+
+` Boston Housing` is another famous dataset
+:::
+
+## 1. load csv
+
+```{julia}
+ using CSV,DataFrames,Tidier
+ using CairoMakie,AlgebraOfGraphics
+
+df=CSV.File("../data/housing.csv")|>DataFrame
+ first(df,5)
+```

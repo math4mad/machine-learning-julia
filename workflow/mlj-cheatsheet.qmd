@@ -1,0 +1,116 @@
+---
+title: "MLJ Cheatsheet"
+---
+
+
+## Starting an interactive MLJ session
+::: {.row}
+::: {.col-sm-6,col-md-6,col-lg-6}
+::: {.card .rounded-2}
+::: {.card-header .rounded-2}
+    Starting an interactive MLJ session
+:::
+::: {.card-body}
+::: {.card-title}
+    Special title treatment
+:::
+
+::: {.card-text}
+ ```julia
+julia> using MLJ
+julia> MLJ_VERSION # version of MLJ for this cheatsheet
+v"0.20.2"
+```
+:::
+:::
+:::
+:::
+:::
+
+## model search
+<div class="card">
+  <div class="card-header">
+    model search
+  </div>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item">`info("RidgeRegressor", pkg="MultivariateStats")`</li>
+    <li class="list-group-item">`doc("DecisionTreeClassifier", pkg="DecisionTree")`</li>
+    <li class="list-group-item">`models()`</li>
+    <li class="list-group-item">`models(Tree)`</li>
+    <li class="list-group-item">`models(matching(X))`</li>
+     <li class="list-group-item">`models(matching(X, y))`</li>
+  </ul>
+</div>
+
+## Scitypes and coercion
+<div class="card">
+  <div class="card-header">
+  <h3>Scitypes and coercion</h3>
+  </div>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item">`schema(X)`</li>
+    <li class="list-group-item">`coerce(y, Multiclass)`</li>
+    <li class="list-group-item">`coerce(X, :x1 => Continuous, :x2 => OrderedFactor)`</li>
+    <li class="list-group-item">`coerce(X, Count => Continuous)`</li>
+  </ul>
+</div>
+
+
+## Ingesting data
+
+<div class="card">
+<div class="card-header">
+<h3>Ingesting data</h3>
+</div>
+<div class="card-body">
+
+<p class="card-text">
+```julia
+using RDatasets
+channing = dataset("boot", "channing")
+y, X =  unpack(channing, ==(:Exit); rng=123)
+
+```
+
+<ul class="list-group list-group-flush">
+    <li class="list-group-item">`train, valid, test = partition(eachindex(y), 0.7, 0.2, rng=1234)` for 70:20:10 ratio</li>
+    <li class="list-group-item">`Xtrain, Xvalid, Xtest = partition(X, 0.5, 0.3, rng=123)`</li>
+    <li class="list-group-item">`X, y = make_blobs(100, 2) (also: make_moons, make_circles)`</li>
+    <li class="list-group-item">`X, y = make_regression(100, 2)`</li>
+</ul>
+<p>
+</div>
+</div>
+
+## Machine Construction 
+<div class="card">
+  <div class="card-header">
+  <h3>Machine Construction</h3>
+  </div>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item">`model = KNNRegressor(K=1) and mach = machine(model, X, y)`</li>
+    <li class="list-group-item">`model = OneHotEncoder() and mach = machine(model, X)`</li>
+    
+  </ul>
+</div>
+
+## fitting
+<div class="card">
+<div class="card-header">
+<h3>fitting</h3>
+</div>
+<div class="card-body">
+<p class="card-text">
+ ```julia
+  fit!(mach, rows=1:100, verbosity=1, force=false) (defaults shown)
+ ```
+ </p>
+</div>
+</div>
+
+
+
+
+
+
+

@@ -16,3 +16,83 @@ title: "🏠🏡🏣 Boston Housing dataset"
 df=CSV.File("../data/housing.csv")|>DataFrame
  first(df,5)
 ```
+
+## 2.  describe dataframe
+```{julia}
+describe(df)
+```
+
+
+## 3  EDA 
+
+### 3.1 CHA 
+charles river is a famous river around harvard univ and mit 
+so , we want to know  by ther river side affect house price
+
+```{julia}
+df1=@chain df begin
+   @group_by(chas)
+   @summarize(mean=mean(medv),median=median(medv))
+
+end
+
+resolution = (500, 250)
+fig = Figure(; resolution)
+ax1 = Axis(fig[1, 1],xlabel="chas",ylabel="mean")
+ax2 = Axis(fig[1, 2],xlabel="chas",ylabel="median")
+
+datalayer1=data(df1)
+mappinglayer1=mapping(:chas,:mean, color=:chas) 
+mappinglayer2=mapping(:chas,:median, color=:chas)
+vislayer=visual(BarPlot,bar_labels=:y,flip_labels_at=23)
+
+plt1 = datalayer1* mappinglayer1*vislayer
+plt2 = datalayer1* mappinglayer2*vislayer
+draw!(ax1,plt1)
+grid=draw!(ax2,plt2)
+legend!(fig[1, 3], grid)
+fig
+```
+
+### 3.2 Rad count
+```{julia}
+df2=@chain df begin
+    @group_by(rad)
+    @summarize(count=n())
+    @ungroup
+end
+```
+
+```{julia}
+let 
+    resolution = (400, 300)
+    fig = Figure(; resolution)
+    ax = Axis(fig[1, 1],xlabel="rad",ylabel="count")
+    
+    datalayer32=data(df2)
+    mappinglayer32=mapping(:rad,:count,color=:rad)
+    vislayer32=visual(BarPlot,bar_labels=:y,flip_labels_at=130)
+    plt=datalayer32*mappinglayer32*vislayer32
+    draw!(ax,plt)
+    fig
+end
+```
+
+### 3.3 Rad price mean
+```{julia}
+df33=@chain df begin
+    @group_by(rad)
+    @summarize(mean=mean(medv))
+    @ungroup
+end
+```
+
+### 3.4 medv  density
+```{julia}
+datalayer34=data(df)
+mappinglayer34=mapping(:medv)
+vislayer341=visual(Density,color=(:lightgreen,0.6),strokewidth=1,strokecolor=:black)
+vislayer342=visual(Hist,strokewidth=1,strokecolor=:black,normalization = :pdf,color=(:red,0.5))
+draw(datalayer34*mappinglayer34*(vislayer341+vislayer342))
+
+```

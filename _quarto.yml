@@ -44,6 +44,8 @@ website:
       contents:
         - text: "Learn"
           href: learn/index.qmd 
+        - text: "ensemble model"
+          href: learn/ensemble-model.qmd 
     - id: packages
       collapse-level: 1
       contents:
@@ -56,6 +58,8 @@ website:
           href:  workflow/index.qmd 
         - text: "composing models"
           href:  workflow/composing-models.qmd 
+        - text: "mlj cheatsheet"
+          href:  workflow/mlj-cheatsheet.qmd
     - id: dataset
       collapse-level: 1
       contents:
@@ -67,6 +71,8 @@ website:
           href: dataset/penguins.qmd 
         - text: "3.boston housing"
           href: dataset/boston-house.qmd
+        - text: "4.auto mpg"
+          href: dataset/mtcar.qmd
     
 format:
   html:

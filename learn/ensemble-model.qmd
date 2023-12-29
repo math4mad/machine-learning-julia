@@ -1,0 +1,134 @@
+---
+title: "mlj Ensemble model"
+---
+
+## 1. loading package
+```{julia}
+using MLJ
+import DataFrames: DataFrame
+using PrettyPrinting
+using StableRNGs
+using CairoMakie,AlgebraOfGraphics,MakieThemes
+rng = StableRNG(512)
+```
+
+## 2. make data 
+```{julia}
+Xraw = rand(rng, 300, 3)
+y = exp.(Xraw[:,1] - Xraw[:,2] - 2Xraw[:,3] + 0.1*rand(rng, 300))
+X = DataFrame(Xraw, :auto)
+train, test = partition(eachindex(y), 0.7);
+```
+
+## 3. single model
+### 3.1 load  machine  model
+```{julia}
+KNNRegressor = @load KNNRegressor
+knn_model = KNNRegressor(K=10)
+```
+
+### 3.2 instantiate  model
+```{julia}
+knn=machine(knn_model,X,y)
+```
+
+### 3.3  fit model
+```{julia}
+fit!(knn, rows=train)
+```
+
+preidict 
+```{julia}
+ŷ = predict(knn, rows=test)
+```
+evaluate quality
+```{julia}
+rms(ŷ, y[test])
+```
+
+## 4 homogengous ensembles
+
+```{julia}
+ensemble_model = EnsembleModel(model=knn_model, n=20);
+```
+
+```{julia}
+ensemble = machine(ensemble_model, X, y)
+```
+
+evaluate ensemble models
+```{julia}
+estimates = evaluate!(ensemble, resampling=CV())
+```
+
+### 4.1 Systme tuning Params 
+
+first show params:
+```{julia}
+params(ensemble_model) |> pprint
+```
+
+construct range of params 
+```{julia}
+B_range = range(ensemble_model, :bagging_fraction,
+                lower=0.5, upper=1.0)
+K_range = range(ensemble_model, :(model.K),
+                lower=1, upper=20)
+```
+
+construct tune models
+```{julia}
+tm = TunedModel(model=ensemble_model,
+                tuning=Grid(resolution=10), # 10x10 grid
+                resampling=Holdout(fraction_train=0.8, rng=StableRNG(42)),
+                ranges=[B_range, K_range])
+
+```
+
+fit  model 
+```{julia}
+tuned_ensemble = machine(tm, X, y)
+fit!(tuned_ensemble, rows=train);
+```
+
+### 4.2 report tunning results
+```{julia}
+best_ensemble = fitted_params(tuned_ensemble).best_model
+@show best_ensemble.model.K
+@show best_ensemble.bagging_fraction
+```
+
+get detail report 
+```{julia}
+r = report(tuned_ensemble)
+```
+
+
+### 4.3 plot tunning results 
+
+```{julia}
+#| label: fig-ensemble-params-tunning
+#| fig-cap: "fig-ensemble-params-tunning"
+#| fig-cap-location : margin
+#| fig-align: "center"
+#| warning: false
+res = r.plotting
+table=(vals_b = res.parameter_values[:, 1],
+            vals_k = res.parameter_values[:, 2],
+            measurement=res.measurements
+)
+
+datalayer=data(table)
+mappinglayer=mapping(:vals_b,:vals_k,:measurement,color=:measurement)
+vislayler=visual(Tricontourf,colormap = :batlow)
+ax=(width = 400, height = 400)
+plt=datalayer*mappinglayer*vislayler
+draw(plt,axis=ax)
+```
+
+### 4.4 predict with ensemble model 
+```{julia}
+ŷ = predict(tuned_ensemble, rows=test)
+@show rms(ŷ, y[test])
+
+```

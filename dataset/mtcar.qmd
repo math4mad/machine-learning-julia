@@ -1,0 +1,164 @@
+---
+title: "🚗🚕🚙 auto-mpg dataset"
+---
+
+## 1. load csv
+```{julia}
+using CSV,DataFrames,Tidier
+using CairoMakie,AlgebraOfGraphics,MakieThemes
+using StatsBase
+using ScientificTypes
+Makie.set_theme!(ggthemr(:flat));
+
+```
+```{julia}
+#| label: tbl-planets
+#| tbl-cap: auto-mpg dataset  
+#| tbl-cap-location : margin 
+df=CSV.File("../data/auto-mpg.csv")|>DataFrame
+df=@chain df begin
+   @clean_names
+end
+first(df,5)
+```
+
+## 2. describe data
+```{julia}
+dropmissing!(df)
+@show describe(df);
+
+```
+
+## 3. EDA
+### 3.1  heatmap of variables
+```{julia}
+#| label: fig-automag-coorlation
+#| fig-cap: "fig-automag-coorlation"
+#| fig-cap-location : margin
+#| fig-align: "center"
+#| warning: false
+df_cor = df|>Matrix|>cor.|> d -> round(d, digits=2)
+labels=names(df)
+function plot_cov_cor()
+    fig = Figure(resolution=(800, 400)) 
+    ax1 = Axis(fig[1, 1]; xticks=(1:7, labels), yticks=(1:7, labels), title="corr of mpg variables",
+    xticklabelrotation = pi/8,
+    yreversed=true)
+    hm = heatmap!(ax1, df_cor)
+    Colorbar(fig[1, 2], hm)
+    [text!(ax1, x, y; text=string(df_cor[x, y]), color=:white, fontsize=18, align=(:center, :center)) for x in 1:7, y in 1:7]
+    fig
+end
+plot_cov_cor()
+```
+
+### 3.2 Univariate Analysis
+
+#### 3.2.1 `cylinders` data
+
+
+`plot_univariate` plot univariate  count
+```{julia}
+    function plot_univariate(df::AbstractDataFrame,feature1::Symbol,feature2::Symbol,cats::Symbol)
+    ax=(width = 225, height = 225)
+    data_layer=data(df)
+    mappinglayer=mapping(feature1,feature2,color=cats)
+    vislayer=visual(BarPlot,bar_labels=:y,flip_labels_at=130)
+    plt=data_layer*mappinglayer*vislayer
+        draw(plt,axis=ax)
+    end
+```
+
+```{julia}
+#| fig-align: "center"
+df321=@chain df begin
+    @group_by(cylinders)
+    @summarize(count=n())
+    @ungroup
+end
+plot_univariate(df321,:cylinders,:count,:cylinders)
+```
+
+#### 3.2.2  model_year count
+```{julia}
+#| fig-align: "center"
+df322=@chain df begin
+    @group_by(model_year)
+    @summarize(count=n())
+    @ungroup
+end
+
+plot_univariate(df322,:model_year,:count,:model_year)
+```
+
+#### 3.2.3  density of horsepower
+```{julia}
+
+#| label: fig-automag-horsepower-density
+#| fig-cap: "fig-automag-horsepower-density"
+#| fig-cap-location : margin
+#| fig-align: "center"
+#| warning: false
+ax=(width = 400, height = 300)
+datalayer323=data(df)
+mappinglayer323=mapping(:horsepower)
+vislayer3231=visual(AlgebraOfGraphics.Density,color=(:lightgreen,0.6),strokewidth=1,strokecolor=:black)
+vislayer3232=visual(AlgebraOfGraphics.Hist,strokewidth=1,strokecolor=:black,normalization = :pdf,color=(:red,0.5))
+draw(datalayer323*mappinglayer323*(vislayer3231+vislayer3232),axis=ax)
+
+```
+
+### 3.3 multivariate analysis
+
+#### 3.3.1 mpg by cylinders 
+
+```{julia}
+#| fig-align: "center"
+#| warning: false
+let
+    ax=(width =250, height = 250)
+    datalayer=data(df)
+    mappinglayer=mapping(:cylinders,:mpg,color=:cylinders)
+    vislayer=visual(BoxPlot)
+   data(df) * visual(BoxPlot) *
+    mapping(:cylinders, :mpg, color=:cylinders) |>d->draw(d,axis=ax)
+end
+```
+
+#### 3.3.2 mpg by model_year
+
+```{julia}
+#| fig-align: "center"
+#| warning: false
+let
+    ax=(width =250, height = 250)
+    data(df) * visual(BoxPlot) *
+    mapping(:model_year, :mpg, color=:model_year) |>d->draw(d,axis=ax)
+end
+```
+
+#### 3.3.3 horsepower-mpg relatiion 
+
+```{julia}
+#| fig-align: "center"
+ax=(width =250, height = 250)
+ plt1 = data(df)*mapping(:horsepower,:mpg) * linear()
+ #plt2 = data(df)*mapping(:horsepower,:mpg) 
+ draw(plt1, axis=ax)
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

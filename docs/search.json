@@ -268,5 +268,324 @@
       "Workflow",
       "flowchart"
     ]
+  },
+  {
+    "objectID": "dataset/boston-house.html#describe-dataframe",
+    "href": "dataset/boston-house.html#describe-dataframe",
+    "title": "🏠🏡🏣 Boston Housing dataset",
+    "section": "2. describe dataframe",
+    "text": "2. describe dataframe\n\ndescribe(df)\n\n14×7 DataFrame\n\n\n\nRow\nvariable\nmean\nmin\nmedian\nmax\nnmissing\neltype\n\n\n\nSymbol\nFloat64\nReal\nFloat64\nReal\nInt64\nDataType\n\n\n\n\n1\ncrim\n3.61352\n0.00632\n0.25651\n88.9762\n0\nFloat64\n\n\n2\nzn\n11.3636\n0.0\n0.0\n100.0\n0\nFloat64\n\n\n3\nindus\n11.1368\n0.46\n9.69\n27.74\n0\nFloat64\n\n\n4\nchas\n0.06917\n0\n0.0\n1\n0\nInt64\n\n\n5\nnox\n0.554695\n0.385\n0.538\n0.871\n0\nFloat64\n\n\n6\nrm\n6.28463\n3.561\n6.2085\n8.78\n0\nFloat64\n\n\n7\nage\n68.5749\n2.9\n77.5\n100.0\n0\nFloat64\n\n\n8\ndis\n3.79504\n1.1296\n3.20745\n12.1265\n0\nFloat64\n\n\n9\nrad\n9.54941\n1\n5.0\n24\n0\nInt64\n\n\n10\ntax\n408.237\n187\n330.0\n711\n0\nInt64\n\n\n11\nptratio\n18.4555\n12.6\n19.05\n22.0\n0\nFloat64\n\n\n12\nb\n356.674\n0.32\n391.44\n396.9\n0\nFloat64\n\n\n13\nlstat\n12.6531\n1.73\n11.36\n37.97\n0\nFloat64\n\n\n14\nmedv\n22.5328\n5.0\n21.2\n50.0\n0\nFloat64",
+    "crumbs": [
+      "Dataset",
+      "3.boston housing"
+    ]
+  },
+  {
+    "objectID": "dataset/boston-house.html#eda",
+    "href": "dataset/boston-house.html#eda",
+    "title": "🏠🏡🏣 Boston Housing dataset",
+    "section": "3 EDA",
+    "text": "3 EDA\n\n3.1 CHA\ncharles river is a famous river around harvard univ and mit so , we want to know by ther river side affect house price\n\ndf1=@chain df begin\n   @group_by(chas)\n   @summarize(mean=mean(medv),median=median(medv))\n\nend\n\nresolution = (500, 250)\nfig = Figure(; resolution)\nax1 = Axis(fig[1, 1],xlabel=\"chas\",ylabel=\"mean\")\nax2 = Axis(fig[1, 2],xlabel=\"chas\",ylabel=\"median\")\n\ndatalayer1=data(df1)\nmappinglayer1=mapping(:chas,:mean, color=:chas) \nmappinglayer2=mapping(:chas,:median, color=:chas)\nvislayer=visual(BarPlot,bar_labels=:y,flip_labels_at=23)\n\nplt1 = datalayer1* mappinglayer1*vislayer\nplt2 = datalayer1* mappinglayer2*vislayer\ndraw!(ax1,plt1)\ngrid=draw!(ax2,plt2)\nlegend!(fig[1, 3], grid)\nfig\n\n\n\n\n\n\n\n\n\n\n3.2 Rad count\n\ndf2=@chain df begin\n    @group_by(rad)\n    @summarize(count=n())\n    @ungroup\nend\n\n9×2 DataFrame\n\n\n\nRow\nrad\ncount\n\n\n\nInt64\nInt64\n\n\n\n\n1\n1\n20\n\n\n2\n2\n24\n\n\n3\n3\n38\n\n\n4\n4\n110\n\n\n5\n5\n115\n\n\n6\n6\n26\n\n\n7\n7\n17\n\n\n8\n8\n24\n\n\n9\n24\n132\n\n\n\n\n\n\n\nlet \n    resolution = (400, 300)\n    fig = Figure(; resolution)\n    ax = Axis(fig[1, 1],xlabel=\"rad\",ylabel=\"count\")\n    \n    datalayer32=data(df2)\n    mappinglayer32=mapping(:rad,:count,color=:rad)\n    vislayer32=visual(BarPlot,bar_labels=:y,flip_labels_at=130)\n    plt=datalayer32*mappinglayer32*vislayer32\n    draw!(ax,plt)\n    fig\nend\n\n\n\n\n\n\n\n\n\n\n3.3 Rad price mean\n\ndf33=@chain df begin\n    @group_by(rad)\n    @summarize(mean=mean(medv))\n    @ungroup\nend\n\n9×2 DataFrame\n\n\n\nRow\nrad\nmean\n\n\n\nInt64\nFloat64\n\n\n\n\n1\n1\n24.365\n\n\n2\n2\n26.8333\n\n\n3\n3\n27.9289\n\n\n4\n4\n21.3873\n\n\n5\n5\n25.707\n\n\n6\n6\n20.9769\n\n\n7\n7\n27.1059\n\n\n8\n8\n30.3583\n\n\n9\n24\n16.4038\n\n\n\n\n\n\n\n\n3.4 medv density\n\ndatalayer34=data(df)\nmappinglayer34=mapping(:medv)\nvislayer341=visual(Density,color=(:lightgreen,0.6),strokewidth=1,strokecolor=:black)\nvislayer342=visual(Hist,strokewidth=1,strokecolor=:black,normalization = :pdf,color=(:red,0.5))\ndraw(datalayer34*mappinglayer34*(vislayer341+vislayer342))",
+    "crumbs": [
+      "Dataset",
+      "3.boston housing"
+    ]
+  },
+  {
+    "objectID": "dataset/mtcar.html",
+    "href": "dataset/mtcar.html",
+    "title": "🚗🚕🚙 auto-mpg dataset",
+    "section": "",
+    "text": "using CSV,DataFrames,Tidier\nusing CairoMakie,AlgebraOfGraphics,MakieThemes\nusing StatsBase\nusing ScientificTypes\nMakie.set_theme!(ggthemr(:flat));\n\n\ndf=CSV.File(\"../data/auto-mpg.csv\")|&gt;DataFrame\ndf=@chain df begin\n   @clean_names\nend\nfirst(df,5)\n\n\n\n\n5×7 DataFrame\n\n\n\nRow\nmpg\ncylinders\ndisplacement\nhorsepower\nweight\nacceleration\nmodel_year\n\n\n\nFloat64\nInt64\nFloat64\nInt64?\nInt64\nFloat64\nInt64\n\n\n\n\n1\n18.0\n8\n307.0\n130\n3504\n12.0\n70\n\n\n2\n15.0\n8\n350.0\n165\n3693\n11.5\n70\n\n\n3\n18.0\n8\n318.0\n150\n3436\n11.0\n70\n\n\n4\n16.0\n8\n304.0\n150\n3433\n12.0\n70\n\n\n5\n17.0\n8\n302.0\n140\n3449\n10.5\n70\n\n\n\n\n\n\n\nTable 1: auto-mpg dataset",
+    "crumbs": [
+      "Dataset",
+      "4.auto mpg"
+    ]
+  },
+  {
+    "objectID": "dataset/mtcar.html#load-csv",
+    "href": "dataset/mtcar.html#load-csv",
+    "title": "🚗🚕🚙 auto-mpg dataset",
+    "section": "",
+    "text": "using CSV,DataFrames,Tidier\nusing CairoMakie,AlgebraOfGraphics,MakieThemes\nusing StatsBase\nusing ScientificTypes\nMakie.set_theme!(ggthemr(:flat));\n\n\ndf=CSV.File(\"../data/auto-mpg.csv\")|&gt;DataFrame\ndf=@chain df begin\n   @clean_names\nend\nfirst(df,5)\n\n\n\n\n5×7 DataFrame\n\n\n\nRow\nmpg\ncylinders\ndisplacement\nhorsepower\nweight\nacceleration\nmodel_year\n\n\n\nFloat64\nInt64\nFloat64\nInt64?\nInt64\nFloat64\nInt64\n\n\n\n\n1\n18.0\n8\n307.0\n130\n3504\n12.0\n70\n\n\n2\n15.0\n8\n350.0\n165\n3693\n11.5\n70\n\n\n3\n18.0\n8\n318.0\n150\n3436\n11.0\n70\n\n\n4\n16.0\n8\n304.0\n150\n3433\n12.0\n70\n\n\n5\n17.0\n8\n302.0\n140\n3449\n10.5\n70\n\n\n\n\n\n\n\nTable 1: auto-mpg dataset",
+    "crumbs": [
+      "Dataset",
+      "4.auto mpg"
+    ]
+  },
+  {
+    "objectID": "dataset/mtcar.html#describe-data",
+    "href": "dataset/mtcar.html#describe-data",
+    "title": "🚗🚕🚙 auto-mpg dataset",
+    "section": "2. describe data",
+    "text": "2. describe data\n\ndropmissing!(df)\n@show describe(df);\n\ndescribe(df) = 7×7 DataFrame\n Row │ variable      mean        min     median   max     nmissing  eltype\n     │ Symbol        Float64     Real    Float64  Real    Int64     DataType\n─────┼───────────────────────────────────────────────────────────────────────\n   1 │ mpg             23.5172      9.0     23.0    46.6         0  Float64\n   2 │ cylinders        5.45707     3        4.0     8           0  Int64\n   3 │ displacement   193.65       68.0    148.5   455.0         0  Float64\n   4 │ horsepower     104.189      46       92.0   230           0  Int64\n   5 │ weight        2973.0      1613     2803.5  5140           0  Int64\n   6 │ acceleration    15.5558      8.0     15.5    24.8         0  Float64\n   7 │ model_year      76.0278     70       76.0    82           0  Int64",
+    "crumbs": [
+      "Dataset",
+      "4.auto mpg"
+    ]
+  },
+  {
+    "objectID": "dataset/mtcar.html#heatmap-of-variables",
+    "href": "dataset/mtcar.html#heatmap-of-variables",
+    "title": "🚗🚕🚙 auto-mpg dataset",
+    "section": "3. heatmap of variables",
+    "text": "3. heatmap of variables\n\ndf_cor = df|&gt;Matrix|&gt;cor.|&gt; d -&gt; round(d, digits=2)\nlabels=names(df)\nfunction plot_cov_cor()\n    fig = Figure(resolution=(800, 400)) \n    ax1 = Axis(fig[1, 1]; xticks=(1:7, labels), yticks=(1:7, labels), title=\"corr of mpg variables\",\n    xticklabelrotation = pi/8,\n    yreversed=true)\n    hm = heatmap!(ax1, df_cor)\n    Colorbar(fig[1, 2], hm)\n    [text!(ax1, x, y; text=string(df_cor[x, y]), color=:white, fontsize=18, align=(:center, :center)) for x in 1:7, y in 1:7]\n    fig\nend\nplot_cov_cor()\n\n\n\n\n\n\n\nFigure 1: fig-automag-coorlation",
+    "crumbs": [
+      "Dataset",
+      "4.auto mpg"
+    ]
+  },
+  {
+    "objectID": "dataset/mtcar.html#eda",
+    "href": "dataset/mtcar.html#eda",
+    "title": "🚗🚕🚙 auto-mpg dataset",
+    "section": "3. EDA",
+    "text": "3. EDA\n\n3.1 heatmap of variables\n\ndf_cor = df|&gt;Matrix|&gt;cor.|&gt; d -&gt; round(d, digits=2)\nlabels=names(df)\nfunction plot_cov_cor()\n    fig = Figure(resolution=(800, 400)) \n    ax1 = Axis(fig[1, 1]; xticks=(1:7, labels), yticks=(1:7, labels), title=\"corr of mpg variables\",\n    xticklabelrotation = pi/8,\n    yreversed=true)\n    hm = heatmap!(ax1, df_cor)\n    Colorbar(fig[1, 2], hm)\n    [text!(ax1, x, y; text=string(df_cor[x, y]), color=:white, fontsize=18, align=(:center, :center)) for x in 1:7, y in 1:7]\n    fig\nend\nplot_cov_cor()\n\n\n\n\n\n\n\nFigure 1: fig-automag-coorlation\n\n\n\n\n\n\n\n3.2 Univariate Analysis\n\n3.2.1 cylinders data\nplot_univariate plot univariate count\n\n    function plot_univariate(df::AbstractDataFrame,feature1::Symbol,feature2::Symbol,cats::Symbol)\n    ax=(width = 225, height = 225)\n    data_layer=data(df)\n    mappinglayer=mapping(feature1,feature2,color=cats)\n    vislayer=visual(BarPlot,bar_labels=:y,flip_labels_at=130)\n    plt=data_layer*mappinglayer*vislayer\n        draw(plt,axis=ax)\n    end\n\nplot_univariate (generic function with 1 method)\n\n\n\ndf321=@chain df begin\n    @group_by(cylinders)\n    @summarize(count=n())\n    @ungroup\nend\nplot_univariate(df321,:cylinders,:count,:cylinders)\n\n\n\n\n\n\n\n\n\n\n3.2.2 model_year count\n\ndf322=@chain df begin\n    @group_by(model_year)\n    @summarize(count=n())\n    @ungroup\nend\n\nplot_univariate(df322,:model_year,:count,:model_year)\n\n\n\n\n\n\n\n\n\n\n3.2.3 density of horsepower\n\nax=(width = 400, height = 300)\ndatalayer323=data(df)\nmappinglayer323=mapping(:horsepower)\nvislayer3231=visual(AlgebraOfGraphics.Density,color=(:lightgreen,0.6),strokewidth=1,strokecolor=:black)\nvislayer3232=visual(AlgebraOfGraphics.Hist,strokewidth=1,strokecolor=:black,normalization = :pdf,color=(:red,0.5))\ndraw(datalayer323*mappinglayer323*(vislayer3231+vislayer3232),axis=ax)\n\n\n\n\n\n\n\nFigure 2: fig-automag-horsepower-density\n\n\n\n\n\n\n\n\n3.3 multivariate analysis\n\n3.3.1 mpg by cylinders\n\nlet\n    ax=(width =250, height = 250)\n    datalayer=data(df)\n    mappinglayer=mapping(:cylinders,:mpg,color=:cylinders)\n    vislayer=visual(BoxPlot)\n   data(df) * visual(BoxPlot) *\n    mapping(:cylinders, :mpg, color=:cylinders) |&gt;d-&gt;draw(d,axis=ax)\nend\n\n\n\n\n\n\n\n\n\n\n3.3.2 mpg by model_year\n\nlet\n    ax=(width =250, height = 250)\n    data(df) * visual(BoxPlot) *\n    mapping(:model_year, :mpg, color=:model_year) |&gt;d-&gt;draw(d,axis=ax)\nend\n\n\n\n\n\n\n\n\n\n\n3.3.3 horsepower-mpg relatiion\n\nax=(width =250, height = 250)\n plt1 = data(df)*mapping(:horsepower,:mpg) * linear()\n #plt2 = data(df)*mapping(:horsepower,:mpg) \n draw(plt1, axis=ax)",
+    "crumbs": [
+      "Dataset",
+      "4.auto mpg"
+    ]
+  },
+  {
+    "objectID": "workflow/mlj-cheatsheet.html",
+    "href": "workflow/mlj-cheatsheet.html",
+    "title": "MLJ Cheatsheet",
+    "section": "",
+    "text": "Starting an interactive MLJ session\n\n\n\nSpecial title treatment\n\n\njulia&gt; using MLJ\njulia&gt; MLJ_VERSION # version of MLJ for this cheatsheet\nv\"0.20.2\"",
+    "crumbs": [
+      "Workflow",
+      "mlj cheatsheet"
+    ]
+  },
+  {
+    "objectID": "workflow/mlj-cheatsheet.html#starting-an-interactive-mlj-session",
+    "href": "workflow/mlj-cheatsheet.html#starting-an-interactive-mlj-session",
+    "title": "MLJ Cheatsheet",
+    "section": "",
+    "text": "Starting an interactive MLJ session\n\n\n\nSpecial title treatment\n\n\njulia&gt; using MLJ\njulia&gt; MLJ_VERSION # version of MLJ for this cheatsheet\nv\"0.20.2\"",
+    "crumbs": [
+      "Workflow",
+      "mlj cheatsheet"
+    ]
+  },
+  {
+    "objectID": "workflow/mlj-cheatsheet.html#model-search",
+    "href": "workflow/mlj-cheatsheet.html#model-search",
+    "title": "MLJ Cheatsheet",
+    "section": "model search",
+    "text": "model search\n\n\nmodel search\n\n\n\ninfo(\"RidgeRegressor\", pkg=\"MultivariateStats\")\n\n\ndoc(\"DecisionTreeClassifier\", pkg=\"DecisionTree\")\n\n\nmodels()\n\n\nmodels(Tree)\n\n\nmodels(matching(X))\n\n\nmodels(matching(X, y))",
+    "crumbs": [
+      "Workflow",
+      "mlj cheatsheet"
+    ]
+  },
+  {
+    "objectID": "workflow/mlj-cheatsheet.html#scitypes-and-coercion",
+    "href": "workflow/mlj-cheatsheet.html#scitypes-and-coercion",
+    "title": "MLJ Cheatsheet",
+    "section": "Scitypes and coercion",
+    "text": "Scitypes and coercion\n\n\n\nScitypes and coercion\n\n\n\n\nschema(X)\n\n\ncoerce(y, Multiclass)\n\n\ncoerce(X, :x1 =&gt; Continuous, :x2 =&gt; OrderedFactor)\n\n\ncoerce(X, Count =&gt; Continuous)",
+    "crumbs": [
+      "Workflow",
+      "mlj cheatsheet"
+    ]
+  },
+  {
+    "objectID": "workflow/mlj-cheatsheet.html#ingesting-data",
+    "href": "workflow/mlj-cheatsheet.html#ingesting-data",
+    "title": "MLJ Cheatsheet",
+    "section": "Ingesting data",
+    "text": "Ingesting data\n\n\n\nIngesting data\n\n\n\n\n\nusing RDatasets\nchanning = dataset(\"boot\", \"channing\")\ny, X =  unpack(channing, ==(:Exit); rng=123)\n\n\ntrain, valid, test = partition(eachindex(y), 0.7, 0.2, rng=1234) for 70:20:10 ratio\n\n\nXtrain, Xvalid, Xtest = partition(X, 0.5, 0.3, rng=123)\n\n\nX, y = make_blobs(100, 2) (also: make_moons, make_circles)\n\n\nX, y = make_regression(100, 2)",
+    "crumbs": [
+      "Workflow",
+      "mlj cheatsheet"
+    ]
+  },
+  {
+    "objectID": "workflow/mlj-cheatsheet.html#blockquote",
+    "href": "workflow/mlj-cheatsheet.html#blockquote",
+    "title": "MLJ Cheatsheet",
+    "section": "blockquote",
+    "text": "blockquote\n\n\nQuote\n\n\n\n\nA well-known quote, contained in a blockquote element.\n\n\nSomeone famous in Source Title",
+    "crumbs": [
+      "Workflow",
+      "mlj cheatsheet"
+    ]
+  },
+  {
+    "objectID": "workflow/mlj-cheatsheet.html#machine-co",
+    "href": "workflow/mlj-cheatsheet.html#machine-co",
+    "title": "MLJ Cheatsheet",
+    "section": "Machine Co",
+    "text": "Machine Co",
+    "crumbs": [
+      "Workflow",
+      "mlj cheatsheet"
+    ]
+  },
+  {
+    "objectID": "workflow/mlj-cheatsheet.html#machine-construct",
+    "href": "workflow/mlj-cheatsheet.html#machine-construct",
+    "title": "MLJ Cheatsheet",
+    "section": "Machine Construct",
+    "text": "Machine Construct",
+    "crumbs": [
+      "Workflow",
+      "mlj cheatsheet"
+    ]
+  },
+  {
+    "objectID": "workflow/mlj-cheatsheet.html#machine-construction",
+    "href": "workflow/mlj-cheatsheet.html#machine-construction",
+    "title": "MLJ Cheatsheet",
+    "section": "Machine Construction",
+    "text": "Machine Construction\n\n\n\nMachine Construction\n\n\n\n\nmodel = KNNRegressor(K=1) and mach = machine(model, X, y)\n\n\nmodel = OneHotEncoder() and mach = machine(model, X)",
+    "crumbs": [
+      "Workflow",
+      "mlj cheatsheet"
+    ]
+  },
+  {
+    "objectID": "workflow/mlj-cheatsheet.html#fitting",
+    "href": "workflow/mlj-cheatsheet.html#fitting",
+    "title": "MLJ Cheatsheet",
+    "section": "fitting",
+    "text": "fitting\n\n\n\nfitting\n\n\n\n\n  fit!(mach, rows=1:100, verbosity=1, force=false) (defaults shown)",
+    "crumbs": [
+      "Workflow",
+      "mlj cheatsheet"
+    ]
+  },
+  {
+    "objectID": "learn/ensemble-model.html",
+    "href": "learn/ensemble-model.html",
+    "title": "mlj Ensemble model",
+    "section": "",
+    "text": "using MLJ\nimport DataFrames: DataFrame\nusing PrettyPrinting\nusing StableRNGs\nusing CairoMakie,AlgebraOfGraphics,MakieThemes\nrng = StableRNG(512)\n\nStableRNGs.LehmerRNG(state=0x00000000000000000000000000000401)",
+    "crumbs": [
+      "Learn",
+      "ensemble model"
+    ]
+  },
+  {
+    "objectID": "learn/ensemble-model.html#loading-package",
+    "href": "learn/ensemble-model.html#loading-package",
+    "title": "mlj Ensemble model",
+    "section": "",
+    "text": "using MLJ\nimport DataFrames: DataFrame\nusing PrettyPrinting\nusing StableRNGs\nusing CairoMakie,AlgebraOfGraphics,MakieThemes\nrng = StableRNG(512)\n\nStableRNGs.LehmerRNG(state=0x00000000000000000000000000000401)",
+    "crumbs": [
+      "Learn",
+      "ensemble model"
+    ]
+  },
+  {
+    "objectID": "learn/ensemble-model.html#make-data",
+    "href": "learn/ensemble-model.html#make-data",
+    "title": "mlj Ensemble model",
+    "section": "2. make data",
+    "text": "2. make data\n\nXraw = rand(rng, 300, 3)\ny = exp.(Xraw[:,1] - Xraw[:,2] - 2Xraw[:,3] + 0.1*rand(rng, 300))\nX = DataFrame(Xraw, :auto)\ntrain, test = partition(eachindex(y), 0.7);",
+    "crumbs": [
+      "Learn",
+      "ensemble model"
+    ]
+  },
+  {
+    "objectID": "learn/ensemble-model.html#load",
+    "href": "learn/ensemble-model.html#load",
+    "title": "mlj Ensemble model",
+    "section": "3. load",
+    "text": "3. load",
+    "crumbs": [
+      "Learn",
+      "ensemble model"
+    ]
+  },
+  {
+    "objectID": "learn/ensemble-model.html#load-machine-model",
+    "href": "learn/ensemble-model.html#load-machine-model",
+    "title": "mlj Ensemble model",
+    "section": "3. load machine model",
+    "text": "3. load machine model\n\nKNNRegressor = @load KNNRegressor\nknn_model = KNNRegressor(K=10)\n\nimport NearestNeighborModels ✔\n\n\n[ Info: For silent loading, specify `verbosity=0`. \n\n\nKNNRegressor(\n  K = 10, \n  algorithm = :kdtree, \n  metric = Distances.Euclidean(0.0), \n  leafsize = 10, \n  reorder = true, \n  weights = NearestNeighborModels.Uniform())",
+    "crumbs": [
+      "Learn",
+      "ensemble model"
+    ]
+  },
+  {
+    "objectID": "learn/ensemble-model.html#section",
+    "href": "learn/ensemble-model.html#section",
+    "title": "mlj Ensemble model",
+    "section": "4",
+    "text": "4",
+    "crumbs": [
+      "Learn",
+      "ensemble model"
+    ]
+  },
+  {
+    "objectID": "learn/ensemble-model.html#instantiate-model",
+    "href": "learn/ensemble-model.html#instantiate-model",
+    "title": "mlj Ensemble model",
+    "section": "4. instantiate model",
+    "text": "4. instantiate model\n\nknn=machine(knn_model,X,y)\n\nuntrained Machine; caches model-specific representations of data\n  model: KNNRegressor(K = 10, …)\n  args: \n    1:  Source @472 ⏎ Table{AbstractVector{Continuous}}\n    2:  Source @452 ⏎ AbstractVector{Continuous}",
+    "crumbs": [
+      "Learn",
+      "ensemble model"
+    ]
+  },
+  {
+    "objectID": "learn/ensemble-model.html#fit-model",
+    "href": "learn/ensemble-model.html#fit-model",
+    "title": "mlj Ensemble model",
+    "section": "5. fit model",
+    "text": "5. fit model\n\nfit!(knn, rows=train)\n\n[ Info: Training machine(KNNRegressor(K = 10, …), …).\n\n\ntrained Machine; caches model-specific representations of data\n  model: KNNRegressor(K = 10, …)\n  args: \n    1:  Source @646 ⏎ Table{AbstractVector{Continuous}}\n    2:  Source @252 ⏎ AbstractVector{Continuous}\n\n\npreidict\n\nŷ = predict(knn, rows=test)\n\n90-element Vector{Float64}:\n 0.34467109322355544\n 0.47021416109338776\n 0.3605963245828601\n 0.7952383260523377\n 0.8175983630884535\n 0.2787449628967793\n 1.376995501664209\n 0.6335451619415926\n 0.24132363918064742\n 0.48242991564636817\n 1.006001124602383\n 0.4619208719838038\n 0.21005488086190915\n ⋮\n 0.17746741478027778\n 1.26371952798802\n 0.8821595000833542\n 1.3986725366131116\n 0.33686536328173955\n 0.28638455204396673\n 0.5602321105178957\n 0.8161827139978965\n 0.1998143885279288\n 0.8256665297053332\n 0.44366704202674506\n 0.7669517046982802\n\n\nevaluate quality\n\nrms(ŷ, y[test])\n\n0.06389980172436369",
+    "crumbs": [
+      "Learn",
+      "ensemble model"
+    ]
+  },
+  {
+    "objectID": "learn/ensemble-model.html#single-model",
+    "href": "learn/ensemble-model.html#single-model",
+    "title": "mlj Ensemble model",
+    "section": "3. single model",
+    "text": "3. single model\n\n3.1 load machine model\n\nKNNRegressor = @load KNNRegressor\nknn_model = KNNRegressor(K=10)\n\nimport NearestNeighborModels ✔\n\n\n[ Info: For silent loading, specify `verbosity=0`. \n\n\nKNNRegressor(\n  K = 10, \n  algorithm = :kdtree, \n  metric = Distances.Euclidean(0.0), \n  leafsize = 10, \n  reorder = true, \n  weights = NearestNeighborModels.Uniform())\n\n\n\n\n3.2 instantiate model\n\nknn=machine(knn_model,X,y)\n\nuntrained Machine; caches model-specific representations of data\n  model: KNNRegressor(K = 10, …)\n  args: \n    1:  Source @724 ⏎ Table{AbstractVector{Continuous}}\n    2:  Source @606 ⏎ AbstractVector{Continuous}\n\n\n\n\n3.3 fit model\n\nfit!(knn, rows=train)\n\n[ Info: Training machine(KNNRegressor(K = 10, …), …).\n\n\ntrained Machine; caches model-specific representations of data\n  model: KNNRegressor(K = 10, …)\n  args: \n    1:  Source @724 ⏎ Table{AbstractVector{Continuous}}\n    2:  Source @606 ⏎ AbstractVector{Continuous}\n\n\npreidict\n\nŷ = predict(knn, rows=test)\n\n90-element Vector{Float64}:\n 0.34467109322355544\n 0.47021416109338776\n 0.3605963245828601\n 0.7952383260523377\n 0.8175983630884535\n 0.2787449628967793\n 1.376995501664209\n 0.6335451619415926\n 0.24132363918064742\n 0.48242991564636817\n 1.006001124602383\n 0.4619208719838038\n 0.21005488086190915\n ⋮\n 0.17746741478027778\n 1.26371952798802\n 0.8821595000833542\n 1.3986725366131116\n 0.33686536328173955\n 0.28638455204396673\n 0.5602321105178957\n 0.8161827139978965\n 0.1998143885279288\n 0.8256665297053332\n 0.44366704202674506\n 0.7669517046982802\n\n\nevaluate quality\n\nrms(ŷ, y[test])\n\n0.06389980172436369",
+    "crumbs": [
+      "Learn",
+      "ensemble model"
+    ]
+  },
+  {
+    "objectID": "learn/ensemble-model.html#homogengous-models",
+    "href": "learn/ensemble-model.html#homogengous-models",
+    "title": "mlj Ensemble model",
+    "section": "4 homogengous models",
+    "text": "4 homogengous models",
+    "crumbs": [
+      "Learn",
+      "ensemble model"
+    ]
+  },
+  {
+    "objectID": "learn/ensemble-model.html#homogengous-ens",
+    "href": "learn/ensemble-model.html#homogengous-ens",
+    "title": "mlj Ensemble model",
+    "section": "4 homogengous ens",
+    "text": "4 homogengous ens",
+    "crumbs": [
+      "Learn",
+      "ensemble model"
+    ]
+  },
+  {
+    "objectID": "learn/ensemble-model.html#homogengous-ensembles",
+    "href": "learn/ensemble-model.html#homogengous-ensembles",
+    "title": "mlj Ensemble model",
+    "section": "4 homogengous ensembles",
+    "text": "4 homogengous ensembles\n\nensemble_model = EnsembleModel(model=knn_model, n=20);\n\n\nensemble = machine(ensemble_model, X, y)\n\nuntrained Machine; caches model-specific representations of data\n  model: DeterministicEnsembleModel(model = KNNRegressor(K = 10, …), …)\n  args: \n    1:  Source @720 ⏎ Table{AbstractVector{Continuous}}\n    2:  Source @516 ⏎ AbstractVector{Continuous}\n\n\nevaluate ensemble models\n\nestimates = evaluate!(ensemble, resampling=CV())\n\n\nPerformanceEvaluation object with these fields:\n  model, measure, operation, measurement, per_fold,\n  per_observation, fitted_params_per_fold,\n  report_per_fold, train_test_rows, resampling, repeats\nExtract:\n┌──────────┬───────────┬─────────────┬─────────┬────────────────────────────────\n│ measure  │ operation │ measurement │ 1.96*SE │ per_fold                      ⋯\n├──────────┼───────────┼─────────────┼─────────┼────────────────────────────────\n│ LPLoss(  │ predict   │ 0.00725     │ 0.00277 │ [0.00786, 0.0127, 0.0054, 0.0 ⋯\n│   p = 2) │           │             │         │                               ⋯\n└──────────┴───────────┴─────────────┴─────────┴────────────────────────────────\n                                                                1 column omitted\n\n\n\n\n\n4.1 Systme tuning Params\nfirst show params:\n\nparams(ensemble_model) |&gt; pprint\n\n(model = (K = 10,\n          algorithm = :kdtree,\n          metric = Distances.Euclidean(0.0),\n          leafsize = 10,\n          reorder = true,\n          weights = NearestNeighborModels.Uniform()),\n atomic_weights = [],\n bagging_fraction = 0.8,\n rng = Random._GLOBAL_RNG(),\n n = 20,\n acceleration = CPU1{Nothing}(nothing),\n out_of_bag_measure = [])\n\n\nconstruct range of params\n\nB_range = range(ensemble_model, :bagging_fraction,\n                lower=0.5, upper=1.0)\nK_range = range(ensemble_model, :(model.K),\n                lower=1, upper=20)\n\nNumericRange(1 ≤ model.K ≤ 20; origin=10.5, unit=9.5)\n\n\nconstruct tune models\n\ntm = TunedModel(model=ensemble_model,\n                tuning=Grid(resolution=10), # 10x10 grid\n                resampling=Holdout(fraction_train=0.8, rng=StableRNG(42)),\n                ranges=[B_range, K_range])\n\n[ Info: No measure specified. Setting measure=LPLoss(p = 2). \n\n\nDeterministicTunedModel(\n  model = DeterministicEnsembleModel(\n        model = KNNRegressor(K = 10, …), \n        atomic_weights = Float64[], \n        bagging_fraction = 0.8, \n        rng = Random._GLOBAL_RNG(), \n        n = 20, \n        acceleration = CPU1{Nothing}(nothing), \n        out_of_bag_measure = Any[]), \n  tuning = Grid(\n        goal = nothing, \n        resolution = 10, \n        shuffle = true, \n        rng = Random._GLOBAL_RNG()), \n  resampling = Holdout(\n        fraction_train = 0.8, \n        shuffle = true, \n        rng = StableRNGs.LehmerRNG(state=0x00000000000000000000000000000055)), \n  measure = LPLoss(p = 2), \n  weights = nothing, \n  class_weights = nothing, \n  operation = nothing, \n  range = MLJBase.NumericRange{T, MLJBase.Bounded, Symbol} where T[NumericRange(0.5 ≤ bagging_fraction ≤ 1.0; origin=0.75, unit=0.25), NumericRange(1 ≤ model.K ≤ 20; origin=10.5, unit=9.5)], \n  selection_heuristic = MLJTuning.NaiveSelection(nothing), \n  train_best = true, \n  repeats = 1, \n  n = nothing, \n  acceleration = CPU1{Nothing}(nothing), \n  acceleration_resampling = CPU1{Nothing}(nothing), \n  check_measure = true, \n  cache = true)\n\n\nfit model\n\ntuned_ensemble = machine(tm, X, y)\nfit!(tuned_ensemble, rows=train);\n\n[ Info: Training machine(DeterministicTunedModel(model = DeterministicEnsembleModel(model = KNNRegressor(K = 10, …), …), …), …).\n[ Info: Attempting to evaluate 100 models.\nEvaluating over 100 metamodels:   0%[&gt;                        ]  ETA: N/AEvaluating over 100 metamodels:   1%[&gt;                        ]  ETA: 0:00:00Evaluating over 100 metamodels:   2%[&gt;                        ]  ETA: 0:00:00Evaluating over 100 metamodels:   3%[&gt;                        ]  ETA: 0:00:00Evaluating over 100 metamodels:   4%[=&gt;                       ]  ETA: 0:00:00Evaluating over 100 metamodels:   5%[=&gt;                       ]  ETA: 0:00:00Evaluating over 100 metamodels:   6%[=&gt;                       ]  ETA: 0:00:00Evaluating over 100 metamodels:   7%[=&gt;                       ]  ETA: 0:00:00Evaluating over 100 metamodels:   8%[==&gt;                      ]  ETA: 0:00:00Evaluating over 100 metamodels:   9%[==&gt;                      ]  ETA: 0:00:00Evaluating over 100 metamodels:  10%[==&gt;                      ]  ETA: 0:00:00Evaluating over 100 metamodels:  11%[==&gt;                      ]  ETA: 0:00:00Evaluating over 100 metamodels:  12%[===&gt;                     ]  ETA: 0:00:00Evaluating over 100 metamodels:  13%[===&gt;                     ]  ETA: 0:00:00Evaluating over 100 metamodels:  14%[===&gt;                     ]  ETA: 0:00:00Evaluating over 100 metamodels:  15%[===&gt;                     ]  ETA: 0:00:00Evaluating over 100 metamodels:  16%[====&gt;                    ]  ETA: 0:00:00Evaluating over 100 metamodels:  17%[====&gt;                    ]  ETA: 0:00:00Evaluating over 100 metamodels:  18%[====&gt;                    ]  ETA: 0:00:00Evaluating over 100 metamodels:  19%[====&gt;                    ]  ETA: 0:00:00Evaluating over 100 metamodels:  20%[=====&gt;                   ]  ETA: 0:00:00Evaluating over 100 metamodels:  21%[=====&gt;                   ]  ETA: 0:00:00Evaluating over 100 metamodels:  22%[=====&gt;                   ]  ETA: 0:00:00Evaluating over 100 metamodels:  23%[=====&gt;                   ]  ETA: 0:00:00Evaluating over 100 metamodels:  24%[======&gt;                  ]  ETA: 0:00:00Evaluating over 100 metamodels:  25%[======&gt;                  ]  ETA: 0:00:00Evaluating over 100 metamodels:  26%[======&gt;                  ]  ETA: 0:00:00Evaluating over 100 metamodels:  27%[======&gt;                  ]  ETA: 0:00:00Evaluating over 100 metamodels:  28%[=======&gt;                 ]  ETA: 0:00:00Evaluating over 100 metamodels:  29%[=======&gt;                 ]  ETA: 0:00:00Evaluating over 100 metamodels:  30%[=======&gt;                 ]  ETA: 0:00:00Evaluating over 100 metamodels:  31%[=======&gt;                 ]  ETA: 0:00:00Evaluating over 100 metamodels:  32%[========&gt;                ]  ETA: 0:00:00Evaluating over 100 metamodels:  33%[========&gt;                ]  ETA: 0:00:00Evaluating over 100 metamodels:  34%[========&gt;                ]  ETA: 0:00:00Evaluating over 100 metamodels:  35%[========&gt;                ]  ETA: 0:00:00Evaluating over 100 metamodels:  36%[=========&gt;               ]  ETA: 0:00:00Evaluating over 100 metamodels:  37%[=========&gt;               ]  ETA: 0:00:00Evaluating over 100 metamodels:  38%[=========&gt;               ]  ETA: 0:00:00Evaluating over 100 metamodels:  39%[=========&gt;               ]  ETA: 0:00:00Evaluating over 100 metamodels:  40%[==========&gt;              ]  ETA: 0:00:00Evaluating over 100 metamodels:  41%[==========&gt;              ]  ETA: 0:00:00Evaluating over 100 metamodels:  42%[==========&gt;              ]  ETA: 0:00:00Evaluating over 100 metamodels:  43%[==========&gt;              ]  ETA: 0:00:00Evaluating over 100 metamodels:  44%[===========&gt;             ]  ETA: 0:00:00Evaluating over 100 metamodels:  45%[===========&gt;             ]  ETA: 0:00:00Evaluating over 100 metamodels:  46%[===========&gt;             ]  ETA: 0:00:00Evaluating over 100 metamodels:  47%[===========&gt;             ]  ETA: 0:00:00Evaluating over 100 metamodels:  48%[============&gt;            ]  ETA: 0:00:00Evaluating over 100 metamodels:  49%[============&gt;            ]  ETA: 0:00:00Evaluating over 100 metamodels:  50%[============&gt;            ]  ETA: 0:00:00Evaluating over 100 metamodels:  51%[============&gt;            ]  ETA: 0:00:00Evaluating over 100 metamodels:  52%[=============&gt;           ]  ETA: 0:00:00Evaluating over 100 metamodels:  53%[=============&gt;           ]  ETA: 0:00:00Evaluating over 100 metamodels:  54%[=============&gt;           ]  ETA: 0:00:00Evaluating over 100 metamodels:  55%[=============&gt;           ]  ETA: 0:00:00Evaluating over 100 metamodels:  56%[==============&gt;          ]  ETA: 0:00:00Evaluating over 100 metamodels:  57%[==============&gt;          ]  ETA: 0:00:00Evaluating over 100 metamodels:  58%[==============&gt;          ]  ETA: 0:00:00Evaluating over 100 metamodels:  59%[==============&gt;          ]  ETA: 0:00:00Evaluating over 100 metamodels:  60%[===============&gt;         ]  ETA: 0:00:00Evaluating over 100 metamodels:  61%[===============&gt;         ]  ETA: 0:00:00Evaluating over 100 metamodels:  62%[===============&gt;         ]  ETA: 0:00:00Evaluating over 100 metamodels:  63%[===============&gt;         ]  ETA: 0:00:00Evaluating over 100 metamodels:  64%[================&gt;        ]  ETA: 0:00:00Evaluating over 100 metamodels:  65%[================&gt;        ]  ETA: 0:00:00Evaluating over 100 metamodels:  66%[================&gt;        ]  ETA: 0:00:00Evaluating over 100 metamodels:  67%[================&gt;        ]  ETA: 0:00:00Evaluating over 100 metamodels:  68%[=================&gt;       ]  ETA: 0:00:00Evaluating over 100 metamodels:  69%[=================&gt;       ]  ETA: 0:00:00Evaluating over 100 metamodels:  70%[=================&gt;       ]  ETA: 0:00:00Evaluating over 100 metamodels:  71%[=================&gt;       ]  ETA: 0:00:00Evaluating over 100 metamodels:  72%[==================&gt;      ]  ETA: 0:00:00Evaluating over 100 metamodels:  73%[==================&gt;      ]  ETA: 0:00:00Evaluating over 100 metamodels:  74%[==================&gt;      ]  ETA: 0:00:00Evaluating over 100 metamodels:  75%[==================&gt;      ]  ETA: 0:00:00Evaluating over 100 metamodels:  76%[===================&gt;     ]  ETA: 0:00:00Evaluating over 100 metamodels:  77%[===================&gt;     ]  ETA: 0:00:00Evaluating over 100 metamodels:  78%[===================&gt;     ]  ETA: 0:00:00Evaluating over 100 metamodels:  79%[===================&gt;     ]  ETA: 0:00:00Evaluating over 100 metamodels:  80%[====================&gt;    ]  ETA: 0:00:00Evaluating over 100 metamodels:  81%[====================&gt;    ]  ETA: 0:00:00Evaluating over 100 metamodels:  82%[====================&gt;    ]  ETA: 0:00:00Evaluating over 100 metamodels:  83%[====================&gt;    ]  ETA: 0:00:00Evaluating over 100 metamodels:  84%[=====================&gt;   ]  ETA: 0:00:00Evaluating over 100 metamodels:  85%[=====================&gt;   ]  ETA: 0:00:00Evaluating over 100 metamodels:  86%[=====================&gt;   ]  ETA: 0:00:00Evaluating over 100 metamodels:  87%[=====================&gt;   ]  ETA: 0:00:00Evaluating over 100 metamodels:  88%[======================&gt;  ]  ETA: 0:00:00Evaluating over 100 metamodels:  89%[======================&gt;  ]  ETA: 0:00:00Evaluating over 100 metamodels:  90%[======================&gt;  ]  ETA: 0:00:00Evaluating over 100 metamodels:  91%[======================&gt;  ]  ETA: 0:00:00Evaluating over 100 metamodels:  92%[=======================&gt; ]  ETA: 0:00:00Evaluating over 100 metamodels:  93%[=======================&gt; ]  ETA: 0:00:00Evaluating over 100 metamodels:  94%[=======================&gt; ]  ETA: 0:00:00Evaluating over 100 metamodels:  95%[=======================&gt; ]  ETA: 0:00:00Evaluating over 100 metamodels:  96%[========================&gt;]  ETA: 0:00:00Evaluating over 100 metamodels:  97%[========================&gt;]  ETA: 0:00:00Evaluating over 100 metamodels:  98%[========================&gt;]  ETA: 0:00:00Evaluating over 100 metamodels:  99%[========================&gt;]  ETA: 0:00:00Evaluating over 100 metamodels: 100%[=========================] Time: 0:00:00\n\n\n\n\n4.2 report tunning results\n\nbest_ensemble = fitted_params(tuned_ensemble).best_model\n@show best_ensemble.model.K\n@show best_ensemble.bagging_fraction\n\nbest_ensemble.model.K = 3\nbest_ensemble.bagging_fraction = 0.6111111111111112\n\n\n0.6111111111111112\n\n\nget detail report\n\nr = report(tuned_ensemble)\n\n(best_model = DeterministicEnsembleModel(model = KNNRegressor(K = 3, …), …),\n best_history_entry = (model = DeterministicEnsembleModel(model = KNNRegressor(K = 3, …), …),\n                       measure = StatisticalMeasuresBase.RobustMeasure{StatisticalMeasuresBase.FussyMeasure{StatisticalMeasuresBase.RobustMeasure{StatisticalMeasuresBase.Multimeasure{StatisticalMeasuresBase.SupportsMissingsMeasure{StatisticalMeasures.LPLossOnScalars{Int64}}, Nothing, StatisticalMeasuresBase.Mean, typeof(identity)}}, Nothing}}[LPLoss(p = 2)],\n                       measurement = [0.0014622515676628268],\n                       per_fold = [[0.0014622515676628268]],),\n history = NamedTuple{(:model, :measure, :measurement, :per_fold), Tuple{MLJEnsembles.DeterministicEnsembleModel{NearestNeighborModels.KNNRegressor}, Vector{StatisticalMeasuresBase.RobustMeasure{StatisticalMeasuresBase.FussyMeasure{StatisticalMeasuresBase.RobustMeasure{StatisticalMeasuresBase.Multimeasure{StatisticalMeasuresBase.SupportsMissingsMeasure{StatisticalMeasures.LPLossOnScalars{Int64}}, Nothing, StatisticalMeasuresBase.Mean, typeof(identity)}}, Nothing}}}, Vector{Float64}, Vector{Vector{Float64}}}}[(model = DeterministicEnsembleModel(model = KNNRegressor(K = 18, …), …), measure = [LPLoss(p = 2)], measurement = [0.006563470407815136], per_fold = [[0.006563470407815136]]), (model = DeterministicEnsembleModel(model = KNNRegressor(K = 16, …), …), measure = [LPLoss(p = 2)], measurement = [0.0122246059374603], per_fold = [[0.0122246059374603]]), (model = DeterministicEnsembleModel(model = KNNRegressor(K = 1, …), …), measure = [LPLoss(p = 2)], measurement = [0.0036628015206465734], per_fold = [[0.0036628015206465734]]), (model = DeterministicEnsembleModel(model = KNNRegressor(K = 14, …), …), measure = [LPLoss(p = 2)], measurement = [0.008020213502274467], per_fold = [[0.008020213502274467]]), (model = DeterministicEnsembleModel(model = KNNRegressor(K = 5, …), …), measure = [LPLoss(p = 2)], measurement = [0.001787953402180091], per_fold = [[0.001787953402180091]]), (model = DeterministicEnsembleModel(model = KNNRegressor(K = 7, …), …), measure = [LPLoss(p = 2)], measurement = [0.0025945479977448303], per_fold = [[0.0025945479977448303]]), (model = DeterministicEnsembleModel(model = KNNRegressor(K = 18, …), …), measure = [LPLoss(p = 2)], measurement = [0.020351582333467805], per_fold = [[0.020351582333467805]]), (model = DeterministicEnsembleModel(model = KNNRegressor(K = 12, …), …), measure = [LPLoss(p = 2)], measurement = [0.009536648688229333], per_fold = [[0.009536648688229333]]), (model = DeterministicEnsembleModel(model = KNNRegressor(K = 12, …), …), measure = [LPLoss(p = 2)], measurement = [0.009536648688229333], per_fold = [[0.009536648688229333]]), (model = DeterministicEnsembleModel(model = KNNRegressor(K = 12, …), …), measure = [LPLoss(p = 2)], measurement = [0.009536648688229333], per_fold = [[0.009536648688229333]])  …  (model = DeterministicEnsembleModel(model = KNNRegressor(K = 20, …), …), measure = [LPLoss(p = 2)], measurement = [0.01646454995922476], per_fold = [[0.01646454995922476]]), (model = DeterministicEnsembleModel(model = KNNRegressor(K = 14, …), …), measure = [LPLoss(p = 2)], measurement = [0.006456471195446319], per_fold = [[0.006456471195446319]]), (model = DeterministicEnsembleModel(model = KNNRegressor(K = 1, …), …), measure = [LPLoss(p = 2)], measurement = [0.003151889979016522], per_fold = [[0.003151889979016522]]), (model = DeterministicEnsembleModel(model = KNNRegressor(K = 3, …), …), measure = [LPLoss(p = 2)], measurement = [0.0030046273651692227], per_fold = [[0.0030046273651692227]]), (model = DeterministicEnsembleModel(model = KNNRegressor(K = 14, …), …), measure = [LPLoss(p = 2)], measurement = [0.004745533719078165], per_fold = [[0.004745533719078165]]), (model = DeterministicEnsembleModel(model = KNNRegressor(K = 7, …), …), measure = [LPLoss(p = 2)], measurement = [0.004590011170145359], per_fold = [[0.004590011170145359]]), (model = DeterministicEnsembleModel(model = KNNRegressor(K = 7, …), …), measure = [LPLoss(p = 2)], measurement = [0.004590011170145359], per_fold = [[0.004590011170145359]]), (model = DeterministicEnsembleModel(model = KNNRegressor(K = 3, …), …), measure = [LPLoss(p = 2)], measurement = [0.0036225306262139788], per_fold = [[0.0036225306262139788]]), (model = DeterministicEnsembleModel(model = KNNRegressor(K = 1, …), …), measure = [LPLoss(p = 2)], measurement = [0.0031016792824338077], per_fold = [[0.0031016792824338077]]), (model = DeterministicEnsembleModel(model = KNNRegressor(K = 12, …), …), measure = [LPLoss(p = 2)], measurement = [0.007526080413070994], per_fold = [[0.007526080413070994]])],\n best_report = (measures = Any[],\n                oob_measurements = missing,),\n plotting = (parameter_names = [\"bagging_fraction\", \"model.K\"],\n             parameter_scales = [:linear, :linear],\n             parameter_values = Any[0.8888888888888888 18; 0.6111111111111112 16; … ; 0.5555555555555556 1; 0.6111111111111112 12],\n             measurements = [0.006563470407815136, 0.0122246059374603, 0.0036628015206465734, 0.008020213502274467, 0.001787953402180091, 0.0025945479977448303, 0.020351582333467805, 0.009536648688229333, 0.009536648688229333, 0.009536648688229333  …  0.01646454995922476, 0.006456471195446319, 0.003151889979016522, 0.0030046273651692227, 0.004745533719078165, 0.004590011170145359, 0.004590011170145359, 0.0036225306262139788, 0.0031016792824338077, 0.007526080413070994],),)\n\n\n\n\n4.3 plot tunning results\n\nres = r.plotting\ntable=(vals_b = res.parameter_values[:, 1],\n            vals_k = res.parameter_values[:, 2],\n            measurement=res.measurements\n)\n\ndatalayer=data(table)\nmappinglayer=mapping(:vals_b,:vals_k,:measurement,color=:measurement)\nvislayler=visual(Tricontourf,colormap = :batlow)\nax=(width = 400, height = 400)\nplt=datalayer*mappinglayer*vislayler\ndraw(plt,axis=ax)\n\n\n\n\n\n\n\nFigure 1: fig-ensemble-params-tunning\n\n\n\n\n\n\n\n4.4 predict with ensemble model\n\nŷ = predict(tuned_ensemble, rows=test)\n@show rms(ŷ, y[test])\n\nrms(ŷ, y[test]) = 0.05120320246985217\n\n\n0.05120320246985217",
+    "crumbs": [
+      "Learn",
+      "ensemble model"
+    ]
   }
 ]

@@ -214,6 +214,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text">3.boston housing</span></a>
   </div>
 </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../dataset/mtcar.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4.auto mpg</span></a>
+  </div>
+</li>
     </ul>
     </div>
 </nav>
@@ -277,14 +283,14 @@ info
 </div>
 <section id="load-csv" class="level2">
 <h2 class="anchored" data-anchor-id="load-csv">1. load csv</h2>
-<div id="b7c6a1e1" class="cell" data-execution_count="1">
+<div id="5c61ce78" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">CSV</span>,<span class="bu">DataFrames</span>,<span class="bu">Tidier</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">CairoMakie</span>,<span class="bu">AlgebraOfGraphics</span>,<span class="bu">MakieThemes</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>Makie.<span class="fu">set_theme!</span>(<span class="fu">ggthemr</span>(<span class="op">:</span>dust))</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>df<span class="op">=</span>CSV.<span class="fu">File</span>(<span class="st">"../data/penguine_data.csv"</span>)<span class="op">|&gt;</span>DataFrame</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">first</span>(df,<span class="fl">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="2">
+<div class="cell-output cell-output-display" data-execution_count="9">
 <div><div style="float: left;"><span>5×7 DataFrame</span></div><div style="clear: both;"></div></div><div class="data-frame" style="overflow-x: scroll;">
 <table class="data-frame table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
@@ -368,9 +374,9 @@ info
 </section>
 <section id="describe-dataframe" class="level2">
 <h2 class="anchored" data-anchor-id="describe-dataframe">2. describe dataframe</h2>
-<div id="4dd6b1c9" class="cell" data-execution_count="2">
+<div id="0685ed93" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">describe</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="3">
+<div class="cell-output cell-output-display" data-execution_count="10">
 <div><div style="float: left;"><span>7×7 DataFrame</span></div><div style="clear: both;"></div></div><div class="data-frame" style="overflow-x: scroll;">
 <table class="data-frame table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
@@ -481,8 +487,8 @@ info
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>mappinglayer<span class="op">=</span><span class="fu">frequency</span>()<span class="fu">*mapping</span>(<span class="op">:</span>species,color <span class="op">=</span> <span class="op">:</span>island,dodge <span class="op">=</span> <span class="op">:</span>island)</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>axis <span class="op">=</span> (width <span class="op">=</span> <span class="fl">225</span>, height <span class="op">=</span> <span class="fl">225</span>)</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">draw</span>(datalayer<span class="op">*</span>mappinglayer,axis<span class="op">=</span>axis)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display page-columns page-full" data-execution_count="4">
-<div id="fig-penguins-fequency" class="quarto-figure quarto-figure-center quarto-float anchored page-columns page-full" data-fig-align="center" data-cap-location="margin">
+<div class="cell-output cell-output-display page-columns page-full" data-execution_count="11">
+<div id="fig-penguins-fequency" class="quarto-figure quarto-figure-center quarto-float anchored page-columns page-full" data-cap-location="margin" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure page-columns page-full">
 <div aria-describedby="fig-penguins-fequency-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="penguins_files/figure-html/fig-penguins-fequency-output-1.svg" class="img-fluid quarto-figure quarto-figure-center figure-img">
@@ -497,12 +503,12 @@ Figure&nbsp;1: fig-penguins-fequency
 </section>
 <section id="correlation-of-two-variables" class="level3 page-columns page-full">
 <h3 class="anchored" data-anchor-id="correlation-of-two-variables">3.2 correlation of two variables</h3>
-<div id="0b384adc" class="cell" data-execution_count="4">
+<div id="8c05bef8" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">#show(names(df))</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>cats<span class="op">=</span>[<span class="st">"bill_length_mm"</span>, <span class="st">"bill_depth_mm"</span>, <span class="st">"flipper_length_mm"</span>, <span class="st">"body_mass_g"</span>]</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>len<span class="op">=</span><span class="fu">length</span>(cats)</span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>cats<span class="op">=</span><span class="fu">Symbol</span>.(cats)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="5">
+<div class="cell-output cell-output-display" data-execution_count="12">
 <pre><code>4-element Vector{Symbol}:
  :bill_length_mm
  :bill_depth_mm
@@ -536,8 +542,8 @@ Figure&nbsp;1: fig-penguins-fequency
 <span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>        <span class="fu">legend!</span>(fig[<span class="fl">2</span><span class="op">:</span><span class="fl">3</span>,<span class="fl">5</span>], cl)</span>
 <span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>        fig</span>
 <span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display page-columns page-full" data-execution_count="6">
-<div id="fig-penguins-pairplot" class="quarto-figure quarto-figure-center quarto-float anchored page-columns page-full" data-fig-align="center" data-cap-location="margin">
+<div class="cell-output cell-output-display page-columns page-full" data-execution_count="13">
+<div id="fig-penguins-pairplot" class="quarto-figure quarto-figure-center quarto-float anchored page-columns page-full" data-cap-location="margin" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure page-columns page-full">
 <div aria-describedby="fig-penguins-pairplot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="penguins_files/figure-html/fig-penguins-pairplot-output-1.svg" class="img-fluid quarto-figure quarto-figure-center figure-img">
@@ -557,8 +563,8 @@ Figure&nbsp;2: fig-penguins-pairplot
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>mappinglayer2<span class="op">=</span><span class="fu">mapping</span>(<span class="op">:</span>species, <span class="op">:</span>bill_depth_mm;color<span class="op">=:</span>species)</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>vislayer2<span class="op">=</span><span class="fu">visual</span>(BoxPlot,show_notch<span class="op">=</span><span class="cn">true</span>)</span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="fu">draw</span>(datalayer<span class="op">*</span>mappinglayer2<span class="op">*</span>vislayer2,axis<span class="op">=</span>ax)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display page-columns page-full" data-execution_count="7">
-<div id="fig-penguins-bodymass" class="quarto-figure quarto-figure-center quarto-float anchored page-columns page-full" data-fig-align="center" data-cap-location="margin">
+<div class="cell-output cell-output-display page-columns page-full" data-execution_count="14">
+<div id="fig-penguins-bodymass" class="quarto-figure quarto-figure-center quarto-float anchored page-columns page-full" data-cap-location="margin" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure page-columns page-full">
 <div aria-describedby="fig-penguins-bodymass-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="penguins_files/figure-html/fig-penguins-bodymass-output-1.svg" class="img-fluid quarto-figure quarto-figure-center figure-img">

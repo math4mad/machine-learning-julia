@@ -46,6 +46,8 @@ website:
           href: learn/index.qmd 
         - text: "ensemble model"
           href: learn/ensemble-model.qmd 
+        - text: "ensemble model with boston housing dataset"
+          href: learn/ensemblemodel-with-bostonhouse.qmd
     - id: packages
       collapse-level: 1
       contents:

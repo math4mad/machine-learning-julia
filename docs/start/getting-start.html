@@ -256,15 +256,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="loading-data-tidy-data" class="level3">
 <h3 class="anchored" data-anchor-id="loading-data-tidy-data">1.loading data, tidy data</h3>
 <p>for <code>iris</code> dataset ref: <a href="../dataset/iris.html"><code>Iris Dataset EDA</code></a></p>
-<div id="c91beff1" class="cell" data-execution_count="1">
+<div id="a94686b6" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">Pipe</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">CSV</span>,<span class="bu">DataFrames</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">MLJ</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>df<span class="op">=</span>CSV.<span class="fu">File</span>(<span class="st">"../data/iris.csv"</span>)<span class="op">|&gt;</span>DataFrame;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="9de61a0c" class="cell" data-execution_count="2">
+<div id="43ed9726" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">schema</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="19">
+<div class="cell-output cell-output-display" data-execution_count="3">
 <div class="ansi-escaped-output">
 <pre>┌──────────────┬────────────┬──────────┐
 │ names        │ scitypes   │ types    │
@@ -280,10 +280,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>for <code>species</code> need transform to Categorical type</p>
-<div id="7ea75665" class="cell" data-execution_count="3">
+<div id="bf534113" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>df.species<span class="op">=</span> <span class="fu">coerce</span>(df.species,Multiclass);</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">schema</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="20">
+<div class="cell-output cell-output-display" data-execution_count="4">
 <div class="ansi-escaped-output">
 <pre>┌──────────────┬───────────────┬────────────────────────────────────┐
 │ names        │ scitypes      │ types                              │
@@ -299,9 +299,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>now we need to split data</p>
-<div id="cd359769" class="cell" data-execution_count="4">
+<div id="2a382f89" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>y, X <span class="op">=</span> <span class="fu">unpack</span>(df, <span class="op">==</span>(<span class="op">:</span>species); rng<span class="op">=</span><span class="fl">123</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="21">
+<div class="cell-output cell-output-display" data-execution_count="5">
 <div class="ansi-escaped-output">
 <pre>(CategoricalArrays.CategoricalValue{String15, UInt32}[String15("virginica"), String15("versicolor"), String15("virginica"), String15("setosa"), String15("versicolor"), String15("virginica"), String15("setosa"), String15("versicolor"), String15("setosa"), String15("virginica")  …  String15("virginica"), String15("virginica"), String15("virginica"), String15("versicolor"), String15("virginica"), String15("setosa"), String15("virginica"), String15("virginica"), String15("setosa"), String15("setosa")], <span class="ansi-bold">150×4 DataFrame</span>
 <span class="ansi-bold"> Row </span>│<span class="ansi-bold"> sepal_length </span><span class="ansi-bold"> sepal_width </span><span class="ansi-bold"> petal_length </span><span class="ansi-bold"> petal_width </span>
@@ -336,9 +336,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="search-models-for-data" class="level3">
 <h3 class="anchored" data-anchor-id="search-models-for-data">2. search models for data</h3>
-<div id="06d8ec20" class="cell" data-execution_count="5">
+<div id="482bf53e" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>res<span class="op">=</span><span class="pp">@pipe</span> <span class="fu">models</span>(<span class="fu">matching</span>(X,y))<span class="op">|&gt;</span> DataFrame<span class="op">|&gt;</span><span class="fu">select</span>(_,[<span class="op">:</span>name,<span class="op">:</span>package_name])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="22">
+<div class="cell-output cell-output-display" data-execution_count="6">
 <div><div style="float: left;"><span>53×2 DataFrame</span></div><div style="float: right;"><span style="font-style: italic;">28 rows omitted</span></div><div style="clear: both;"></div></div><div class="data-frame" style="overflow-x: scroll;">
 <table class="data-frame table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
@@ -491,9 +491,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>simple way to look into model details:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">doc</span>(<span class="op">$</span>name, pkg<span class="op">=$</span>package_name)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div id="4611f678" class="cell" data-execution_count="6">
+<div id="f936a6f8" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">doc</span>(<span class="st">"AdaBoostStumpClassifier"</span>, pkg<span class="op">=</span><span class="st">"DecisionTree"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display cell-output-markdown" data-execution_count="23">
+<div class="cell-output cell-output-display cell-output-markdown" data-execution_count="7">
 <pre><code>AdaBoostStumpClassifier</code></pre>
 <p>A model type for constructing a Ada-boosted stump classifier, based on <a href="https://github.com/bensadeghi/DecisionTree.jl">DecisionTree.jl</a>, and implementing the MLJ model interface.</p>
 <p>From MLJ, the type can be imported using</p>
@@ -573,7 +573,7 @@ feature_importances(mach)</code></pre>
 <section id="load-model" class="level3">
 <h3 class="anchored" data-anchor-id="load-model">3. load model</h3>
 <p>there are too many models, so you just add code if repel notice missing package , you just install packages.</p>
-<div id="469b1b17" class="cell" data-execution_count="7">
+<div id="ff9d1d03" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>Tree <span class="op">=</span> <span class="pp">@load</span> DecisionTreeClassifier pkg<span class="op">=</span>DecisionTree</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>import MLJDecisionTreeInterface ✔</code></pre>
@@ -581,16 +581,16 @@ feature_importances(mach)</code></pre>
 <div class="cell-output cell-output-stderr">
 <pre><code>[ Info: For silent loading, specify `verbosity=0`. </code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="24">
+<div class="cell-output cell-output-display" data-execution_count="8">
 <pre><code>MLJDecisionTreeInterface.DecisionTreeClassifier</code></pre>
 </div>
 </div>
 </section>
 <section id="instanite-model" class="level3">
 <h3 class="anchored" data-anchor-id="instanite-model">4. instanite model</h3>
-<div id="1205871e" class="cell" data-execution_count="8">
+<div id="e0f59d00" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a> tree<span class="op">=</span><span class="fu">Tree</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="25">
+<div class="cell-output cell-output-display" data-execution_count="9">
 <pre><code>DecisionTreeClassifier(
   max_depth = -1, 
   min_samples_leaf = 1, 
@@ -607,12 +607,12 @@ feature_importances(mach)</code></pre>
 </section>
 <section id="evalute-model" class="level3">
 <h3 class="anchored" data-anchor-id="evalute-model">5. evalute model</h3>
-<div id="9120dbe2" class="cell" data-execution_count="9">
+<div id="6fc14568" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">evaluate</span>(tree, X, y,</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>         resampling<span class="op">=</span><span class="fu">CV</span>(shuffle<span class="op">=</span><span class="cn">true</span>),</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>         measures<span class="op">=</span>[log_loss, accuracy],</span>
 <span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>         verbosity<span class="op">=</span><span class="fl">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="26">
+<div class="cell-output cell-output-display" data-execution_count="10">
 <div class="ansi-escaped-output">
 <pre>PerformanceEvaluation object with these fields:
   model, measure, operation, measurement, per_fold,
@@ -622,9 +622,9 @@ Extract:
 ┌──────────────────────┬──────────────┬─────────────┬─────────┬─────────────────
 │ measure              │ operation    │ measurement │ 1.96*SE │ per_fold       ⋯
 ├──────────────────────┼──────────────┼─────────────┼─────────┼─────────────────
-│ LogLoss(             │ predict      │ 2.4         │ 1.53    │ [2.88, 2.22e-1 ⋯
+│ LogLoss(             │ predict      │ 2.4         │ 1.31    │ [1.44, 2.88, 2 ⋯
 │   tol = 2.22045e-16) │              │             │         │                ⋯
-│ Accuracy()           │ predict_mode │ 0.933       │ 0.0425  │ [0.92, 1.0, 0. ⋯
+│ Accuracy()           │ predict_mode │ 0.933       │ 0.0362  │ [0.96, 0.92, 1 ⋯
 └──────────────────────┴──────────────┴─────────────┴─────────┴─────────────────
 <span class="ansi-cyan-fg">                                                                1 column omitted</span>
 </pre>
@@ -635,46 +635,46 @@ Extract:
 <section id="fit-and-perdict" class="level3">
 <h3 class="anchored" data-anchor-id="fit-and-perdict">6. fit and perdict</h3>
 <p>fill model and data to <code>machine</code></p>
-<div id="0c911ae4" class="cell" data-execution_count="10">
+<div id="b1a6252e" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>mach<span class="op">=</span><span class="fu">machine</span>(tree, X,y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="27">
+<div class="cell-output cell-output-display" data-execution_count="11">
 <pre><code>untrained Machine; caches model-specific representations of data
   model: DecisionTreeClassifier(max_depth = -1, …)
   args: 
-    1:  Source @124 ⏎ Table{AbstractVector{Continuous}}
-    2:  Source @591 ⏎ AbstractVector{Multiclass{3}}</code></pre>
+    1:  Source @757 ⏎ Table{AbstractVector{Continuous}}
+    2:  Source @003 ⏎ AbstractVector{Multiclass{3}}</code></pre>
 </div>
 </div>
 </section>
 <section id="split-data-by-index" class="level3">
 <h3 class="anchored" data-anchor-id="split-data-by-index">7. split data by index</h3>
-<div id="07b5d46a" class="cell" data-execution_count="11">
+<div id="72a50073" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>train, test <span class="op">=</span> <span class="fu">partition</span>(<span class="fu">eachindex</span>(y), <span class="fl">0.7</span>); </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="fitting-model" class="level3">
 <h3 class="anchored" data-anchor-id="fitting-model">8. fitting model</h3>
 <p>use train index to inform model to we must not use all data!!!</p>
-<div id="af15eb5f" class="cell" data-execution_count="12">
+<div id="11555d04" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fit!</span>(mach, rows<span class="op">=</span>train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>[ Info: Training machine(DecisionTreeClassifier(max_depth = -1, …), …).</code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="29">
+<div class="cell-output cell-output-display" data-execution_count="13">
 <pre><code>trained Machine; caches model-specific representations of data
   model: DecisionTreeClassifier(max_depth = -1, …)
   args: 
-    1:  Source @124 ⏎ Table{AbstractVector{Continuous}}
-    2:  Source @591 ⏎ AbstractVector{Multiclass{3}}</code></pre>
+    1:  Source @757 ⏎ Table{AbstractVector{Continuous}}
+    2:  Source @003 ⏎ AbstractVector{Multiclass{3}}</code></pre>
 </div>
 </div>
 </section>
 <section id="predict" class="level3">
 <h3 class="anchored" data-anchor-id="predict">9. predict</h3>
 <p>same with other julia stats model , X must be a matrix ,even if it is one row and one column data</p>
-<div id="bd1caa15" class="cell" data-execution_count="13">
+<div id="3c432a24" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>yhat <span class="op">=</span> <span class="fu">predict_mode</span>(mach, X[test,<span class="op">:</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="30">
+<div class="cell-output cell-output-display" data-execution_count="14">
 <pre><code>45-element CategoricalArrays.CategoricalArray{String15,1,UInt32}:
  String15("versicolor")
  String15("virginica")
@@ -707,15 +707,15 @@ Extract:
 </section>
 <section id="plot-descision-bundary" class="level3">
 <h3 class="anchored" data-anchor-id="plot-descision-bundary">10. plot descision bundary</h3>
-<div id="b15d412f" class="cell" data-execution_count="14">
+<div id="d250a193" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">accuracy</span>(yhat,y[test])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="31">
+<div class="cell-output cell-output-display" data-execution_count="15">
 <pre><code>0.9555555555555556</code></pre>
 </div>
 </div>
-<div id="11ec801b" class="cell" data-execution_count="15">
+<div id="e7367af3" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(yhat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="32">
+<div class="cell-output cell-output-display" data-execution_count="16">
 <pre><code>3-element Vector{String15}:
  "setosa"
  "versicolor"

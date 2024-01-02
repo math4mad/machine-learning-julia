@@ -1,17 +1,20 @@
 ---
 title: "MLJ Cheatsheet"
+
 ---
 
 
 ## Starting an interactive MLJ session
 ::: {.row}
 ::: {.col-sm-6,col-md-6,col-lg-6}
-::: {.card .rounded-2}
-::: {.card-header .rounded-2}
-    Starting an interactive MLJ session
+::: {.card .rounded-3 .shadow-sm}
+::: {.card-header .rounded-top-3 .alert .alert-success}
+<h3>Starting an interactive MLJ session</h3>
+    
 :::
 ::: {.card-body}
 ::: {.card-title}
+
     Special title treatment
 :::
 
@@ -28,8 +31,8 @@ v"0.20.2"
 :::
 
 ## model search
-<div class="card">
-  <div class="card-header">
+<div class="card shadow-sm rounded-3">
+  <div class="card-header alert alert-success rounded-top-3">
     model search
   </div>
   <ul class="list-group list-group-flush">
@@ -43,8 +46,8 @@ v"0.20.2"
 </div>
 
 ## Scitypes and coercion
-<div class="card">
-  <div class="card-header">
+<div class="card shadow-sm rounded-3">
+  <div class="card-header alert alert-success rounded-top-3">
   <h3>Scitypes and coercion</h3>
   </div>
   <ul class="list-group list-group-flush">
@@ -59,7 +62,7 @@ v"0.20.2"
 ## Ingesting data
 
 <div class="card">
-<div class="card-header">
+<div class="card-header alert alert-success">
 <h3>Ingesting data</h3>
 </div>
 <div class="card-body">
@@ -84,7 +87,7 @@ y, X =  unpack(channing, ==(:Exit); rng=123)
 
 ## Machine Construction 
 <div class="card">
-  <div class="card-header">
+  <div class="card-header alert alert-success">
   <h3>Machine Construction</h3>
   </div>
   <ul class="list-group list-group-flush">
@@ -96,7 +99,7 @@ y, X =  unpack(channing, ==(:Exit); rng=123)
 
 ## fitting
 <div class="card">
-<div class="card-header">
+<div class="card-header alert alert-success">
 <h3>fitting</h3>
 </div>
 <div class="card-body">

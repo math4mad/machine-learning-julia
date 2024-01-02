@@ -1,0 +1,72 @@
+---
+title: "Palmer Penguins"
+author: "Cobblepot Analytics"
+format: dashboard
+---
+
+```{julia}
+using CSV,DataFrames,Tidier,PrettyTables
+using CairoMakie,AlgebraOfGraphics,MakieThemes
+using RCall
+Makie.set_theme!(ggthemr(:dust));
+```
+
+## Row {height=60%}
+
+```{julia}
+cats=["bill_length_mm", "bill_depth_mm", "flipper_length_mm", "body_mass_g"]
+len=length(cats)
+cats=Symbol.(cats)
+palette = (color=tuple.(["#FC7808", "#8C00EC", "#107A78"], 0.65),
+           marker=[:circle, :utriangle, :rect])
+cycle = Cycle([:color, :marker], covary=true)
+
+function make_layer(sy1::Symbol,sy2::Symbol)
+   mapping_layer=sy1==sy2 ? mapping(sy1,color=:species) : mapping(sy1,sy2,color=:species)
+   vis_layer=sy1==sy2 ? visual(Density,color=:species) : visual(Scatter,color=:species,strokewidth=1,storkecolor=:black)
+   return  datalayer*mapping_layer*vis_layer
+end
+
+df=CSV.File("../data/penguine_data.csv")|>DataFrame
+#@pt first(df,5);
+```
+
+
+
+
+
+## Row {height=40%}
+
+```{julia}
+#| title: Population
+datalayer=data(df)
+mappinglayer=frequency()*mapping(:species,color = :island,dodge = :island)
+axis = (width = 225, height = 225)
+draw(datalayer*mappinglayer,axis=axis)
+```
+
+```{julia}
+#| title: Pair Plot
+with_theme(ggthemr(:dust),resolution = (800,800), palette=palette, Scatter=(cycle=cycle,)) do
+        cl=0.1
+        fig = Figure()
+        for i in 1:len
+            for  j in 1:len
+                ax=Axis(fig[i,j])
+                j==1 ? ax.ylabel= String(cats[i]) : nothing
+                i==len ? ax.xlabel= String(cats[j]) : nothing
+                layer=make_layer(cats[i],cats[j])
+              [i,j]==[len,len] ? cl=draw!(ax,layer) : draw!(ax,layer)
+            end
+        end
+        legend!(fig[2:3,5], cl)
+        fig
+end
+```
+
+```{julia}
+ax=(width = 225, height = 225)
+mappinglayer2=mapping(:species, :bill_depth_mm;color=:species)
+vislayer2=visual(BoxPlot,show_notch=true)
+draw(datalayer*mappinglayer2*vislayer2,axis=ax)
+```

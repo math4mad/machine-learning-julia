@@ -1,13 +1,12 @@
 project:
   type: website
   title: "Julia Machine Learning"
-  
   output-dir: docs
   render:
     - "*.qmd"
-  
   resources:
     - "data/iris.csv"
+    
 website:
   title: "Machine-Learning Julia"
   navbar:
@@ -48,6 +47,14 @@ website:
           href: learn/ensemble-model.qmd 
         - text: "ensemble model with boston housing dataset"
           href: learn/ensemblemodel-with-bostonhouse.qmd
+        - text: "learnig network 1"
+          href: learn/learning-network-1.qmd 
+        - text: "tailwind css test"
+          href: learn/tailwind-test.qmd 
+        - text: "PCA  explained"
+          href: learn/pca-explained.qmd 
+        - text: "menu test"
+        - href: learn/menu-test.qmd
     - id: packages
       collapse-level: 1
       contents:
@@ -75,6 +82,8 @@ website:
           href: dataset/boston-house.qmd
         - text: "4.auto mpg"
           href: dataset/mtcar.qmd
+        - text: "5.penguins dashboard"
+          href: dataset/penguins-dahboard.qmd
     
 format:
   html:
@@ -85,10 +94,9 @@ format:
       body-width: 840px
     mermaid:
       theme: forest
-
+     
 theme:
   - cosmo
-  #- features.css
   -  styles.scss
   -  theme.css
   -  feaures.css
@@ -99,3 +107,6 @@ execute:
 
 filters:
   - _extensions/qreacto/qreacto.lua
+
+code-block-bg: true
+highlight-style: Ayu 

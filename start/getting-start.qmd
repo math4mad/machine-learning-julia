@@ -1,6 +1,5 @@
 ---
 title: "Build first MLJ machine learning model"
-
 ---
 
 ##  Getting Start 
@@ -109,17 +108,3 @@ accuracy(yhat,y[test])
 ```{julia}
 levels(yhat)
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-

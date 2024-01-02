@@ -250,18 +250,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="starting-an-interactive-mlj-session">Starting an interactive MLJ session</h2>
 <div class="row">
 <div class="{.col-sm-6,col-md-6,col-lg-6}">
-<div class="card rounded-2">
-<div class="card-header rounded-2">
-<pre><code>Starting an interactive MLJ session</code></pre>
+<div class="card rounded-3 shadow-sm">
+<div class="card-header rounded-top-3 alert alert-success">
+<h3 class="anchored">
+Starting an interactive MLJ session
+</h3>
 </div>
 <div class="card-body">
 <div class="card-title">
 <pre><code>Special title treatment</code></pre>
 </div>
 <div class="card-text">
-<div class="sourceCode" id="cb3"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>julia<span class="op">&gt;</span> <span class="im">using</span> <span class="bu">MLJ</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>julia<span class="op">&gt;</span> MLJ_VERSION <span class="co"># version of MLJ for this cheatsheet</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="st">v"0.20.2"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>julia<span class="op">&gt;</span> <span class="im">using</span> <span class="bu">MLJ</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>julia<span class="op">&gt;</span> MLJ_VERSION <span class="co"># version of MLJ for this cheatsheet</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="st">v"0.20.2"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
@@ -270,8 +272,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="model-search" class="level2">
 <h2 class="anchored" data-anchor-id="model-search">model search</h2>
-<div class="card">
-<div class="card-header">
+<div class="card shadow-sm rounded-3">
+<div class="card-header alert alert-success rounded-top-3">
 <pre><code>model search</code></pre>
 </div>
 <ul class="list-group list-group-flush">
@@ -298,8 +300,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="scitypes-and-coercion" class="level2">
 <h2 class="anchored" data-anchor-id="scitypes-and-coercion">Scitypes and coercion</h2>
-<div class="card">
-<div class="card-header">
+<div class="card shadow-sm rounded-3">
+<div class="card-header alert alert-success rounded-top-3">
 <h3 class="anchored">
 Scitypes and coercion
 </h3>
@@ -323,7 +325,7 @@ Scitypes and coercion
 <section id="ingesting-data" class="level2">
 <h2 class="anchored" data-anchor-id="ingesting-data">Ingesting data</h2>
 <div class="card">
-<div class="card-header">
+<div class="card-header alert alert-success">
 <h3 class="anchored">
 Ingesting data
 </h3>
@@ -331,9 +333,9 @@ Ingesting data
 <div class="card-body">
 
 <p class="card-text">
-</p><div class="sourceCode" id="cb5"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">RDatasets</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>channing <span class="op">=</span> <span class="fu">dataset</span>(<span class="st">"boot"</span>, <span class="st">"channing"</span>)</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>y, X <span class="op">=</span>  <span class="fu">unpack</span>(channing, <span class="op">==</span>(<span class="op">:</span>Exit); rng<span class="op">=</span><span class="fl">123</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</p><div class="sourceCode" id="cb4"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">RDatasets</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>channing <span class="op">=</span> <span class="fu">dataset</span>(<span class="st">"boot"</span>, <span class="st">"channing"</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>y, X <span class="op">=</span>  <span class="fu">unpack</span>(channing, <span class="op">==</span>(<span class="op">:</span>Exit); rng<span class="op">=</span><span class="fl">123</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <ul class="list-group list-group-flush">
 <li class="list-group-item">
 <code>train, valid, test = partition(eachindex(y), 0.7, 0.2, rng=1234)</code> for 70:20:10 ratio
@@ -355,7 +357,7 @@ Ingesting data
 <section id="machine-construction" class="level2">
 <h2 class="anchored" data-anchor-id="machine-construction">Machine Construction</h2>
 <div class="card">
-<div class="card-header">
+<div class="card-header alert alert-success">
 <h3 class="anchored">
 Machine Construction
 </h3>
@@ -373,14 +375,14 @@ Machine Construction
 <section id="fitting" class="level2">
 <h2 class="anchored" data-anchor-id="fitting">fitting</h2>
 <div class="card">
-<div class="card-header">
+<div class="card-header alert alert-success">
 <h3 class="anchored">
 fitting
 </h3>
 </div>
 <div class="card-body">
 <p class="card-text">
-</p><div class="sourceCode" id="cb6"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit!</span>(mach, rows<span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span>, verbosity<span class="op">=</span><span class="fl">1</span>, force<span class="op">=</span><span class="cn">false</span>) (defaults shown)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</p><div class="sourceCode" id="cb5"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit!</span>(mach, rows<span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span>, verbosity<span class="op">=</span><span class="fl">1</span>, force<span class="op">=</span><span class="cn">false</span>) (defaults shown)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p></p>
 </div>
 </div>

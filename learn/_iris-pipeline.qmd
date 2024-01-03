@@ -1,0 +1,29 @@
+
+---
+title: "Iris Pipeline"
+---
+
+
+
+## 1. load packages
+
+```{julia}
+import MLJ:transform,inverse_transform,fit!,predict_mode,evaluate
+using CSV, DataFrames,JLSO,LinearAlgebra,MLJ,RDatasets
+```
+
+## 2. load data
+```{julia}
+X, y = @load_iris
+```
+
+## 3. mlj workflow
+```{julia}
+ KNNRegressor = @load KNNRegressor pkg=NearestNeighborModels
+ LinearRegressor = @load LinearRegressor pkg=MLJLinearModels add=true
+ PCA = @load PCA pkg=MultivariateStats add=true
+
+pipe1 =(X)|>ContinuousEncoder |> Standardizer
+pipe2 = PCA(maxoutdim=3) |> KNNRegressor()
+evaluate(pipe1|>pipe2, X,y,resampling=CV(nfolds=3), measure=MisclassificationRate())
+```

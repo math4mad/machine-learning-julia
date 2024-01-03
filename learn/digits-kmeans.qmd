@@ -1,0 +1,75 @@
+---
+title: "mlj digits kmeans"
+---
+
+
+
+## 1. load package
+
+```{julia}
+import MLJ:transform,inverse_transform,fit!,predict,fitted_params
+using CSV, DataFrames,JLSO,LinearAlgebra,MLJ,GLMakie,Pipe
+```
+## 2. load data
+```{julia}
+data=@pipe CSV.File("../data/load_digits.csv")|>DataFrame
+Xtr = Matrix(data[!,1:64])
+ytr = categorical(data[!,65])
+cat=levels(ytr)
+```
+
+## 3. pca workflow
+从 64维数字降维到 2 维
+```{julia}
+PCA = @load PCA pkg=MultivariateStats
+
+pcamodel=PCA(maxoutdim=2)
+
+kpcamachine = machine(pcamodel,Xtr ) |> fit!
+pcaXtr=transform(kpcamachine, Xtr)
+
+
+nums=200
+function boundary_data(data;n=nums)
+    xs=extrema(data[:x1]).|>d->round(d,digits=3)
+    ys=extrema(data[:x2]).|>d->round(d,digits=3)
+    tx = LinRange(xs...,n)
+    ty = LinRange(ys...,n)
+    xtest = mapreduce(collect, hcat, Iterators.product(tx, ty));
+    xtest=MLJ.table(xtest')
+    return tx,ty, xtest
+end
+
+tx,ty, Xtest=boundary_data(pcaXtr)
+```
+
+## 4. kmeans workflow
+```{julia}
+KMeans = @load KMeans pkg=Clustering
+model = KMeans(k=10)
+mach = machine(model, pcaXtr) |> fit!
+centers=fitted_params(mach)[:centers]
+yhat = predict(mach, Xtest)
+ytest=yhat|>Array|>d->reshape(d,nums,nums)
+```
+
+
+## 5. plot results
+```{julia}
+function plot_img()
+    fig=Figure(resolution=(900,900))
+    ax= Axis(fig[1,1])
+    colors=[:red, :yellow,:purple,:lightblue,:black,:orange,:pink,:blue,:tomato,:lightgreen,]
+    markers=['0','1','2','3','4','5','6','7','8','9']
+    contourf!(ax, tx,ty,ytest,levels=length(cat),colormap=:redsblues)
+    scatter!(ax, centers[1,:],centers[2,:],marker=:cross,markersize=26,color=:white)
+    for (i,c) in enumerate(cat)
+        dx=pcaXtr[:x1][ytr.==c]
+        dy=pcaXtr[:x2][ytr.==c]
+        scatter!(ax, dx,dy,color=(colors[i],0.8),label="$c",marker=markers[i],markersize=18)
+    end
+    axislegend(ax)
+fig
+end
+plot_img()
+```

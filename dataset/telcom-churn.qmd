@@ -1,0 +1,141 @@
+---
+title: "📱📱📱telcom customer churn"
+execute:
+  warning: false
+---
+
+:::{.callout-note title="info"}
+ ref : [Telco Customer Churn](https://www.kaggle.com/datasets/blastchar/telco-customer-churn)
+ 
+ churn means loss of customers
+:::
+
+## 1. load csv
+
+```{julia}
+ using CSV,DataFrames,Tidier
+ using CairoMakie,AlgebraOfGraphics,MakieThemes
+ using ScientificTypes
+ #Makie.set_theme!(ggthemr(:flat))
+df=CSV.File("../data/Telco-Customer-Churn.csv")|>DataFrame
+df=@chain  df  begin  @clean_names end
+#df=coerce(df,:total_charges=>Continuous)
+#df.total_charges=[length(idx)== 0 ? 0 : parse.(Float64,idx) for idx in  df.total_charges]
+first(df,5)
+```
+
+
+## 2.  describe dataframe
+```{julia}
+describe(df)
+```
+
+## 3. EDA  
+
+### 3.1 gender of customer
+```{julia}
+df31=@chain df begin
+  @group_by(gender)
+  @summarize(count=n())
+  @ungroup
+end
+```
+
+```{julia}
+let
+ax=(width=250,height=250)
+datalayer=data(df31)
+mplayer=mapping(:gender,:count,color=:gender)
+vislayer=visual(BarPlot,strokewidth=1,strokcolor=:black,bar_labels=:y,flip_labels_at=2000)
+plt=datalayer*mplayer*vislayer
+draw(plt,axis=ax)
+end
+```
+
+### 3.2 churn of customers
+```{julia}
+df32=@chain df begin
+   @group_by(churn)
+   @summarize(count=n())
+   @ungroup
+end
+
+```
+
+```{julia}
+let
+ax=(width=250,height=250)
+datalayer=data(df32)
+mplayer=mapping(:churn,:count,color=:churn)
+vislayer=visual(BarPlot,strokewidth=1,strokcolor=:black,bar_labels=:y,flip_labels_at=2000)
+plt=datalayer*mplayer*vislayer
+draw(plt,axis=ax)
+end
+```
+
+### 3.3  relation of  churn and tenure
+
+```{julia}
+let
+ax=(width=250,height=250)
+plt=data(df)*mapping(:churn,:tenure,color=:churn)*visual(BoxPlot;)
+draw(plt; axis=ax)
+end
+```
+### 3.4 contract type and churn 
+
+```{julia}
+let
+ax=(width=400,height=250)
+plt=data(df)*mapping(:contract)*frequency()*mapping(color=:churn,dodge=:churn)
+draw(plt; axis=ax)
+end
+```
+
+### 3.5  Churn by Seniority
+```{julia}
+let
+ax=(width=400,height=250)
+plt=data(df)*mapping(:senior_citizen)*frequency()*mapping(color=:churn,dodge=:churn)
+draw(plt; axis=ax)
+end
+
+```
+
+### 3.6 monthly_charges and churn
+
+```{julia}
+let 
+ ax=(width=400,height=250)
+ plt=data(df)*mapping(:monthly_charges)*AlgebraOfGraphics.density(datalimits=((0, 140),))*mapping(color=:churn)
+ draw(plt; axis=ax)
+
+end
+```
+
+### 3.7 totalcharges  and churn
+
+<!-- ```{julia}
+#| excute: false
+let 
+ ax=(width=400,height=250)
+ plt=data(df)*mapping(:total_charges)*AlgebraOfGraphics.density()*mapping(color=:churn)
+ draw(plt; axis=ax)
+end
+``` -->
+
+```{julia}
+df36=@chain df begin
+  @filter(total_charges != " ")
+  coerce(_,:total_charges=>Continuous)
+ end;
+```
+```{julia}
+let 
+ ax=(width=400,height=250)
+ plt=data(df36)*mapping(:total_charges)*AlgebraOfGraphics.density()*mapping(color=:churn)
+ draw(plt; axis=ax)
+end
+```
+
+

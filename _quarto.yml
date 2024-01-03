@@ -55,6 +55,11 @@ website:
           href: learn/pca-explained.qmd 
         - text: "menu test"
         - href: learn/menu-test.qmd
+        - text: "Iris Pipeline"
+        - href: learn/iris-pipeline.qmd
+        - text: "Digits pca kmeans"
+        - href: learn/digits-kmeans.qmd
+
     - id: packages
       collapse-level: 1
       contents:
@@ -84,6 +89,9 @@ website:
           href: dataset/mtcar.qmd
         - text: "5.penguins dashboard"
           href: dataset/penguins-dahboard.qmd
+        - text: "6.telcom customer churn"
+          href: dataset/telcom-churn.qmd
+        
     
 format:
   html:

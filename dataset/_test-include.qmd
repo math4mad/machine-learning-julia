@@ -1,0 +1,15 @@
+---
+title: "Test include methods"
+execute:
+  warning: false
+---
+
+{{<include _common.qmd >}}
+
+## 2. load csv
+```{julia}
+df=CSV.File("../data/iris.csv")|>DataFrame
+first(df,10)
+
+```
+

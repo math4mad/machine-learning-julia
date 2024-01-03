@@ -1,0 +1,139 @@
+---
+title: "Breast Cancer Wisconsin (Diagnostic) Data Set"
+execute:
+  warning: false
+---
+
+:::{.callout-note title="info"}
+ ref : [Breast Cancer Wisconsin (Diagnostic) Data Set](https://www.kaggle.com/datasets/uciml/breast-cancer-wisconsin-data/data)
+:::
+
+
+## 1. load package
+```{julia}
+ using CSV,DataFrames,Tidier,Pipe
+ using CairoMakie,AlgebraOfGraphics,MakieThemes
+ using ScientificTypes,StatsBase,RCall
+ #Makie.set_theme!(ggthemr(:flat))
+
+```
+
+## 2. load csv 
+```{julia}
+df=CSV.File("../data/Breast-Cancer-Wisconsin.csv")|>DataFrame
+df=@chain  df  begin  
+    @clean_names 
+    @select(Not(33))
+    @mutate(diagnosis = case_when(diagnosis=="M"  => "malignant",
+                        true    => "benign"))
+end
+first(df,5)
+```
+
+## 3. decscrbe of dataset
+```{julia}
+describe(df)
+```
+
+## 4. EDA  
+
+### 4.1 diagnostic of cancer
+```{julia}
+let
+    ax=(width=250,height=250)
+    plt=data(df)*mapping(:diagnosis)*frequency()*mapping(color=:diagnosis)
+    draw(plt;axis=ax)
+end
+```
+
+### 4.2  diagonstic  mean
+```{julia}
+#df42= @pivot_longer(df, 3:12, names_to = "features", values_to = "mean_value");
+
+df421=@chain df begin
+   @select(1:2)
+end
+df422=@chain df begin
+   @select(3:12)
+   mapcols(zscore, _)
+end
+df42=hcat(df421,df422)
+df42= @pivot_longer(df42, 3:12, names_to = "features", values_to = "mean_value")
+```
+
+
+```{julia}
+let
+ax=(width=600,height=250,xticklabelrotation = pi/8)
+datalayer=data(df42)
+mappinglayer=mapping(:features,:mean_value)
+vislayer=visual(Violin)
+plt=datalayer*mappinglayer*vislayer
+plt=data(df42) * visual(Violin) *mapping(:features, :mean_value,color=:diagnosis,dodge=:diagnosis,side=:diagnosis) 
+draw(plt;axis=ax)
+  
+end
+
+```
+
+### 4.3 second 10 features
+```{julia}
+df431=@chain df begin
+   @select(1:2)
+end
+df432=@chain df begin
+   @select(13:22)
+   mapcols(zscore, _)
+end
+df43=hcat(df431,df432)
+df43= @pivot_longer(df43, 3:12, names_to = "features", values_to = "mean_value")
+
+```
+
+```{julia}
+let
+ax=(width=600,height=400,xticklabelrotation = pi/8)
+plt=data(df43) * visual(Violin) *mapping(:features, :mean_value,color=:diagnosis,dodge=:diagnosis) 
+draw(plt;axis=ax)
+end
+
+```
+
+### 4.4  bee-swarm plot
+```{julia}
+#| eval: false
+df44=dropmissing(df43)
+rdata=df43.mean_value
+cats=df43.features
+diagnosis=df.diagnosis
+@rput rdata
+@rput cats
+@rput diagnosis
+
+R"""
+library(beeswarm)
+beeswarm(rdata ~ cats,
+         pch = 19, pwcol = as.numeric(diagnosis))
+legend("topright", legend = c("malignant", "benign"),
+       col = 1:2, pch = 19)
+"""
+```
+
+### 4.5 variables corelation 
+```{julia}
+df45=select(df,3:32)
+cats=names(df45)
+cor_matrix=Matrix(df45)|>cor
+```
+```{julia}
+fig = Figure(size = (1800, 2400))
+ax = Axis(fig[1, 1], xticks = (1:30, cats), yticks = (1:30, cats),xticklabelrotation = pi/2,ylabelsize=8,xlabelsize=8)
+hmap = heatmap!(ax, cor_matrix, colormap = :plasma)
+Colorbar(fig[1, 2], hmap; label = "values", width = 10, ticksize = 10)
+fig
+```
+
+
+
+
+

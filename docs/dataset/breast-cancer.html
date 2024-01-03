@@ -1,0 +1,1839 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.533">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Machine-Learning Julia - Breast Cancer Wisconsin (Diagnostic) Data Set</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+</head>
+
+<body class="nav-sidebar floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../imgs/logo.png" alt="" class="navbar-logo">
+    </a>
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Machine-Learning Julia</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../start/index.html"> 
+<span class="menu-text">Start</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../workflow/index.html"> 
+<span class="menu-text">Workflow</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../packages/index.html"> 
+<span class="menu-text">Packages</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../learn/index.html"> 
+<span class="menu-text">Learn</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="../dataset/index.html" aria-current="page"> 
+<span class="menu-text">Dataset</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-more" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">More</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-more">    
+        <li>
+    <a class="dropdown-item" href="../about.html">
+ <span class="dropdown-text">About</span></a>
+  </li>  
+        <li class="dropdown-header">reference.qmd</li>
+    </ul>
+  </li>
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../dataset/breast-cancer.html">7.breast cancer</a></li></ol></nav>
+        <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../dataset/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">intro</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../dataset/iris.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1.iris</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../dataset/penguins.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2.penguins</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../dataset/boston-house.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.boston housing</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../dataset/mtcar.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4.auto mpg</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../dataset/penguins-dahboard.qmd" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.penguins dashboard</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../dataset/telecom-churn.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6.telecom customer churn</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../dataset/breast-cancer.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">7.breast cancer</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+ <span class="menu-text">8. test inlude methods</span>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../dataset/test-include.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2. load csv</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#load-package" id="toc-load-package" class="nav-link active" data-scroll-target="#load-package">1. load package</a></li>
+  <li><a href="#load-csv" id="toc-load-csv" class="nav-link" data-scroll-target="#load-csv">2. load csv</a></li>
+  <li><a href="#decscrbe-of-dataset" id="toc-decscrbe-of-dataset" class="nav-link" data-scroll-target="#decscrbe-of-dataset">3. decscrbe of dataset</a></li>
+  <li><a href="#eda" id="toc-eda" class="nav-link" data-scroll-target="#eda">4. EDA</a>
+  <ul class="collapse">
+  <li><a href="#diagnostic-of-cancer" id="toc-diagnostic-of-cancer" class="nav-link" data-scroll-target="#diagnostic-of-cancer">4.1 diagnostic of cancer</a></li>
+  <li><a href="#diagonstic-mean" id="toc-diagonstic-mean" class="nav-link" data-scroll-target="#diagonstic-mean">4.2 diagonstic mean</a></li>
+  <li><a href="#second-10-features" id="toc-second-10-features" class="nav-link" data-scroll-target="#second-10-features">4.3 second 10 features</a></li>
+  <li><a href="#bee-swarm-plot" id="toc-bee-swarm-plot" class="nav-link" data-scroll-target="#bee-swarm-plot">4.4 bee-swarm plot</a></li>
+  <li><a href="#variables-corelation" id="toc-variables-corelation" class="nav-link" data-scroll-target="#variables-corelation">4.5 variables corelation</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Breast Cancer Wisconsin (Diagnostic) Data Set</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="callout callout-style-default callout-note callout-titled" title="info">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+info
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>ref : <a href="https://www.kaggle.com/datasets/uciml/breast-cancer-wisconsin-data/data">Breast Cancer Wisconsin (Diagnostic) Data Set</a></p>
+</div>
+</div>
+<section id="load-package" class="level2">
+<h2 class="anchored" data-anchor-id="load-package">1. load package</h2>
+<div id="6a0cb3e4" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a> <span class="im">using</span> <span class="bu">CSV</span>,<span class="bu">DataFrames</span>,<span class="bu">Tidier</span>,<span class="bu">Pipe</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a> <span class="im">using</span> <span class="bu">CairoMakie</span>,<span class="bu">AlgebraOfGraphics</span>,<span class="bu">MakieThemes</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a> <span class="im">using</span> <span class="bu">ScientificTypes</span>,<span class="bu">StatsBase</span>,<span class="bu">RCall</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a> <span class="co">#Makie.set_theme!(ggthemr(:flat))</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="load-csv" class="level2">
+<h2 class="anchored" data-anchor-id="load-csv">2. load csv</h2>
+<div id="e2237370" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>df<span class="op">=</span>CSV.<span class="fu">File</span>(<span class="st">"../data/Breast-Cancer-Wisconsin.csv"</span>)<span class="op">|&gt;</span>DataFrame</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>df<span class="op">=</span><span class="pp">@chain</span>  df  <span class="cf">begin</span>  </span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="pp">@clean_names</span> </span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="pp">@select</span>(<span class="fu">Not</span>(<span class="fl">33</span>))</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="pp">@mutate</span>(diagnosis <span class="op">=</span> <span class="fu">case_when</span>(diagnosis<span class="op">==</span><span class="st">"M"</span>  <span class="op">=&gt;</span> <span class="st">"malignant"</span>,</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>                        <span class="cn">true</span>    <span class="op">=&gt;</span> <span class="st">"benign"</span>))</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="fu">first</span>(df,<span class="fl">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="3">
+<div><div style="float: left;"><span>5×32 DataFrame</span></div><div style="clear: both;"></div></div><div class="data-frame" style="overflow-x: scroll;">
+<table class="data-frame table table-sm table-striped small" data-quarto-postprocess="true">
+<thead>
+<tr class="header">
+<th class="rowNumber" data-quarto-table-cell-role="th" style="text-align: right; font-weight: bold;">Row</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">id</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">diagnosis</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">radius_mean</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">texture_mean</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">perimeter_mean</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">area_mean</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">smoothness_mean</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">compactness_mean</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">concavity_mean</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">concave_points_mean</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">symmetry_mean</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">fractal_dimension_mean</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">radius_se</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">texture_se</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">perimeter_se</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">area_se</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">smoothness_se</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">compactness_se</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">concavity_se</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">concave_points_se</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">symmetry_se</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">fractal_dimension_se</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">radius_worst</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">texture_worst</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">perimeter_worst</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">area_worst</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">smoothness_worst</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">compactness_worst</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">concavity_worst</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">concave_points_worst</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">symmetry_worst</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">fractal_dimension_worst</th>
+</tr>
+<tr class="odd subheader headerLastRow">
+<th class="rowNumber" data-quarto-table-cell-role="th" style="text-align: right; font-weight: bold;"></th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Int64">Int64</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="String">String</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Float64">Float64</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Float64">Float64</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Float64">Float64</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Float64">Float64</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Float64">Float64</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Float64">Float64</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Float64">Float64</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Float64">Float64</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Float64">Float64</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Float64">Float64</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Float64">Float64</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Float64">Float64</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Float64">Float64</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Float64">Float64</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Float64">Float64</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Float64">Float64</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Float64">Float64</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Float64">Float64</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Float64">Float64</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Float64">Float64</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Float64">Float64</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Float64">Float64</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Float64">Float64</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Float64">Float64</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Float64">Float64</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Float64">Float64</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Float64">Float64</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Float64">Float64</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Float64">Float64</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Float64">Float64</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">1</td>
+<td style="text-align: right;">842302</td>
+<td style="text-align: left;">malignant</td>
+<td style="text-align: right;">17.99</td>
+<td style="text-align: right;">10.38</td>
+<td style="text-align: right;">122.8</td>
+<td style="text-align: right;">1001.0</td>
+<td style="text-align: right;">0.1184</td>
+<td style="text-align: right;">0.2776</td>
+<td style="text-align: right;">0.3001</td>
+<td style="text-align: right;">0.1471</td>
+<td style="text-align: right;">0.2419</td>
+<td style="text-align: right;">0.07871</td>
+<td style="text-align: right;">1.095</td>
+<td style="text-align: right;">0.9053</td>
+<td style="text-align: right;">8.589</td>
+<td style="text-align: right;">153.4</td>
+<td style="text-align: right;">0.006399</td>
+<td style="text-align: right;">0.04904</td>
+<td style="text-align: right;">0.05373</td>
+<td style="text-align: right;">0.01587</td>
+<td style="text-align: right;">0.03003</td>
+<td style="text-align: right;">0.006193</td>
+<td style="text-align: right;">25.38</td>
+<td style="text-align: right;">17.33</td>
+<td style="text-align: right;">184.6</td>
+<td style="text-align: right;">2019.0</td>
+<td style="text-align: right;">0.1622</td>
+<td style="text-align: right;">0.6656</td>
+<td style="text-align: right;">0.7119</td>
+<td style="text-align: right;">0.2654</td>
+<td style="text-align: right;">0.4601</td>
+<td style="text-align: right;">0.1189</td>
+</tr>
+<tr class="even">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">2</td>
+<td style="text-align: right;">842517</td>
+<td style="text-align: left;">malignant</td>
+<td style="text-align: right;">20.57</td>
+<td style="text-align: right;">17.77</td>
+<td style="text-align: right;">132.9</td>
+<td style="text-align: right;">1326.0</td>
+<td style="text-align: right;">0.08474</td>
+<td style="text-align: right;">0.07864</td>
+<td style="text-align: right;">0.0869</td>
+<td style="text-align: right;">0.07017</td>
+<td style="text-align: right;">0.1812</td>
+<td style="text-align: right;">0.05667</td>
+<td style="text-align: right;">0.5435</td>
+<td style="text-align: right;">0.7339</td>
+<td style="text-align: right;">3.398</td>
+<td style="text-align: right;">74.08</td>
+<td style="text-align: right;">0.005225</td>
+<td style="text-align: right;">0.01308</td>
+<td style="text-align: right;">0.0186</td>
+<td style="text-align: right;">0.0134</td>
+<td style="text-align: right;">0.01389</td>
+<td style="text-align: right;">0.003532</td>
+<td style="text-align: right;">24.99</td>
+<td style="text-align: right;">23.41</td>
+<td style="text-align: right;">158.8</td>
+<td style="text-align: right;">1956.0</td>
+<td style="text-align: right;">0.1238</td>
+<td style="text-align: right;">0.1866</td>
+<td style="text-align: right;">0.2416</td>
+<td style="text-align: right;">0.186</td>
+<td style="text-align: right;">0.275</td>
+<td style="text-align: right;">0.08902</td>
+</tr>
+<tr class="odd">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">3</td>
+<td style="text-align: right;">84300903</td>
+<td style="text-align: left;">malignant</td>
+<td style="text-align: right;">19.69</td>
+<td style="text-align: right;">21.25</td>
+<td style="text-align: right;">130.0</td>
+<td style="text-align: right;">1203.0</td>
+<td style="text-align: right;">0.1096</td>
+<td style="text-align: right;">0.1599</td>
+<td style="text-align: right;">0.1974</td>
+<td style="text-align: right;">0.1279</td>
+<td style="text-align: right;">0.2069</td>
+<td style="text-align: right;">0.05999</td>
+<td style="text-align: right;">0.7456</td>
+<td style="text-align: right;">0.7869</td>
+<td style="text-align: right;">4.585</td>
+<td style="text-align: right;">94.03</td>
+<td style="text-align: right;">0.00615</td>
+<td style="text-align: right;">0.04006</td>
+<td style="text-align: right;">0.03832</td>
+<td style="text-align: right;">0.02058</td>
+<td style="text-align: right;">0.0225</td>
+<td style="text-align: right;">0.004571</td>
+<td style="text-align: right;">23.57</td>
+<td style="text-align: right;">25.53</td>
+<td style="text-align: right;">152.5</td>
+<td style="text-align: right;">1709.0</td>
+<td style="text-align: right;">0.1444</td>
+<td style="text-align: right;">0.4245</td>
+<td style="text-align: right;">0.4504</td>
+<td style="text-align: right;">0.243</td>
+<td style="text-align: right;">0.3613</td>
+<td style="text-align: right;">0.08758</td>
+</tr>
+<tr class="even">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">4</td>
+<td style="text-align: right;">84348301</td>
+<td style="text-align: left;">malignant</td>
+<td style="text-align: right;">11.42</td>
+<td style="text-align: right;">20.38</td>
+<td style="text-align: right;">77.58</td>
+<td style="text-align: right;">386.1</td>
+<td style="text-align: right;">0.1425</td>
+<td style="text-align: right;">0.2839</td>
+<td style="text-align: right;">0.2414</td>
+<td style="text-align: right;">0.1052</td>
+<td style="text-align: right;">0.2597</td>
+<td style="text-align: right;">0.09744</td>
+<td style="text-align: right;">0.4956</td>
+<td style="text-align: right;">1.156</td>
+<td style="text-align: right;">3.445</td>
+<td style="text-align: right;">27.23</td>
+<td style="text-align: right;">0.00911</td>
+<td style="text-align: right;">0.07458</td>
+<td style="text-align: right;">0.05661</td>
+<td style="text-align: right;">0.01867</td>
+<td style="text-align: right;">0.05963</td>
+<td style="text-align: right;">0.009208</td>
+<td style="text-align: right;">14.91</td>
+<td style="text-align: right;">26.5</td>
+<td style="text-align: right;">98.87</td>
+<td style="text-align: right;">567.7</td>
+<td style="text-align: right;">0.2098</td>
+<td style="text-align: right;">0.8663</td>
+<td style="text-align: right;">0.6869</td>
+<td style="text-align: right;">0.2575</td>
+<td style="text-align: right;">0.6638</td>
+<td style="text-align: right;">0.173</td>
+</tr>
+<tr class="odd">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">5</td>
+<td style="text-align: right;">84358402</td>
+<td style="text-align: left;">malignant</td>
+<td style="text-align: right;">20.29</td>
+<td style="text-align: right;">14.34</td>
+<td style="text-align: right;">135.1</td>
+<td style="text-align: right;">1297.0</td>
+<td style="text-align: right;">0.1003</td>
+<td style="text-align: right;">0.1328</td>
+<td style="text-align: right;">0.198</td>
+<td style="text-align: right;">0.1043</td>
+<td style="text-align: right;">0.1809</td>
+<td style="text-align: right;">0.05883</td>
+<td style="text-align: right;">0.7572</td>
+<td style="text-align: right;">0.7813</td>
+<td style="text-align: right;">5.438</td>
+<td style="text-align: right;">94.44</td>
+<td style="text-align: right;">0.01149</td>
+<td style="text-align: right;">0.02461</td>
+<td style="text-align: right;">0.05688</td>
+<td style="text-align: right;">0.01885</td>
+<td style="text-align: right;">0.01756</td>
+<td style="text-align: right;">0.005115</td>
+<td style="text-align: right;">22.54</td>
+<td style="text-align: right;">16.67</td>
+<td style="text-align: right;">152.2</td>
+<td style="text-align: right;">1575.0</td>
+<td style="text-align: right;">0.1374</td>
+<td style="text-align: right;">0.205</td>
+<td style="text-align: right;">0.4</td>
+<td style="text-align: right;">0.1625</td>
+<td style="text-align: right;">0.2364</td>
+<td style="text-align: right;">0.07678</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="decscrbe-of-dataset" class="level2">
+<h2 class="anchored" data-anchor-id="decscrbe-of-dataset">3. decscrbe of dataset</h2>
+<div id="8f23575b" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">describe</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="4">
+<div><div style="float: left;"><span>32×7 DataFrame</span></div><div style="float: right;"><span style="font-style: italic;">7 rows omitted</span></div><div style="clear: both;"></div></div><div class="data-frame" style="overflow-x: scroll;">
+<table class="data-frame table table-sm table-striped small" data-quarto-postprocess="true">
+<thead>
+<tr class="header">
+<th class="rowNumber" data-quarto-table-cell-role="th" style="text-align: right; font-weight: bold;">Row</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">variable</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">mean</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">min</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">median</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">max</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">nmissing</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">eltype</th>
+</tr>
+<tr class="odd subheader headerLastRow">
+<th class="rowNumber" data-quarto-table-cell-role="th" style="text-align: right; font-weight: bold;"></th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Symbol">Symbol</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Union{Nothing, Float64}">Union…</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Any">Any</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Union{Nothing, Float64}">Union…</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Any">Any</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Int64">Int64</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="DataType">DataType</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">1</td>
+<td style="text-align: left;">id</td>
+<td style="text-align: left;">3.03718e7</td>
+<td style="text-align: left;">8670</td>
+<td style="text-align: left;">906024.0</td>
+<td style="text-align: left;">911320502</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: left;">Int64</td>
+</tr>
+<tr class="even">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">2</td>
+<td style="text-align: left;">diagnosis</td>
+<td style="text-align: left; font-style: italic;"></td>
+<td style="text-align: left;">benign</td>
+<td style="text-align: left; font-style: italic;"></td>
+<td style="text-align: left;">malignant</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: left;">String</td>
+</tr>
+<tr class="odd">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">3</td>
+<td style="text-align: left;">radius_mean</td>
+<td style="text-align: left;">14.1273</td>
+<td style="text-align: left;">6.981</td>
+<td style="text-align: left;">13.37</td>
+<td style="text-align: left;">28.11</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: left;">Float64</td>
+</tr>
+<tr class="even">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">4</td>
+<td style="text-align: left;">texture_mean</td>
+<td style="text-align: left;">19.2896</td>
+<td style="text-align: left;">9.71</td>
+<td style="text-align: left;">18.84</td>
+<td style="text-align: left;">39.28</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: left;">Float64</td>
+</tr>
+<tr class="odd">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">5</td>
+<td style="text-align: left;">perimeter_mean</td>
+<td style="text-align: left;">91.969</td>
+<td style="text-align: left;">43.79</td>
+<td style="text-align: left;">86.24</td>
+<td style="text-align: left;">188.5</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: left;">Float64</td>
+</tr>
+<tr class="even">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">6</td>
+<td style="text-align: left;">area_mean</td>
+<td style="text-align: left;">654.889</td>
+<td style="text-align: left;">143.5</td>
+<td style="text-align: left;">551.1</td>
+<td style="text-align: left;">2501.0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: left;">Float64</td>
+</tr>
+<tr class="odd">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">7</td>
+<td style="text-align: left;">smoothness_mean</td>
+<td style="text-align: left;">0.0963603</td>
+<td style="text-align: left;">0.05263</td>
+<td style="text-align: left;">0.09587</td>
+<td style="text-align: left;">0.1634</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: left;">Float64</td>
+</tr>
+<tr class="even">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">8</td>
+<td style="text-align: left;">compactness_mean</td>
+<td style="text-align: left;">0.104341</td>
+<td style="text-align: left;">0.01938</td>
+<td style="text-align: left;">0.09263</td>
+<td style="text-align: left;">0.3454</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: left;">Float64</td>
+</tr>
+<tr class="odd">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">9</td>
+<td style="text-align: left;">concavity_mean</td>
+<td style="text-align: left;">0.0887993</td>
+<td style="text-align: left;">0.0</td>
+<td style="text-align: left;">0.06154</td>
+<td style="text-align: left;">0.4268</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: left;">Float64</td>
+</tr>
+<tr class="even">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">10</td>
+<td style="text-align: left;">concave_points_mean</td>
+<td style="text-align: left;">0.0489191</td>
+<td style="text-align: left;">0.0</td>
+<td style="text-align: left;">0.0335</td>
+<td style="text-align: left;">0.2012</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: left;">Float64</td>
+</tr>
+<tr class="odd">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">11</td>
+<td style="text-align: left;">symmetry_mean</td>
+<td style="text-align: left;">0.181162</td>
+<td style="text-align: left;">0.106</td>
+<td style="text-align: left;">0.1792</td>
+<td style="text-align: left;">0.304</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: left;">Float64</td>
+</tr>
+<tr class="even">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">12</td>
+<td style="text-align: left;">fractal_dimension_mean</td>
+<td style="text-align: left;">0.0627976</td>
+<td style="text-align: left;">0.04996</td>
+<td style="text-align: left;">0.06154</td>
+<td style="text-align: left;">0.09744</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: left;">Float64</td>
+</tr>
+<tr class="odd">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">13</td>
+<td style="text-align: left;">radius_se</td>
+<td style="text-align: left;">0.405172</td>
+<td style="text-align: left;">0.1115</td>
+<td style="text-align: left;">0.3242</td>
+<td style="text-align: left;">2.873</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: left;">Float64</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">⋮</td>
+<td style="text-align: right;">⋮</td>
+<td style="text-align: right;">⋮</td>
+<td style="text-align: right;">⋮</td>
+<td style="text-align: right;">⋮</td>
+<td style="text-align: right;">⋮</td>
+<td style="text-align: right;">⋮</td>
+<td style="text-align: right;">⋮</td>
+</tr>
+<tr class="odd">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">21</td>
+<td style="text-align: left;">symmetry_se</td>
+<td style="text-align: left;">0.0205423</td>
+<td style="text-align: left;">0.007882</td>
+<td style="text-align: left;">0.01873</td>
+<td style="text-align: left;">0.07895</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: left;">Float64</td>
+</tr>
+<tr class="even">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">22</td>
+<td style="text-align: left;">fractal_dimension_se</td>
+<td style="text-align: left;">0.0037949</td>
+<td style="text-align: left;">0.0008948</td>
+<td style="text-align: left;">0.003187</td>
+<td style="text-align: left;">0.02984</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: left;">Float64</td>
+</tr>
+<tr class="odd">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">23</td>
+<td style="text-align: left;">radius_worst</td>
+<td style="text-align: left;">16.2692</td>
+<td style="text-align: left;">7.93</td>
+<td style="text-align: left;">14.97</td>
+<td style="text-align: left;">36.04</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: left;">Float64</td>
+</tr>
+<tr class="even">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">24</td>
+<td style="text-align: left;">texture_worst</td>
+<td style="text-align: left;">25.6772</td>
+<td style="text-align: left;">12.02</td>
+<td style="text-align: left;">25.41</td>
+<td style="text-align: left;">49.54</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: left;">Float64</td>
+</tr>
+<tr class="odd">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">25</td>
+<td style="text-align: left;">perimeter_worst</td>
+<td style="text-align: left;">107.261</td>
+<td style="text-align: left;">50.41</td>
+<td style="text-align: left;">97.66</td>
+<td style="text-align: left;">251.2</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: left;">Float64</td>
+</tr>
+<tr class="even">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">26</td>
+<td style="text-align: left;">area_worst</td>
+<td style="text-align: left;">880.583</td>
+<td style="text-align: left;">185.2</td>
+<td style="text-align: left;">686.5</td>
+<td style="text-align: left;">4254.0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: left;">Float64</td>
+</tr>
+<tr class="odd">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">27</td>
+<td style="text-align: left;">smoothness_worst</td>
+<td style="text-align: left;">0.132369</td>
+<td style="text-align: left;">0.07117</td>
+<td style="text-align: left;">0.1313</td>
+<td style="text-align: left;">0.2226</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: left;">Float64</td>
+</tr>
+<tr class="even">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">28</td>
+<td style="text-align: left;">compactness_worst</td>
+<td style="text-align: left;">0.254265</td>
+<td style="text-align: left;">0.02729</td>
+<td style="text-align: left;">0.2119</td>
+<td style="text-align: left;">1.058</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: left;">Float64</td>
+</tr>
+<tr class="odd">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">29</td>
+<td style="text-align: left;">concavity_worst</td>
+<td style="text-align: left;">0.272188</td>
+<td style="text-align: left;">0.0</td>
+<td style="text-align: left;">0.2267</td>
+<td style="text-align: left;">1.252</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: left;">Float64</td>
+</tr>
+<tr class="even">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">30</td>
+<td style="text-align: left;">concave_points_worst</td>
+<td style="text-align: left;">0.114606</td>
+<td style="text-align: left;">0.0</td>
+<td style="text-align: left;">0.09993</td>
+<td style="text-align: left;">0.291</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: left;">Float64</td>
+</tr>
+<tr class="odd">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">31</td>
+<td style="text-align: left;">symmetry_worst</td>
+<td style="text-align: left;">0.290076</td>
+<td style="text-align: left;">0.1565</td>
+<td style="text-align: left;">0.2822</td>
+<td style="text-align: left;">0.6638</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: left;">Float64</td>
+</tr>
+<tr class="even">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">32</td>
+<td style="text-align: left;">fractal_dimension_worst</td>
+<td style="text-align: left;">0.0839458</td>
+<td style="text-align: left;">0.05504</td>
+<td style="text-align: left;">0.08004</td>
+<td style="text-align: left;">0.2075</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: left;">Float64</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="eda" class="level2">
+<h2 class="anchored" data-anchor-id="eda">4. EDA</h2>
+<section id="diagnostic-of-cancer" class="level3">
+<h3 class="anchored" data-anchor-id="diagnostic-of-cancer">4.1 diagnostic of cancer</h3>
+<div id="935d29de" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    ax<span class="op">=</span>(width<span class="op">=</span><span class="fl">250</span>,height<span class="op">=</span><span class="fl">250</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    plt<span class="op">=</span><span class="fu">data</span>(df)<span class="fu">*mapping</span>(<span class="op">:</span>diagnosis)<span class="fu">*frequency</span>()<span class="fu">*mapping</span>(color<span class="op">=:</span>diagnosis)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">draw</span>(plt;axis<span class="op">=</span>ax)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="5">
+<div>
+<figure class="figure">
+<p><img src="breast-cancer_files/figure-html/cell-5-output-1.svg" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="diagonstic-mean" class="level3">
+<h3 class="anchored" data-anchor-id="diagonstic-mean">4.2 diagonstic mean</h3>
+<div id="bb8618db" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">#df42= @pivot_longer(df, 3:12, names_to = "features", values_to = "mean_value");</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>df421<span class="op">=</span><span class="pp">@chain</span> df <span class="cf">begin</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>   <span class="pp">@select</span>(<span class="fl">1</span><span class="op">:</span><span class="fl">2</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>df422<span class="op">=</span><span class="pp">@chain</span> df <span class="cf">begin</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>   <span class="pp">@select</span>(<span class="fl">3</span><span class="op">:</span><span class="fl">12</span>)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>   <span class="fu">mapcols</span>(zscore, _)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>df42<span class="op">=</span><span class="fu">hcat</span>(df421,df422)</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>df42<span class="op">=</span> <span class="pp">@pivot_longer</span>(df42, <span class="fl">3</span><span class="op">:</span><span class="fl">12</span>, names_to <span class="op">=</span> <span class="st">"features"</span>, values_to <span class="op">=</span> <span class="st">"mean_value"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="6">
+<div><div style="float: left;"><span>5690×4 DataFrame</span></div><div style="float: right;"><span style="font-style: italic;">5665 rows omitted</span></div><div style="clear: both;"></div></div><div class="data-frame" style="overflow-x: scroll;">
+<table class="data-frame table table-sm table-striped small" data-quarto-postprocess="true">
+<thead>
+<tr class="header">
+<th class="rowNumber" data-quarto-table-cell-role="th" style="text-align: right; font-weight: bold;">Row</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">id</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">diagnosis</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">features</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">mean_value</th>
+</tr>
+<tr class="odd subheader headerLastRow">
+<th class="rowNumber" data-quarto-table-cell-role="th" style="text-align: right; font-weight: bold;"></th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Int64">Int64</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="String">String</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="String">String</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Float64">Float64</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">1</td>
+<td style="text-align: right;">842302</td>
+<td style="text-align: left;">malignant</td>
+<td style="text-align: left;">radius_mean</td>
+<td style="text-align: right;">1.0961</td>
+</tr>
+<tr class="even">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">2</td>
+<td style="text-align: right;">842517</td>
+<td style="text-align: left;">malignant</td>
+<td style="text-align: left;">radius_mean</td>
+<td style="text-align: right;">1.82821</td>
+</tr>
+<tr class="odd">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">3</td>
+<td style="text-align: right;">84300903</td>
+<td style="text-align: left;">malignant</td>
+<td style="text-align: left;">radius_mean</td>
+<td style="text-align: right;">1.5785</td>
+</tr>
+<tr class="even">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">4</td>
+<td style="text-align: right;">84348301</td>
+<td style="text-align: left;">malignant</td>
+<td style="text-align: left;">radius_mean</td>
+<td style="text-align: right;">-0.768233</td>
+</tr>
+<tr class="odd">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">5</td>
+<td style="text-align: right;">84358402</td>
+<td style="text-align: left;">malignant</td>
+<td style="text-align: left;">radius_mean</td>
+<td style="text-align: right;">1.74876</td>
+</tr>
+<tr class="even">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">6</td>
+<td style="text-align: right;">843786</td>
+<td style="text-align: left;">malignant</td>
+<td style="text-align: left;">radius_mean</td>
+<td style="text-align: right;">-0.475956</td>
+</tr>
+<tr class="odd">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">7</td>
+<td style="text-align: right;">844359</td>
+<td style="text-align: left;">malignant</td>
+<td style="text-align: left;">radius_mean</td>
+<td style="text-align: right;">1.16988</td>
+</tr>
+<tr class="even">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">8</td>
+<td style="text-align: right;">84458202</td>
+<td style="text-align: left;">malignant</td>
+<td style="text-align: left;">radius_mean</td>
+<td style="text-align: right;">-0.118413</td>
+</tr>
+<tr class="odd">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">9</td>
+<td style="text-align: right;">844981</td>
+<td style="text-align: left;">malignant</td>
+<td style="text-align: left;">radius_mean</td>
+<td style="text-align: right;">-0.319885</td>
+</tr>
+<tr class="even">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">10</td>
+<td style="text-align: right;">84501001</td>
+<td style="text-align: left;">malignant</td>
+<td style="text-align: left;">radius_mean</td>
+<td style="text-align: right;">-0.473118</td>
+</tr>
+<tr class="odd">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">11</td>
+<td style="text-align: right;">845636</td>
+<td style="text-align: left;">malignant</td>
+<td style="text-align: left;">radius_mean</td>
+<td style="text-align: right;">0.537083</td>
+</tr>
+<tr class="even">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">12</td>
+<td style="text-align: right;">84610002</td>
+<td style="text-align: left;">malignant</td>
+<td style="text-align: left;">radius_mean</td>
+<td style="text-align: right;">0.46898</td>
+</tr>
+<tr class="odd">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">13</td>
+<td style="text-align: right;">846226</td>
+<td style="text-align: left;">malignant</td>
+<td style="text-align: left;">radius_mean</td>
+<td style="text-align: right;">1.43094</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">⋮</td>
+<td style="text-align: right;">⋮</td>
+<td style="text-align: right;">⋮</td>
+<td style="text-align: right;">⋮</td>
+<td style="text-align: right;">⋮</td>
+</tr>
+<tr class="odd">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">5679</td>
+<td style="text-align: right;">925236</td>
+<td style="text-align: left;">benign</td>
+<td style="text-align: left;">fractal_dimension_mean</td>
+<td style="text-align: right;">-0.312677</td>
+</tr>
+<tr class="even">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">5680</td>
+<td style="text-align: right;">925277</td>
+<td style="text-align: left;">benign</td>
+<td style="text-align: left;">fractal_dimension_mean</td>
+<td style="text-align: right;">-0.188037</td>
+</tr>
+<tr class="odd">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">5681</td>
+<td style="text-align: right;">925291</td>
+<td style="text-align: left;">benign</td>
+<td style="text-align: left;">fractal_dimension_mean</td>
+<td style="text-align: right;">0.411082</td>
+</tr>
+<tr class="even">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">5682</td>
+<td style="text-align: right;">925292</td>
+<td style="text-align: left;">benign</td>
+<td style="text-align: left;">fractal_dimension_mean</td>
+<td style="text-align: right;">-0.154044</td>
+</tr>
+<tr class="odd">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">5683</td>
+<td style="text-align: right;">925311</td>
+<td style="text-align: left;">benign</td>
+<td style="text-align: left;">fractal_dimension_mean</td>
+<td style="text-align: right;">-1.10159</td>
+</tr>
+<tr class="even">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">5684</td>
+<td style="text-align: right;">925622</td>
+<td style="text-align: left;">malignant</td>
+<td style="text-align: left;">fractal_dimension_mean</td>
+<td style="text-align: right;">1.2354</td>
+</tr>
+<tr class="odd">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">5685</td>
+<td style="text-align: right;">926125</td>
+<td style="text-align: left;">malignant</td>
+<td style="text-align: left;">fractal_dimension_mean</td>
+<td style="text-align: right;">0.848737</td>
+</tr>
+<tr class="even">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">5686</td>
+<td style="text-align: right;">926424</td>
+<td style="text-align: left;">malignant</td>
+<td style="text-align: left;">fractal_dimension_mean</td>
+<td style="text-align: right;">-0.930209</td>
+</tr>
+<tr class="odd">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">5687</td>
+<td style="text-align: right;">926682</td>
+<td style="text-align: left;">malignant</td>
+<td style="text-align: left;">fractal_dimension_mean</td>
+<td style="text-align: right;">-1.05768</td>
+</tr>
+<tr class="even">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">5688</td>
+<td style="text-align: right;">926954</td>
+<td style="text-align: left;">malignant</td>
+<td style="text-align: left;">fractal_dimension_mean</td>
+<td style="text-align: right;">-0.8948</td>
+</tr>
+<tr class="odd">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">5689</td>
+<td style="text-align: right;">927241</td>
+<td style="text-align: left;">malignant</td>
+<td style="text-align: left;">fractal_dimension_mean</td>
+<td style="text-align: right;">1.04278</td>
+</tr>
+<tr class="even">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">5690</td>
+<td style="text-align: right;">92751</td>
+<td style="text-align: left;">benign</td>
+<td style="text-align: left;">fractal_dimension_mean</td>
+<td style="text-align: right;">-0.560539</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="df7cf8c9" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>ax<span class="op">=</span>(width<span class="op">=</span><span class="fl">600</span>,height<span class="op">=</span><span class="fl">250</span>,xticklabelrotation <span class="op">=</span> <span class="cn">pi</span><span class="op">/</span><span class="fl">8</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>datalayer<span class="op">=</span><span class="fu">data</span>(df42)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>mappinglayer<span class="op">=</span><span class="fu">mapping</span>(<span class="op">:</span>features,<span class="op">:</span>mean_value)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>vislayer<span class="op">=</span><span class="fu">visual</span>(Violin)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>plt<span class="op">=</span>datalayer<span class="op">*</span>mappinglayer<span class="op">*</span>vislayer</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>plt<span class="op">=</span><span class="fu">data</span>(df42) <span class="op">*</span> <span class="fu">visual</span>(Violin) <span class="fu">*mapping</span>(<span class="op">:</span>features, <span class="op">:</span>mean_value,color<span class="op">=:</span>diagnosis,dodge<span class="op">=:</span>diagnosis,side<span class="op">=:</span>diagnosis) </span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="fu">draw</span>(plt;axis<span class="op">=</span>ax)</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="7">
+<div>
+<figure class="figure">
+<p><img src="breast-cancer_files/figure-html/cell-7-output-1.svg" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="second-10-features" class="level3">
+<h3 class="anchored" data-anchor-id="second-10-features">4.3 second 10 features</h3>
+<div id="3a79832a" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>df431<span class="op">=</span><span class="pp">@chain</span> df <span class="cf">begin</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>   <span class="pp">@select</span>(<span class="fl">1</span><span class="op">:</span><span class="fl">2</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>df432<span class="op">=</span><span class="pp">@chain</span> df <span class="cf">begin</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>   <span class="pp">@select</span>(<span class="fl">13</span><span class="op">:</span><span class="fl">22</span>)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>   <span class="fu">mapcols</span>(zscore, _)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>df43<span class="op">=</span><span class="fu">hcat</span>(df431,df432)</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>df43<span class="op">=</span> <span class="pp">@pivot_longer</span>(df43, <span class="fl">3</span><span class="op">:</span><span class="fl">12</span>, names_to <span class="op">=</span> <span class="st">"features"</span>, values_to <span class="op">=</span> <span class="st">"mean_value"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="8">
+<div><div style="float: left;"><span>5690×4 DataFrame</span></div><div style="float: right;"><span style="font-style: italic;">5665 rows omitted</span></div><div style="clear: both;"></div></div><div class="data-frame" style="overflow-x: scroll;">
+<table class="data-frame table table-sm table-striped small" data-quarto-postprocess="true">
+<thead>
+<tr class="header">
+<th class="rowNumber" data-quarto-table-cell-role="th" style="text-align: right; font-weight: bold;">Row</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">id</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">diagnosis</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">features</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">mean_value</th>
+</tr>
+<tr class="odd subheader headerLastRow">
+<th class="rowNumber" data-quarto-table-cell-role="th" style="text-align: right; font-weight: bold;"></th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Int64">Int64</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="String">String</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="String">String</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Float64">Float64</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">1</td>
+<td style="text-align: right;">842302</td>
+<td style="text-align: left;">malignant</td>
+<td style="text-align: left;">radius_se</td>
+<td style="text-align: right;">2.48755</td>
+</tr>
+<tr class="even">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">2</td>
+<td style="text-align: right;">842517</td>
+<td style="text-align: left;">malignant</td>
+<td style="text-align: left;">radius_se</td>
+<td style="text-align: right;">0.498816</td>
+</tr>
+<tr class="odd">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">3</td>
+<td style="text-align: right;">84300903</td>
+<td style="text-align: left;">malignant</td>
+<td style="text-align: left;">radius_se</td>
+<td style="text-align: right;">1.2276</td>
+</tr>
+<tr class="even">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">4</td>
+<td style="text-align: right;">84348301</td>
+<td style="text-align: left;">malignant</td>
+<td style="text-align: left;">radius_se</td>
+<td style="text-align: right;">0.326087</td>
+</tr>
+<tr class="odd">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">5</td>
+<td style="text-align: right;">84358402</td>
+<td style="text-align: left;">malignant</td>
+<td style="text-align: left;">radius_se</td>
+<td style="text-align: right;">1.26943</td>
+</tr>
+<tr class="even">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">6</td>
+<td style="text-align: right;">843786</td>
+<td style="text-align: left;">malignant</td>
+<td style="text-align: left;">radius_se</td>
+<td style="text-align: right;">-0.254846</td>
+</tr>
+<tr class="odd">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">7</td>
+<td style="text-align: right;">844359</td>
+<td style="text-align: left;">malignant</td>
+<td style="text-align: left;">radius_se</td>
+<td style="text-align: right;">0.149751</td>
+</tr>
+<tr class="even">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">8</td>
+<td style="text-align: right;">84458202</td>
+<td style="text-align: left;">malignant</td>
+<td style="text-align: left;">radius_se</td>
+<td style="text-align: right;">0.643057</td>
+</tr>
+<tr class="odd">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">9</td>
+<td style="text-align: right;">844981</td>
+<td style="text-align: left;">malignant</td>
+<td style="text-align: left;">radius_se</td>
+<td style="text-align: right;">-0.356536</td>
+</tr>
+<tr class="even">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">10</td>
+<td style="text-align: right;">84501001</td>
+<td style="text-align: left;">malignant</td>
+<td style="text-align: left;">radius_se</td>
+<td style="text-align: right;">-0.387909</td>
+</tr>
+<tr class="odd">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">11</td>
+<td style="text-align: right;">845636</td>
+<td style="text-align: left;">malignant</td>
+<td style="text-align: left;">radius_se</td>
+<td style="text-align: right;">-0.0925744</td>
+</tr>
+<tr class="even">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">12</td>
+<td style="text-align: right;">84610002</td>
+<td style="text-align: left;">malignant</td>
+<td style="text-align: left;">radius_se</td>
+<td style="text-align: right;">0.362868</td>
+</tr>
+<tr class="odd">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">13</td>
+<td style="text-align: right;">846226</td>
+<td style="text-align: left;">malignant</td>
+<td style="text-align: left;">radius_se</td>
+<td style="text-align: right;">1.9845</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">⋮</td>
+<td style="text-align: right;">⋮</td>
+<td style="text-align: right;">⋮</td>
+<td style="text-align: right;">⋮</td>
+<td style="text-align: right;">⋮</td>
+</tr>
+<tr class="odd">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">5679</td>
+<td style="text-align: right;">925236</td>
+<td style="text-align: left;">benign</td>
+<td style="text-align: left;">fractal_dimension_se</td>
+<td style="text-align: right;">-0.177963</td>
+</tr>
+<tr class="even">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">5680</td>
+<td style="text-align: right;">925277</td>
+<td style="text-align: left;">benign</td>
+<td style="text-align: left;">fractal_dimension_se</td>
+<td style="text-align: right;">0.230945</td>
+</tr>
+<tr class="odd">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">5681</td>
+<td style="text-align: right;">925291</td>
+<td style="text-align: left;">benign</td>
+<td style="text-align: left;">fractal_dimension_se</td>
+<td style="text-align: right;">0.356414</td>
+</tr>
+<tr class="even">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">5682</td>
+<td style="text-align: right;">925292</td>
+<td style="text-align: left;">benign</td>
+<td style="text-align: left;">fractal_dimension_se</td>
+<td style="text-align: right;">0.570316</td>
+</tr>
+<tr class="odd">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">5683</td>
+<td style="text-align: right;">925311</td>
+<td style="text-align: left;">benign</td>
+<td style="text-align: left;">fractal_dimension_se</td>
+<td style="text-align: right;">-0.764116</td>
+</tr>
+<tr class="even">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">5684</td>
+<td style="text-align: right;">925622</td>
+<td style="text-align: left;">malignant</td>
+<td style="text-align: left;">fractal_dimension_se</td>
+<td style="text-align: right;">0.887012</td>
+</tr>
+<tr class="odd">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">5685</td>
+<td style="text-align: right;">926125</td>
+<td style="text-align: left;">malignant</td>
+<td style="text-align: left;">fractal_dimension_se</td>
+<td style="text-align: right;">0.913844</td>
+</tr>
+<tr class="even">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">5686</td>
+<td style="text-align: right;">926424</td>
+<td style="text-align: left;">malignant</td>
+<td style="text-align: left;">fractal_dimension_se</td>
+<td style="text-align: right;">0.167832</td>
+</tr>
+<tr class="odd">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">5687</td>
+<td style="text-align: right;">926682</td>
+<td style="text-align: left;">malignant</td>
+<td style="text-align: left;">fractal_dimension_se</td>
+<td style="text-align: right;">-0.490124</td>
+</tr>
+<tr class="even">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">5688</td>
+<td style="text-align: right;">926954</td>
+<td style="text-align: left;">malignant</td>
+<td style="text-align: left;">fractal_dimension_se</td>
+<td style="text-align: right;">0.0366945</td>
+</tr>
+<tr class="odd">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">5689</td>
+<td style="text-align: right;">927241</td>
+<td style="text-align: left;">malignant</td>
+<td style="text-align: left;">fractal_dimension_se</td>
+<td style="text-align: right;">0.903262</td>
+</tr>
+<tr class="even">
+<td class="rowNumber" style="text-align: right; font-weight: bold;">5690</td>
+<td style="text-align: right;">92751</td>
+<td style="text-align: left;">benign</td>
+<td style="text-align: left;">fractal_dimension_se</td>
+<td style="text-align: right;">-0.382418</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="507db628" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>ax<span class="op">=</span>(width<span class="op">=</span><span class="fl">600</span>,height<span class="op">=</span><span class="fl">400</span>,xticklabelrotation <span class="op">=</span> <span class="cn">pi</span><span class="op">/</span><span class="fl">8</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>plt<span class="op">=</span><span class="fu">data</span>(df43) <span class="op">*</span> <span class="fu">visual</span>(Violin) <span class="fu">*mapping</span>(<span class="op">:</span>features, <span class="op">:</span>mean_value,color<span class="op">=:</span>diagnosis,dodge<span class="op">=:</span>diagnosis) </span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="fu">draw</span>(plt;axis<span class="op">=</span>ax)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="9">
+<div>
+<figure class="figure">
+<p><img src="breast-cancer_files/figure-html/cell-9-output-1.svg" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="bee-swarm-plot" class="level3">
+<h3 class="anchored" data-anchor-id="bee-swarm-plot">4.4 bee-swarm plot</h3>
+<div id="141413ee" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>df44<span class="op">=</span><span class="fu">dropmissing</span>(df43)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>rdata<span class="op">=</span>df43.mean_value</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>cats<span class="op">=</span>df43.features</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>diagnosis<span class="op">=</span>df.diagnosis</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="pp">@rput</span> rdata</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="pp">@rput</span> cats</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="pp">@rput</span> diagnosis</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>R<span class="st">"""</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="st">library(beeswarm)</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="st">beeswarm(rdata ~ cats,</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="st">         pch = 19, pwcol = as.numeric(diagnosis))</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="st">legend("topright", legend = c("malignant", "benign"),</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="st">       col = 1:2, pch = 19)</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="variables-corelation" class="level3">
+<h3 class="anchored" data-anchor-id="variables-corelation">4.5 variables corelation</h3>
+<div id="31a249f2" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>df45<span class="op">=</span><span class="fu">select</span>(df,<span class="fl">3</span><span class="op">:</span><span class="fl">32</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>cats<span class="op">=</span><span class="fu">names</span>(df45)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>cor_matrix<span class="op">=</span><span class="fu">Matrix</span>(df45)<span class="op">|&gt;</span>cor</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="10">
+<pre><code>30×30 Matrix{Float64}:
+  1.0          0.323782    …   0.744214    0.163953    0.00706589
+  0.323782     1.0             0.295316    0.105008    0.119205
+  0.997855     0.329533        0.771241    0.189115    0.0510185
+  0.987357     0.321086        0.722017    0.14357     0.0037376
+  0.170581    -0.0233885       0.503053    0.394309    0.499316
+  0.506124     0.236702    …   0.815573    0.510223    0.687382
+  0.676764     0.302418        0.861323    0.409464    0.51493
+  0.822529     0.293464        0.910155    0.375744    0.368661
+  0.147741     0.071401        0.430297    0.699826    0.438413
+ -0.311631    -0.0764372       0.175325    0.334019    0.767297
+  0.67909      0.275869    …   0.531062    0.0945428   0.0495594
+ -0.0973174    0.386358       -0.119638   -0.128215   -0.0456546
+  0.674172     0.281673        0.554897    0.10993     0.0854326
+  ⋮                        ⋱                          
+ -0.104321     0.00912717     -0.0304134   0.389402    0.0780795
+ -0.0426413    0.0544575       0.215204    0.111094    0.591328
+  0.969539     0.352573    …   0.787424    0.243529    0.093492
+  0.297008     0.912045        0.359755    0.233027    0.219122
+  0.965137     0.35804         0.816322    0.269493    0.138957
+  0.941082     0.343546        0.747419    0.209146    0.079647
+  0.119616     0.0775034       0.547691    0.493838    0.617624
+  0.413463     0.27783     …   0.80108     0.614441    0.810455
+  0.526911     0.301025        0.855434    0.53252     0.686511
+  0.744214     0.295316        1.0         0.502528    0.511114
+  0.163953     0.105008        0.502528    1.0         0.537848
+  0.00706589   0.119205        0.511114    0.537848    1.0</code></pre>
+</div>
+</div>
+<div id="53fab02d" class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> <span class="fu">Figure</span>(size <span class="op">=</span> (<span class="fl">1800</span>, <span class="fl">2400</span>))</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> <span class="fu">Axis</span>(fig[<span class="fl">1</span>, <span class="fl">1</span>], xticks <span class="op">=</span> (<span class="fl">1</span><span class="op">:</span><span class="fl">30</span>, cats), yticks <span class="op">=</span> (<span class="fl">1</span><span class="op">:</span><span class="fl">30</span>, cats),xticklabelrotation <span class="op">=</span> <span class="cn">pi</span><span class="op">/</span><span class="fl">2</span>,ylabelsize<span class="op">=</span><span class="fl">8</span>,xlabelsize<span class="op">=</span><span class="fl">8</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>hmap <span class="op">=</span> <span class="fu">heatmap!</span>(ax, cor_matrix, colormap <span class="op">=</span> <span class="op">:</span>plasma)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="fu">Colorbar</span>(fig[<span class="fl">1</span>, <span class="fl">2</span>], hmap; label <span class="op">=</span> <span class="st">"values"</span>, width <span class="op">=</span> <span class="fl">10</span>, ticksize <span class="op">=</span> <span class="fl">10</span>)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>fig</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="11">
+<div>
+<figure class="figure">
+<p><img src="breast-cancer_files/figure-html/cell-12-output-1.svg" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      return note.innerHTML;
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

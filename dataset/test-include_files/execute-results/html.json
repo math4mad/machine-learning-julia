@@ -1,0 +1,12 @@
+{
+  "hash": "afccb08bfc6b6ad9894897e72c96bcc9",
+  "result": {
+    "engine": "jupyter",
+    "markdown": "---\ntitle: \"test\"\nexecute:\n  warning: false\n---\n\n{{include _common.qmd}}\n\n## 2. load csv\n\n::: {#20ae0c9b .cell execution_count=1}\n``` {.julia .cell-code}\ndf=CSV.File(\"../data/iris.csv\")|>DataFrame\ndf=@chain  df  begin\n    @clean_names\n    @select(Not(33))\n    @mutate(diagnosis = case_when(diagnosis==\"M\"  => \"malignant\",\n                        true    => \"benign\"))\nend\nfirst(df,5)\n```\n:::\n\n\n",
+    "supporting": [
+      "test-include_files"
+    ],
+    "filters": [],
+    "includes": {}
+  }
+}

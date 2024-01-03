@@ -1,0 +1,109 @@
+---
+title: "Diabetes Diagnosis Dataset"
+execute:
+  warning: false
+---
+
+:::{.callout-note title="info"}
+ ref :  [Diabetes Classification|EDA|SVM|LR|DT|RF|XGBOOST](https://www.kaggle.com/code/tanmaygupta123/diabetes-classification-eda-svm-lr-dt-rf-xgboost/input)
+
+ ref :    [EDA, Feature and ComparisonML 0.87(Diabetes)](https://www.kaggle.com/code/yunusemreturkoglu/eda-feature-and-comparisonml-0-87-diabetes)
+:::
+
+
+## 1. load package
+```{julia}
+ 
+ using CSV,DataFrames,Tidier,Pipe
+ using CairoMakie,AlgebraOfGraphics,MakieThemes
+ using ScientificTypes,StatsBase,RCall
+ #Makie.set_theme!(ggthemr(:flat))
+
+```
+
+## 2. load csv
+
+```{julia}
+
+df=CSV.File("../data/diabetes.csv")|>DataFrame
+df=@chain  df  begin
+    @clean_names
+end
+first(df,5)
+```
+
+## 3. describe df
+```{julia}
+describe(df)
+```
+
+## 4. EDA 
+
+### 4.1 cor of eachcol
+```{julia}
+df41=@chain df begin
+    @select(1:8)
+end
+outcome=df.outcome
+
+cors=[cor(col, outcome) for col in eachcol(df41)]
+features=names(df41)
+```
+
+```{julia}
+ax=(width=250,height=250,xticklabelrotation = pi/8)
+datalayer=data(DataFrame(cors=cors,features=features))
+maplayer=mapping(:features,:cors,color=:features)
+vislayer=visual(BarPlot,strokewidth=1,strokecolor=:black)
+plt=datalayer*maplayer*vislayer
+draw(plt;axis=ax)
+
+```
+
+### 4.2 Feature Engineering
+
+```{julia}
+new_df=@chain df begin
+  @mutate(age_cat = case_when(age<21 => "young",
+                                age>50 => "elder",
+                                true => "mature"
+                                ))
+  @mutate(glucose_cat=case_when(
+                                glucose>=140=>"at_rist",
+                                true=>"normal"
+  )) 
+
+  @mutate(age_gul_cat=case_when((glucose<140) & (age<=50) => "normal_mature", 
+                                 (glucose<140) & (age>50) => "normal_elder",
+                                 (glucose>140) & (age<50) => "at_risk_mature",
+                                 true=>"at_risk_elder"
+  ))
+
+  @mutate(age_insul_level=case_when(
+
+                                   (insulin<126) & (age<=50) => "is_normal_mature",
+                                   (insulin<126) & (age>50) => "is_normal_elder",
+                                   (insulin>=126) & (age<=50) => "not_normal_mature",
+                                   (insulin>=126) & (age>50) => "not_normal_elder",
+
+
+  ))
+  @mutate(insulin_level=case_when(insulin<126 =>"is_normal",
+                                  insulin>=126 =>"not_normal"
+                            
+                                 
+  ))
+
+  @mutate(gulcose_insulin=glucose*insulin)
+end
+
+```
+
+```{julia}
+datalayer=data(new_df)
+maplayer=mapping(:glucose_cat)*frequency()*mapping(color=:glucose_cat)
+draw(datalayer*maplayer)
+```
+
+
+

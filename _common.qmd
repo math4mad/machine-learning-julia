@@ -1,0 +1,8 @@
+
+```{julia}
+ 
+ using CSV,DataFrames,Tidier,Pipe
+ using CairoMakie,AlgebraOfGraphics,MakieThemes
+ using ScientificTypes,StatsBase,RCall
+ 
+```

@@ -1,0 +1,53 @@
+---
+title: "3 Gaussian Mixture Model Regression in Boston Housing"
+execute:
+  warning: false
+---
+
+
+## 1. load package
+```{julia}
+import MLJ:predict
+using MLJ
+```
+
+## 2. load data
+```{julia}
+X, y= @load_boston;
+```
+
+## 3. load model 
+
+<button class="btn btn-info rounded-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Gaussian Mixture Model Regression doc {{< fa right-long >}} </button>
+<div class="offcanvas offcanvas-end " tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+<div class="offcanvas-header">
+<h5 id="offcanvasRightLabel">GMR</h5>
+<button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+</div>
+<div class="offcanvas-body">
+```{julia}
+ @doc(GaussianMixtureRegressor)
+```
+</div>
+</div>
+
+```{julia}
+modelType= @load GaussianMixtureRegressor pkg = "BetaML"
+gmr= modelType()
+```
+
+## 4. fit model 
+```{julia}
+  (fitResults, cache, report) = MLJ.fit(gmr, 1, X, y);
+  y_res= predict(gmr, fitResults, X)
+  show(y_res)
+```
+
+## 5. measure model 
+```{julia}
+rmse(y_res,y)
+```
+
+
+
+

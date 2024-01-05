@@ -1,0 +1,80 @@
+---
+title: "4 Salary dataset Linear Regression"
+execute:
+  warning: false
+---
+
+:::{.callout-note title="info"}
+dataset: [Salary Dataset - Simple linear regression](https://www.kaggle.com/datasets/abhishek14398/salary-dataset-simple-linear-regression)
+:::
+
+
+## 1. load package
+```{julia}
+ import MLJ:fit!,match,predict,table,fitted_params
+ using CSV,DataFrames,Tidier,Pipe
+ using CairoMakie,AlgebraOfGraphics,MakieThemes
+ using MLJ,StatsBase
+```
+
+## 2. load data
+```{julia}
+df=CSV.File("../../data/salary_dataset.csv")|>DataFrame
+first(df,5)
+```
+
+## 3. data processing 
+```{julia}
+df=@chain df begin
+  @clean_names
+  @select(Not(1))
+  #coerce(_,:years_experience=>Continuous,:salary=>Continuous)
+end
+schema(df)
+```
+
+```{julia}
+ax=(width=400,height=250)
+plt1=data(df)*mapping(:years_experience,:salary)*visual(Scatter,color=:lightgreen,strokewidth=1,strokecolor=:black)
+fg=draw(plt1,axis=ax)
+```
+
+```{julia}
+X=MLJ.table(reshape(df[:,1],30,1))
+y=Vector(df[:,2])
+show(y)
+```
+
+## 4. MLJ workflow
+### 4.1 load model
+```{julia}
+LinearRegressor = @load LinearRegressor pkg=MLJLinearModels
+model=LinearRegressor()
+```
+
+### 4.2 fitting model
+```{julia}
+mach = MLJ.fit!(machine(model,X,y))
+```
+
+### 4.3 getting params
+```{julia}
+fp=MLJ.fitted_params(mach)
+a=fp.coefs[1,1][2]
+b=fp.intercept
+f(t)=a*t+b
+```
+
+## 5 plot fit line 
+```{julia}
+xspan=range(extrema(df[:,1])...,200)
+ys=f.(xspan)
+
+datalayer2=data((years_experience=xspan,salary=ys))
+maplayer2=mapping(:years_experience,:salary)
+vislayer2=visual(Lines,color=:red,linewidth=2)
+plt2=datalayer2*maplayer2*vislayer2
+draw(plt1+plt2,axis=ax)
+```
+
+

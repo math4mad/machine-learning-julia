@@ -1,0 +1,37 @@
+---
+title: "5 Ecommerce customers dataset Linear Regression"
+execute:
+  warning: false
+---
+
+:::{.callout-note title="info"}
+ dataset: [Linear Regression E-commerce Dataset](https://www.kaggle.com/datasets/kolawale/focusing-on-mobile-app-or-website)
+
+ model :  [E-commerce Dataset - Linear Regression Model](https://www.kaggle.com/code/mohammedibrahim784/e-commerce-dataset-linear-regression-model)
+:::
+
+
+## 1. load package
+```{julia}
+ import MLJ:fit!,match,predict,table,fitted_params
+ using CSV,DataFrames,Tidier,Pipe
+ using CairoMakie,AlgebraOfGraphics,MakieThemes
+ using MLJ,StatsBase
+```
+
+## 2. load data
+```{julia}
+df=CSV.File("../../data/Ecommerce-Customers.csv")|>DataFrame
+df=@chain df begin
+  @select(4:8)
+  @clean_names
+end;
+```
+## 3. EDA 
+  [ecommerce-customer-dataset EDA](../../dataset/ecommerce-customer-dataset.qmd)
+
+
+
+
+
+

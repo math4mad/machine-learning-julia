@@ -1,0 +1,119 @@
+---
+title: " 👧👱👳Ecommerce Customer dataset EDA"
+---
+
+:::{.callout-note title="info"}
+ dataset: [Linear Regression E-commerce Dataset](https://www.kaggle.com/datasets/kolawale/focusing-on-mobile-app-or-website)
+
+ model :  [E-commerce Dataset - Linear Regression Model](https://www.kaggle.com/code/mohammedibrahim784/e-commerce-dataset-linear-regression-model)
+
+ dataset standard methods ref:  [Standardize all columns of DataFrame](https://discourse.julialang.org/t/standardize-all-columns-of-dataframe/77772)
+:::
+
+
+## 1. load package
+```{julia}
+ using CSV,DataFrames,Tidier,Pipe
+ using CairoMakie,AlgebraOfGraphics,MakieThemes
+ using StatsBase
+```
+
+## 2. load data
+```{julia}
+df=CSV.File("../data/Ecommerce-Customers.csv")|>DataFrame
+df=@chain df begin
+  @select(4:8)
+  @clean_names
+  mapcols(zscore, _)   #standard methods    
+end
+
+first(df,5)
+```
+
+## 3. describe df
+```{julia}
+ describe(df)
+```
+
+## 4. wide to long  table
+```{julia}
+long_table=@chain df begin
+@pivot_longer(_,1:5)
+end
+```
+
+## 5 EDA 
+### 5.1 boxplot
+```{julia}
+let
+ax=(width=600, height=300,xticklabelrotation = pi/8)
+datalayer=data(long_table)
+maplayer=mapping(:variable,:value, color=:variable)
+vislayer=visual(BoxPlot, storkewidth=1,storkecolor=:black)
+plt51=datalayer*maplayer*vislayer
+draw(plt51,axis=ax)
+end
+```
+
+### 5.2 pair plot 
+```{julia}
+
+cats=names(df)
+cats=Symbol.(cats)
+len=length(cats)
+
+data_layer=data(df)
+
+function make_layer(sy1::Symbol,sy2::Symbol)
+   mapping_layer=sy1==sy2 ? mapping(sy1) : mapping(sy1,sy2)
+   vis_layer=sy1==sy2 ? visual(Density,color=(:green, 0.5)) : visual(Scatter,color=(:purple,0.5),strokewidth=1,strokecolor=:black,markersize=6)
+   return  data_layer*mapping_layer*vis_layer
+end
+
+with_theme(theme_minimal(),resolution = (800,800)) do
+        cl=0.1
+        fig = Figure()
+        for i in 1:len
+            for  j in 1:len
+                ax=Axis(fig[i,j],yticklabelrotation = pi/8)
+                j==1 ? ax.ylabel= String(cats[i]) : nothing
+                i==len ? ax.xlabel= String(cats[j]) : nothing
+                layer=make_layer(cats[i],cats[j])
+              [i,j]==[len,len] ? cl=draw!(ax,layer) : draw!(ax,layer)
+            end
+        end
+    fig
+end
+```
+
+### 5.3 heatmap
+
+```{julia}
+
+cats=names(df)
+row,col=size(df)
+cor_matrix=Matrix(df)|>cor
+row,col=size(cor_matrix)
+```
+
+```{julia}
+
+let
+fig = Figure(size = (800, 800))
+ax = Axis(fig[1, 1], xticks = (1:row, cats), yticks = (1:row, cats),xticklabelrotation = pi/8,ylabelsize=8,xlabelsize=8)
+hmap = heatmap!(ax, cor_matrix, colormap = :plasma)
+Colorbar(fig[1, 2], hmap; label = "values", width = 10, ticksize = 10)
+fig
+end
+
+
+```
+
+<!-- ## 6 remove outliers
+```{julia}
+new_df=@chain df begin
+upper=percentile(time_on_app, 0.99)
+lower=percentile(time_on_app, 0.01)
+@filter(lower<time_on_app<upper)
+end
+``` -->

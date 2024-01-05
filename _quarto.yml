@@ -85,6 +85,12 @@ website:
           href:  learn/Regression/1-cricket-chirps.qmd
         - text:  "2.FloridaLakes"
           href:  learn/Regression/2-florida-lakes.qmd
+        - text:  "3-gaussian-mixturemodels-regression(boston housing)"
+          href:  learn/Regression/3-gaussian-mixturemodels-regression.qmd
+        - text:  "4-salary-dataset-linear-regression"
+          href:  learn/Regression/4-salary-linear-regression.qmd
+        - text:  "5-ecommerce-customer-dataset-linear-regression"
+          href:  learn/Regression/5-ecommerce-dataset-linear-regression.qmd
 
     - id: classfication
       collapse-level: 1
@@ -149,6 +155,8 @@ website:
           href: dataset/circket-chirps.qmd 
         - text: "11.Florida Lakes Dataset"
           href: dataset/florida-lakes.qmd
+        - text: "12 Ecommerce Customer dataset"
+          href: dataset/ecommerce-customer-dataset.qmd
       
         
     

@@ -74,6 +74,54 @@ website:
           href:  workflow/composing-models.qmd 
         - text: "mlj cheatsheet"
           href:  workflow/mlj-cheatsheet.qmd
+        - text: "MLJ PCA Workflow"
+          href:  workflow/mlj-pca-workflow.qmd
+    - id: regression
+      collapse-level: 1
+      contents:  
+        - text: "Regression Intro"
+          href: learn/Regression/index.qmd
+        - text:  "1.Cricket Chirps Rate"
+          href:  learn/Regression/1-cricket-chirps.qmd
+        - text:  "2.FloridaLakes"
+          href:  learn/Regression/2-florida-lakes.qmd
+
+    - id: classfication
+      collapse-level: 1
+      contents:  
+        - text: "Classfication Intro"
+          href:  learn/Classfication/index.qmd 
+    - id: clustering
+      collapse-level: 1
+      contents:  
+        - text: "Clustering Intro"
+          href:  learn/Clustering/index.qmd
+        - text: "1-IRIS PCA-Kmeans clustering"
+          href:  learn/Clustering/1-iris-pca-kmeans.qmd
+        - text: "2-IRIS KernelPCA-Kmeans clustering"
+          href:  learn/Clustering/2-iris-kernelpca-kmeans.qmd
+        
+    - id: dimensionreduction
+      collapse-level: 1
+      contents:  
+        - text: "Dimensionreduction Intro"
+          href:  learn/Dimension/index.qmd
+        - text: "1.NIR Spectra of Milk"
+          href:  learn/Dimension/1-nir-spectra-milk.qmd
+        - text: "3.IRIS  PCA "
+          href:  learn/Dimension/3-iris-pca.qmd
+    - id: ensemble
+      collapse-level: 1
+      contents:  
+        - text: "Ensemble  Intro"
+          href:  learn/Ensemble/index.qmd 
+    - id: learning-network
+      collapse-level: 1
+      contents:  
+        - text: "Learning Network  Intro"
+          href:  learn/LearningNetwork/index.qmd
+    
+    
     - id: dataset
       collapse-level: 1
       contents:
@@ -94,7 +142,14 @@ website:
         - text: "7.breast cancer"
           href: dataset/breast-cancer.qmd
         - text: "8.Diabetes diagnosis dataset"
-        - href: dataset/diabetes.qmd
+          href: dataset/diabetes.qmd
+        - text: "9.Diamonds dataset"
+          href: dataset/diamond.qmd
+        - text: "10.Circket chirps rate"
+          href: dataset/circket-chirps.qmd 
+        - text: "11.Florida Lakes Dataset"
+          href: dataset/florida-lakes.qmd
+      
         
     
 format:
@@ -106,6 +161,8 @@ format:
       body-width: 840px
     mermaid:
       theme: forest
+    code-block-bg: true
+    code-block-border-left: "#31BAE9"
      
 theme:
   - cosmo

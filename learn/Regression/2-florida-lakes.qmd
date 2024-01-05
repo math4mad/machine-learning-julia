@@ -1,0 +1,42 @@
+
+---
+title: "Florida Lakes"
+execute:
+  warning: false
+---
+
+:::{.callout-note title="info"}
+ ref : [`FloridaLakes Dataset`](https://www.lock5stat.com/datapage3e.html)
+
+ >数学的基本用途是用来解决问题. 我们总是尝试利用简单方法解决复杂问题. 在 Florida Lakes 数据集中,测量了湖泊水体的 PH值, 重金属元素的含量.    当我们使用回归模型建立 PH值和重金属含量之间的映射关系以后, 数学的威力就显现出来.  我们可以以非常简单的方法来间接测量湖水的重金属浓度.  这些重金属的浓度如果直接测量,会非常复杂,价格也非常昂贵.  由于有非常好的在线 PH值检测传感器, 我们甚至可以实时检测重金属浓度. 但是必须要注意的是模型并没有完全反映出实际的浓度. 这是近似模型 .
+
+ >The basic purpose of mathematics is to solve problems.   We always try to solve complex problems with simple methods. In the Florida Lakes dataset, the PH value of the lake water body, the content of heavy metal elements, was measured.    When we use regression models to establish a mapping between PH and heavy metal content, the power of mathematics becomes apparent.  We can indirectly measure the concentration of heavy metals in lake water in a very simple way.  The concentration of these heavy metals can be very complex and expensive if measured directly.  Since there are very good online PH detection sensors, we can even detect heavy metal concentrations in real time. However, it is important to note that the model does not fully reflect the actual concentrations. This is an approximate model .
+:::
+
+
+## 1. load package
+```{julia}
+ #| eval: false
+ using CSV,DataFrames,Tidier,Pipe
+ using CairoMakie,AlgebraOfGraphics,MakieThemes
+ using StatsBase
+ #Makie.set_theme!(ggthemr(:flat))
+
+```
+
+## 2. load csv
+```{julia}
+
+df=CSV.File("../../data/FloridaLakes.csv")|>DataFrame
+df=@chain  df  begin
+    @clean_names
+end
+first(df,5)
+```
+
+## 3. describe df
+```{julia}
+
+describe(df)
+```
+

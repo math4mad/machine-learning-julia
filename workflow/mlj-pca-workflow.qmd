@@ -1,0 +1,135 @@
+---
+title: "MLJ PCA Workflow"
+---
+
+:::{.row}
+:::{.col-sm-6 col-md-6 col-lg-6}
+
+<div class="card shadow-sm rounded-3">
+  <div class="card-header alert alert-success rounded-top-3">
+  <h3>1. load package</h3>
+  </div>
+```julia
+ using CSV,DataFrames,Tidier,Pipe
+ using CairoMakie,AlgebraOfGraphics,MakieThemes
+ using MLJ,MLJModelInterface,Random
+ import MLJ:transform,predict
+ #Makie.set_theme!(ggthemr(:flat))
+```
+</div>
+
+
+<div class="card shadow-sm rounded-3 my-4">
+  <div class="card-header alert alert-success rounded-top-3">
+  <h3>2. load csv</h3>
+  </div>
+  <div class="card-body">
+  <div class="card-text">
+```julia
+df=CSV.File("../../data/iris.csv")|>DataFrame
+df=@chain  df  begin
+    @clean_names
+end
+first(df,5)
+```
+</div>
+</div>
+</div>
+
+
+
+<div class="card shadow-sm rounded-3 ">
+<div class="card-header alert alert-success rounded-top-3">
+<h3>3. describe df</h3>
+</div>
+<div class="card-body">
+<div class="card-text">
+```julia
+describe(df)
+```
+</div>
+</div>
+</div>
+
+<div class="card shadow-sm rounded-3 ">
+<div class="card-header alert alert-success rounded-top-3">
+<h3>4. dataprocessing</h3>
+</div>
+<div class="card-body">
+<div class="card-text">
+ ```julia
+    coerce!(df,:labels=>Multiclass)
+    ytrain, Xtrain=  unpack(df, ==(:species), rng=123)
+    cat=levels(ytrain)
+    rows,cols=size(Xtrain)
+```
+</div>
+</div>
+</div>
+
+
+
+
+<div class="card shadow-sm rounded-3 ">
+<div class="card-header alert alert-success rounded-top-3">
+<h3>5. PCA workflow</h3>
+</div>
+<div class="card-body">
+<div class="card-text">
+```julia
+PCA = @load PCA pkg=MultivariateStats
+maxdim=6
+model=PCA(maxoutdim=maxdim)
+mach = machine(model, Xtrain) |> fit!
+Ytr =transform(mach, Xtrain)
+first(Ytr,10)
+```
+</div>
+</div>
+</div>
+
+
+::: {.alert .alert-success .rounded-2 .shadow-xs}
+### 6. report mach
+:::
+```julia
+report(mach)
+```
+
+::: {.alert .alert-success .rounded-2 .shadow-xs}
+### 7. plot results
+:::
+#### 7.1 2 pcs
+```julia
+#| label: fig-iris-pca-2pcs
+#| fig-cap: "iris-pca-2pcs"
+#| fig-cap-location : margin
+#| fig-align: "center"
+  ax=(width=400, height=300)
+  table=(pc1=Ytr.x1,pc2=Ytr.x2,cat=ytrain)
+  datalayer=data(table)
+  maplayer=mapping(:pc1,:pc2,color=:cat)
+  vislayer=visual(Scatter,markersize=10,strokewidth=1,strokecolor=:black)
+  plt=datalayer*maplayer*vislayer*visual(alpha = 0.5)
+  draw(plt,axis=ax)
+```
+
+####  7.2 3 pcs
+```julia
+#| label: fig-iris-pca-3pcs
+#| fig-cap: "iris-pca-3pcs"
+#| fig-cap-location : margin
+#| fig-align: "center"
+let
+ax = (type = Axis3, width = 400, height = 300,azimuth =-0.1pi,elevation=0.1pi)
+table=(pc1=Ytr.x1,pc2=Ytr.x2,pc3=Ytr.x3,cat=ytrain)
+datalayer=data(table)
+maplayer=mapping(:pc1,:pc2,:pc3,color=:cat)
+vislayer=visual(Scatter,markersize=10,strokewidth=1,strokecolor=:black)
+plt=datalayer*maplayer*vislayer*visual(alpha = 0.5)
+draw(plt,axis=ax)
+end
+```
+
+:::
+:::

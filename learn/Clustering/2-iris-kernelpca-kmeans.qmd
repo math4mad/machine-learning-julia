@@ -1,0 +1,127 @@
+---
+title: "2 IRIS KernnelPCA-Kmeans clustering"
+---
+
+:::{.callout-note title="info"}
+using kernel methods mapping dataset to 
+feature space
+:::
+
+## 1. load package
+```{julia}
+ using CSV,DataFrames,Tidier,Pipe
+ using CairoMakie,AlgebraOfGraphics,MakieThemes
+ using MLJ,MLJModelInterface,Random
+ import MLJ:transform,predict
+ using LinearAlgebra
+ #Makie.set_theme!(ggthemr(:flat))
+
+```
+
+## 2. load csv
+```{julia}
+
+df=CSV.File("../../data/iris.csv")|>DataFrame
+df=@chain  df  begin
+    @clean_names
+end;
+```
+
+## 3. data processing
+```{julia}
+    coerce!(df,:labels=>Multiclass)
+    ytrain, Xtrain=  unpack(df, ==(:species), rng=123)
+    cat=levels(ytrain)
+    rows,cols=size(Xtrain)
+```
+
+## 4. MLJ workflow
+
+### 4.1 load model
+using  `KernelPCA`  from `MultivariateStats.jl` package
+
+<button class="btn btn-info rounded-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">KernelPCA doc {{< fa right-long >}} </button>
+<div class="offcanvas offcanvas-end " tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+<div class="offcanvas-header">
+<h5 id="offcanvasRightLabel">KernelPCA</h5>
+<button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+</div>
+<div class="offcanvas-body">
+```{julia}
+@doc(KernelPCA)
+```
+</div>
+</div>
+
+```{julia}
+KernelPCA = @load KernelPCA pkg=MultivariateStats
+KMeans = @load KMeans pkg=Clustering
+```
+
+
+### 4.2 defin rbs function 
+
+change params `length_scale`
+```{julia}
+function rbf_kernel(length_scale)
+    return (x,y) -> norm(x-y)^2 / ((2 * length_scale)^2)
+end
+```
+
+### 4.3 define tunning function 
+```{julia}
+function tune(i)
+    model1 = KernelPCA(maxoutdim=3, kernel=rbf_kernel(i))
+    mach1 = machine(model1, Xtrain) |> fit!
+    model2 = KMeans(k=3)
+    Xproj = MLJ.transform(mach1, Xtrain)
+    mach2 = machine(model2, Xproj) |> fit!
+    yhat = MLJ.predict(mach2, Xproj)
+    return i,Xproj,yhat
+end
+```
+
+```{julia}
+length_scales=1:9
+yhat_arr=[tune(i) for i in length_scales];
+```
+
+
+## 5 plot results
+
+
+### 5.1 two pcs 
+```{julia}
+fig=Figure()
+for i in length_scales
+   ls,df,label=yhat_arr[i]
+   row,col=fldmod1(i,3)
+   ax=Axis(fig[row,col],subtitle="len_scale=$(ls)")
+   table=(pc1=df.x1,pc2=df.x2,label=label)
+   datalayer=data(table)
+   maplayer=mapping(:pc1,:pc2,color=:label)
+   vislayer=visual(Scatter,markersize=8,strokewidth=1,strokecolor=:black)
+   plt=datalayer*maplayer*vislayer
+   hidedecorations!(ax)
+   draw!(ax, plt)
+end
+fig
+```
+
+```{julia}
+fig=Figure()
+for i in length_scales
+   ls,df,label=yhat_arr[i]
+   row,col=fldmod1(i,3)
+   ax=Axis3(fig[row,col],title="len_scale=$(ls)")
+   table=(pc1=df.x1,pc2=df.x2,pc3=df.x3,label=label)
+   datalayer=data(table)
+   maplayer=mapping(:pc1,:pc2,:pc3,color=:label)
+   vislayer=visual(Scatter,markersize=8,strokewidth=1,strokecolor=:black)
+   plt=datalayer*maplayer*vislayer
+   hidedecorations!(ax)
+   draw!(ax, plt)
+   
+end
+fig
+```

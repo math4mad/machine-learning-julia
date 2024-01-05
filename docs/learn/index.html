@@ -6,9 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="math4mad">
 
-<title>Machine-Learning Julia - Leanring</title>
+<title>Machine-Learning Julia</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -40,6 +39,10 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-contrib/react-17.0.2/react.min.js"></script>
+<script src="../site_libs/quarto-contrib/react-dom-17.0.2/react-dom.min.js"></script>
+<script src="../site_libs/quarto-contrib/babel-6.26.0/babel.min.js"></script>
+<script src="../site_libs/quarto-contrib/babel-presets-1.0.0/babel-presets.js"></script>
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -69,9 +72,11 @@ ul.task-list li input[type="checkbox"] {
 }</script>
 
 
+<link rel="stylesheet" href="../index.css">
+<link rel="stylesheet" href="../features.css">
 </head>
 
-<body class="nav-sidebar floating nav-fixed">
+<body class="nav-sidebar nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -137,129 +142,109 @@ ul.task-list li input[type="checkbox"] {
 </div>
       </div> <!-- /container-fluid -->
     </nav>
-  <nav class="quarto-secondary-nav">
-    <div class="container-fluid d-flex">
-      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
-        <i class="bi bi-layout-text-sidebar-reverse"></i>
-      </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../learn/index.html">Learn</a></li></ol></nav>
-        <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-        </a>
-    </div>
-  </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<div id="quarto-content" class="quarto-container page-layout-custom page-navbar">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <div class="sidebar-menu-container"> 
-    <ul class="list-unstyled mt-1">
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../learn/index.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Learn</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../learn/ensemble-model.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">ensemble model</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../learn/ensemblemodel-with-bostonhouse.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">ensemble model with boston housing dataset</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../learn/learning-network-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">learnig network 1</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../learn/tailwind-test.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">tailwind css test</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../learn/pca-explained.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">PCA explained</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
- <span class="menu-text">menu test</span>
-  </li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../learn/menu-test.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Menu Test</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
- <span class="menu-text">Iris Pipeline</span>
-  </li>
-        <li class="sidebar-item">
- <span class="menu-text">Digits pca kmeans</span>
-  </li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../learn/digits-kmeans.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">mlj digits kmeans</span></a>
-  </div>
-</li>
-    </ul>
-    </div>
-</nav>
-<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul>
-  <li><a href="#learn" id="toc-learn" class="nav-link active" data-scroll-target="#learn">Learn</a></li>
-  </ul>
-</nav>
-    </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title">Leanring</h1>
+
+
+
+<p></p><div id="react-JumptronComponents-D6mL1S0F"></div><p></p>
+<div class="container">
+<div class="grid text-center">
+<div class="g-col-4">
+<div class="card mb-3 border-primary shadow rounded-2" style="width: 18rem; height: 24rem">
+<img src="../imgs/24-classifier-comparison.jpg" class=" mx-auto card-img-top rounded-2" alt="..." style="width:200px; height:200px;">
+<div class="card-body">
+<h5 class="card-title">
+Classficiaition
+</h5>
+<p class="card-text">
+Some quick example text to build on the card title and make up the bulk of the card’s content.
+</p>
+<p><a href="../learn/Classfication/index.html" class="btn btn-primary rounded-2">Example</a></p>
+</div>
+</div>
+</div>
+<div class="g-col-4">
+<div class="card mb-3 border-info rounded-2 shadow" style="width: 18rem; height: 24rem">
+<img src="../imgs/5-salary-dataset-linear-regression.png" class="card-img-top rounded-2 mx-auto" alt="..." style="width:200px; height:200px;">
+<div class="card-body">
+<h5 class="card-title">
+Regression
+</h5>
+<p class="card-text">
+Predicting a continuous-valued attribute associated with an object.
+</p>
+<p><a href="../learn/Regression/index.html" class="btn btn-primary rounded-2">Example</a></p>
+</div>
+</div>
+</div>
+<div class="g-col-4 border mx-auto">
+<div class="card mb-3 border-primary rounded-2 shadow" style="width: 18rem; height: 24rem">
+<img src="../imgs/iris-svm.png" class="card-img-top rounded-2 max-auto" alt="..." style="width:200px; height:200px;">
+<div class="card-body">
+<h5 class="card-title">
+Clustering
+</h5>
+<p class="card-text">
+Automatic grouping of similar objects into sets.
+</p>
+<a href="../learn/Clustering/index.html" class="btn btn-primary rounded-2">Example</a>
+</div>
+</div>
+</div>
+<div class="g-col-4">
+<div class="card mb-3 border-primary rounded-2 shadow" style="width: 18rem; height: 24rem">
+<img src="../imgs/26-NIR-spectra-milk-3-components-pca.png" class="card-img-top rounded-2 object-fit-cover mx-auto" alt="..." style="width:200px; height:200px;">
+<div class="card-body">
+<h5 class="card-title">
+Dimension Reduction
+</h5>
+<p class="card-text">
+Automatic grouping of similar objects into sets.
+</p>
+<a href="../learn/Dimension/index.html" class="btn btn-primary rounded-2">Example</a>
+</div>
+</div>
+</div>
+<div class="g-col-4">
+<div class="card mb-3 border-primary rounded-2 shadow" style="width: 18rem; height: 24rem">
+<img src="../imgs/iris-svm.png" class="card-img-top rounded-2" alt="...">
+<div class="card-body">
+<h5 class="card-title">
+Ensemble
+</h5>
+<p class="card-text">
+Automatic grouping of similar objects into sets.
+</p>
+<a href="../learn/Ensemble/index.html" class="btn btn-primary rounded-2">Example</a>
+</div>
+</div>
+</div>
+<div class="g-col-4">
+<div class="card mb-3 border-primary rounded-2 shadow" style="width: 18rem; height: 24rem">
+<img src="../imgs/iris-svm.png" class="card-img-top rounded-2" alt="...">
+<div class="card-body">
+<h5 class="card-title">
+Learning Network
+</h5>
+<p class="card-text">
+Automatic grouping of similar objects into sets.
+</p>
+<a href="../learn/LearningNetwork/index.html" class="btn btn-primary rounded-2">Example</a>
+</div>
+</div>
+</div>
+</div>
 </div>
 
 
 
-<div class="quarto-title-meta">
 
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p>math4mad </p>
-          </div>
-  </div>
-    
-  
-    
-  </div>
-  
-
-
-</header>
-
-
-<section id="learn" class="level1">
-<h1>Learn</h1>
-
-
-</section>
-
-</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
@@ -643,6 +628,51 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script>
 </div> <!-- /content -->
+<script type="text/babel" data-type="module" data-presets="env-plus,react,typescript">//import './bootstrap.min.css';
+function JumptronComponents() {
+    return (
+        <>
+            <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
+                <symbol id="bootstrap" viewBox="0 0 118 94">
+                    <title>Bootstrap</title>
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M24.509 0c-6.733 0-11.715 5.893-11.492 12.284.214 6.14-.064 14.092-2.066 20.577C8.943 39.365 5.547 43.485 0 44.014v5.972c5.547.529 8.943 4.649 10.951 11.153 2.002 6.485 2.28 14.437 2.066 20.577C12.794 88.106 17.776 94 24.51 94H93.5c6.733 0 11.714-5.893 11.491-12.284-.214-6.14.064-14.092 2.066-20.577 2.009-6.504 5.396-10.624 10.943-11.153v-5.972c-5.547-.529-8.934-4.649-10.943-11.153-2.002-6.484-2.28-14.437-2.066-20.577C105.214 5.894 100.233 0 93.5 0H24.508zM80 57.863C80 66.663 73.436 72 62.543 72H44a2 2 0 01-2-2V24a2 2 0 012-2h18.437c9.083 0 15.044 4.92 15.044 12.474 0 5.302-4.01 10.049-9.119 10.88v.277C75.317 46.394 80 51.21 80 57.863zM60.521 28.34H49.948v14.934h8.905c6.884 0 10.68-2.772 10.68-7.727 0-4.643-3.264-7.207-9.012-7.207zM49.948 49.2v16.458H60.91c7.167 0 10.964-2.876 10.964-8.281 0-5.406-3.903-8.178-11.425-8.178H49.948z"></path>
+                </symbol>
+                <symbol id="arrow-right-short" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z" />
+                </symbol>
+                <symbol id="check2-circle" viewBox="0 0 16 16">
+                    <path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0z" />
+                    <path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l7-7z" />
+                </symbol>
+            </svg>
+
+            <div class=" my-1">
+                <div class="p-1 text-center bg-body-tertiary rounded-3">
+                   
+                    <h1 class="text-body-emphasis">Machine Learning with Julia</h1>
+                    <p class="col-lg-8 mx-auto fs-5 text-muted">
+                        This is a machine learning framework for julia
+                    </p>
+                    <div class="d-inline-flex gap-2 mb-5">
+                        <button class="d-inline-flex align-items-center btn btn-primary btn-lg px-4 rounded-pill" type="button">
+                            Goto to Docs
+                            
+                        </button>
+                        <button class="btn btn-outline-secondary btn-lg px-4 rounded-pill" type="button">
+                            Goto to Github
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </>
+
+
+    );
+}
+
+
+
+ReactDOM.render( <React.StrictMode>    <JumptronComponents/>  </React.StrictMode>,  document.getElementById("react-JumptronComponents-D6mL1S0F") );</script>
 
 
 

@@ -1,0 +1,45 @@
+---
+title: "10 🦗🦗🦗cricket chirps data"
+---
+
+
+:::{.callout-note title="info"}
+ ref : [snowy tree cricket](https://www.britannica.com/animal/snowy-tree-cricket)
+:::
+
+
+## 1. load package
+```{julia}
+ #| eval: false
+ using CSV,DataFrames,Tidier,Pipe
+ using CairoMakie,AlgebraOfGraphics,MakieThemes
+ using StatsBase,RCall
+ #Makie.set_theme!(ggthemr(:flat))
+
+```
+
+## 2. load csv
+```{julia}
+
+df=CSV.File("../data/CricketChirps.csv")|>DataFrame
+df=@chain  df  begin
+    @clean_names
+
+end
+first(df,5)
+```
+
+## 3. describe df
+```{julia}
+describe(df)
+```
+
+## 4. EDA 
+
+```{julia}
+datalayer=data(df)
+maplayer=mapping(:temperature,:chirps)
+ax=(width=250,height=250)
+draw(datalayer*maplayer,axis=ax)
+```
+

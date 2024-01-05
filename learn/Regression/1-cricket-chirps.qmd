@@ -1,0 +1,77 @@
+---
+title: "Cricket Chirp Linear Regression"
+execute:
+  warning: false
+---
+
+:::{.callout-note title="info"}
+ ref :[snowy tree cricket](https://www.britannica.com/animal/snowy-tree-cricket)
+
+ 雪树蟋蟀鸣叫的频率和温度的线性关系非常精确. 线性模型在两个不同的物理量之间寻求映射关系
+:::
+
+## 1. load package
+```{julia}
+ import FileIO:load
+ import MLJ:fit!,match,predict,table,fitted_params
+ using CSV,DataFrames,Tidier,Pipe
+ using CairoMakie,AlgebraOfGraphics,MakieThemes
+ using MLJ,StatsBase
+```
+
+## 2. load csv,img
+```{julia}
+img=load("../../imgs/snowy-cricket.png");
+df=CSV.File("../../data/CricketChirps.csv")|>DataFrame
+first(df,5)
+```
+
+## 3.  make data and test data
+
+测试数据使用利用温度区间的极值区间, 插值 n=50获得
+
+`test_X=range(extrema(df[:,1])...,50)`
+
+```{julia}
+X=MLJ.table(reshape(df[:,1],7,1))
+y=Vector(df[:,2])
+test_X=range(extrema(df[:,1])...,50)
+test_X=MLJ.table(reshape(test_X,50,1))
+cols=names(df)
+```
+
+## 4. wrap LinearReg model
+return  fitting Model
+```{julia}
+function LineReg(X,y)
+    LinearRegressor = @load LinearRegressor pkg=MLJLinearModels
+    mach = fit!(machine(LinearRegressor(), X, y))
+    return mach
+end
+```
+
+```{julia}
+mach=LineReg(X,y)
+yhat=predict(mach,test_X).|>(d->round(d,digits=2))
+```
+
+## 5. plot fitting curve
+```{julia}
+function plot_fitting_curve(df,yhat)
+    X=df[:,1]
+    test_X=range(extrema(df[:,1])...,50)
+    cols=names(df)
+    fig=Figure()
+    ax=Axis(fig[1:3,1:3];xlabel="$(cols[1])",ylabel="$(cols[2])",title="cricket-chirp")
+    ax2 = Axis(fig[2,4],title="snowy-tree-cricket")
+    scatter!(ax, X,y,markersize=12,color=(:red,0.8),strokewidth=1,strokecolor=:black,label="origin data")
+    lines!(ax, test_X,yhat,color=:blue,label="fitting lines")
+    image!(ax2,img)
+    hidespines!(ax2)
+    hidedecorations!(ax2)
+    axislegend(ax,position=:rb)
+    fig
+end
+
+plot_fitting_curve(df,yhat)
+```

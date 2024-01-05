@@ -1,0 +1,12 @@
+---
+toc-location: body
+toc-depth: 2
+toc-title: ""
+---
+
+## Regression Model 
+<!-- ### 1. [*Ensembel model*](../ensemble-model.qmd) -->
+```{julia}
+using MLJ 
+models("Regression")
+```

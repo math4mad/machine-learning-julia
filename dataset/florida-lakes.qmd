@@ -1,0 +1,95 @@
+---
+title: "11 Florida Lakes"
+execute:
+  warning: false
+---
+
+:::{.callout-note title="info"}
+ ref : [`FloridaLakes Dataset`](https://www.lock5stat.com/datapage3e.html)
+:::
+
+
+## 1. load package
+```{julia}
+
+ using CSV,DataFrames,Tidier,Pipe
+ using CairoMakie,AlgebraOfGraphics,MakieThemes
+ using StatsBase
+ #Makie.set_theme!(ggthemr(:flat))
+
+```
+
+## 2. load csv
+```{julia}
+
+df=CSV.File("../data/FloridaLakes.csv")|>DataFrame
+df=@chain  df  begin
+    @clean_names
+end
+first(df,5)
+```
+
+## 3. describe df
+```{julia}
+describe(df)
+```
+
+## 4. EDA 
+
+### 4.1 data processing
+
+select numerical features and standarid
+```{julia}
+new_df=@chain df begin
+   @select(3:7,9:11)
+   mapcols(zscore,_)
+end
+```
+
+### 4.2 heatmap
+```{julia}
+cats=names(new_df)
+row,col=size(new_df)
+cor_matrix=Matrix(new_df)|>cor
+row,col=size(cor_matrix)
+```
+
+```{julia}
+fig = Figure(size = (800, 800))
+ax = Axis(fig[1, 1], xticks = (1:row, cats), yticks = (1:row, cats),xticklabelrotation = pi/8,ylabelsize=8,xlabelsize=8)
+hmap = heatmap!(ax, cor_matrix, colormap = :plasma)
+Colorbar(fig[1, 2], hmap; label = "values", width = 10, ticksize = 10)
+fig
+```
+
+### 4.3 pair plot 
+```{julia}
+data_layer=data(new_df)
+function make_layer(sy1::Symbol,sy2::Symbol)
+   mapping_layer=sy1==sy2 ? mapping(sy1,) : mapping(sy1,sy2)
+   vis_layer=sy1==sy2 ? visual(Density,color=(:green,0.6)) : visual(Scatter,strokewidth=1,storkecolor=:black,color=:red,markersize=4)
+   return  data_layer*mapping_layer*vis_layer
+end
+
+cats=@pipe names(new_df)|>Symbol.(_)
+len=length(cats)
+```
+```{julia}
+with_theme(theme_minimal(),resolution = (1200,1200)) do
+        cl=0.1
+        fig = Figure()
+        for i in 1:len
+            for  j in 1:len
+                ax=Axis(fig[i,j])
+                j==1 ? ax.ylabel= String(cats[i]) : nothing
+                i==len ? ax.xlabel= String(cats[j]) : nothing
+                layer=make_layer(cats[i],cats[j])
+              [i,j]==[len,len] ? cl=draw!(ax,layer) : draw!(ax,layer)
+            end
+        end
+        
+        fig
+end
+
+```
+

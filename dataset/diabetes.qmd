@@ -100,9 +100,10 @@ end
 ```
 
 ```{julia}
+ax=(width=150,height=250)
 datalayer=data(new_df)
 maplayer=mapping(:glucose_cat)*frequency()*mapping(color=:glucose_cat)
-draw(datalayer*maplayer)
+draw(datalayer*maplayer,axis=ax)
 ```
 
 

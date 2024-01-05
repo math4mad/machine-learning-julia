@@ -1,0 +1,87 @@
+---
+title: "1 IRIS PCA-Kmeans clustering"
+---
+
+## 1. load package
+```{julia}
+ using CSV,DataFrames,Tidier,Pipe
+ using CairoMakie,AlgebraOfGraphics,MakieThemes
+ using MLJ,MLJModelInterface,Random
+ import MLJ:transform,predict
+ #Makie.set_theme!(ggthemr(:flat))
+
+```
+
+## 2. load csv
+```{julia}
+
+df=CSV.File("../../data/iris.csv")|>DataFrame
+df=@chain  df  begin
+    @clean_names
+end
+first(df,5)
+```
+
+## 3. describe df
+```{julia}
+describe(df)
+```
+## 4. data processing
+```{julia}
+    coerce!(df,:labels=>Multiclass)
+    ytrain, Xtrain=  unpack(df, ==(:species), rng=123)
+    cat=levels(ytrain)
+    rows,cols=size(Xtrain)
+```
+
+## 5. MLJ workflow
+### 5.1 load model
+
+<button class="btn btn-info rounded-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">PCA doc {{< fa right-long >}} </button>
+<div class="offcanvas offcanvas-end " tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+<div class="offcanvas-header">
+<h5 id="offcanvasRightLabel">PCA</h5>
+<button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+</div>
+<div class="offcanvas-body">
+```{julia}
+@doc(PCA)
+```
+</div>
+</div>
+
+```{julia}
+PCA = @load PCA pkg=MultivariateStats
+KMeans = @load KMeans pkg=Clustering
+```
+
+### 5.2 fitting model
+- model1 : pca model
+- modle2 : kmeans model
+  
+```{julia}
+model1 = PCA(maxoutdim=2)
+mach1 = machine(model1, Xtrain) |> fit!
+model2 = KMeans(k=3)
+Xproj = MLJ.transform(mach1, Xtrain)
+mach2 = machine(model2, Xproj) |> fit!
+yhat = MLJ.predict(mach2, Xproj)
+show(yhat)
+```
+
+
+## 6. plot resutls
+```{julia}
+#| label: fig-iris-pca-kmeans-2pcs
+#| fig-cap: "iris-pca-kmeans-2pcs"
+#| fig-cap-location : margin
+#| fig-align: "center"
+  ax=(width=400, height=300,title="IRIS PCA-Kmeans plot",subtitle="(2pcs)")
+  table=(pc1=Xproj.x1,pc2=Xproj.x2,cat=yhat)
+  datalayer=data(table)
+  maplayer=mapping(:pc1,:pc2,color=:cat)
+  vislayer=visual(Scatter,markersize=10,strokewidth=1,strokecolor=:black)
+  plt=datalayer*maplayer*vislayer
+  draw(plt,axis=ax)
+```
+

@@ -178,7 +178,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../dataset/diabetes.html">Diabetes Diagnosis Dataset</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../dataset/diabetes.html">8.Diabetes diagnosis dataset</a></li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -239,12 +239,27 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </div>
 </li>
         <li class="sidebar-item">
- <span class="menu-text">8.Diabetes diagnosis dataset</span>
-  </li>
-        <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../dataset/diabetes.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Diabetes Diagnosis Dataset</span></a>
+ <span class="menu-text">8.Diabetes diagnosis dataset</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../dataset/diamond.qmd" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">9.Diamonds dataset</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../dataset/circket-chirps.qmd" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">10.Circket chirps rate</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../dataset/florida-lakes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">11.Florida Lakes Dataset</span></a>
   </div>
 </li>
     </ul>
@@ -306,7 +321,7 @@ info
 </div>
 <section id="load-package" class="level2">
 <h2 class="anchored" data-anchor-id="load-package">1. load package</h2>
-<div id="71f0a211" class="cell" data-execution_count="1">
+<div id="bfef9d2e" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a> <span class="im">using</span> <span class="bu">CSV</span>,<span class="bu">DataFrames</span>,<span class="bu">Tidier</span>,<span class="bu">Pipe</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a> <span class="im">using</span> <span class="bu">CairoMakie</span>,<span class="bu">AlgebraOfGraphics</span>,<span class="bu">MakieThemes</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a> <span class="im">using</span> <span class="bu">ScientificTypes</span>,<span class="bu">StatsBase</span>,<span class="bu">RCall</span></span>
@@ -315,13 +330,13 @@ info
 </section>
 <section id="load-csv" class="level2">
 <h2 class="anchored" data-anchor-id="load-csv">2. load csv</h2>
-<div id="0d97974e" class="cell" data-execution_count="2">
+<div id="95c70fa2" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>df<span class="op">=</span>CSV.<span class="fu">File</span>(<span class="st">"../data/diabetes.csv"</span>)<span class="op">|&gt;</span>DataFrame</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>df<span class="op">=</span><span class="pp">@chain</span>  df  <span class="cf">begin</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="pp">@clean_names</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">first</span>(df,<span class="fl">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="11">
+<div class="cell-output cell-output-display" data-execution_count="12">
 <div><div style="float: left;"><span>5×9 DataFrame</span></div><div style="clear: both;"></div></div><div class="data-frame" style="overflow-x: scroll;">
 <table class="data-frame table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
@@ -419,9 +434,9 @@ info
 </section>
 <section id="describe-df" class="level2">
 <h2 class="anchored" data-anchor-id="describe-df">3. describe df</h2>
-<div id="504572cb" class="cell" data-execution_count="3">
+<div id="04777e87" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">describe</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="12">
+<div class="cell-output cell-output-display" data-execution_count="13">
 <div><div style="float: left;"><span>9×7 DataFrame</span></div><div style="clear: both;"></div></div><div class="data-frame" style="overflow-x: scroll;">
 <table class="data-frame table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
@@ -547,7 +562,7 @@ info
 <h2 class="anchored" data-anchor-id="eda">4. EDA</h2>
 <section id="cor-of-eachcol" class="level3">
 <h3 class="anchored" data-anchor-id="cor-of-eachcol">4.1 cor of eachcol</h3>
-<div id="fe2191c7" class="cell" data-execution_count="4">
+<div id="a45fef6a" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>df41<span class="op">=</span><span class="pp">@chain</span> df <span class="cf">begin</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="pp">@select</span>(<span class="fl">1</span><span class="op">:</span><span class="fl">8</span>)</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
@@ -555,7 +570,7 @@ info
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>cors<span class="op">=</span>[<span class="fu">cor</span>(col, outcome) for col <span class="kw">in</span> <span class="fu">eachcol</span>(df41)]</span>
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>features<span class="op">=</span><span class="fu">names</span>(df41)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="13">
+<div class="cell-output cell-output-display" data-execution_count="14">
 <pre><code>8-element Vector{String}:
  "pregnancies"
  "glucose"
@@ -567,14 +582,14 @@ info
  "age"</code></pre>
 </div>
 </div>
-<div id="8c21fb2b" class="cell" data-execution_count="5">
+<div id="67fa9fb3" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>ax<span class="op">=</span>(width<span class="op">=</span><span class="fl">250</span>,height<span class="op">=</span><span class="fl">250</span>,xticklabelrotation <span class="op">=</span> <span class="cn">pi</span><span class="op">/</span><span class="fl">8</span>)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>datalayer<span class="op">=</span><span class="fu">data</span>(<span class="fu">DataFrame</span>(cors<span class="op">=</span>cors,features<span class="op">=</span>features))</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>maplayer<span class="op">=</span><span class="fu">mapping</span>(<span class="op">:</span>features,<span class="op">:</span>cors,color<span class="op">=:</span>features)</span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>vislayer<span class="op">=</span><span class="fu">visual</span>(BarPlot,strokewidth<span class="op">=</span><span class="fl">1</span>,strokecolor<span class="op">=:</span>black)</span>
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>plt<span class="op">=</span>datalayer<span class="op">*</span>maplayer<span class="op">*</span>vislayer</span>
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="fu">draw</span>(plt;axis<span class="op">=</span>ax)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="14">
+<div class="cell-output cell-output-display" data-execution_count="15">
 <div>
 <figure class="figure">
 <p><img src="diabetes_files/figure-html/cell-6-output-1.svg" class="img-fluid figure-img"></p>
@@ -585,7 +600,7 @@ info
 </section>
 <section id="feature-engineering" class="level3">
 <h3 class="anchored" data-anchor-id="feature-engineering">4.2 Feature Engineering</h3>
-<div id="85fa8c9f" class="cell" data-execution_count="6">
+<div id="423e4ef0" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>new_df<span class="op">=</span><span class="pp">@chain</span> df <span class="cf">begin</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="pp">@mutate</span>(age_cat <span class="op">=</span> <span class="fu">case_when</span>(age<span class="op">&lt;</span><span class="fl">21</span> <span class="op">=&gt;</span> <span class="st">"young"</span>,</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>                                age<span class="op">&gt;</span><span class="fl">50</span> <span class="op">=&gt;</span> <span class="st">"elder"</span>,</span>
@@ -619,7 +634,7 @@ info
 <span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>  <span class="pp">@mutate</span>(gulcose_insulin<span class="op">=</span>glucose<span class="op">*</span>insulin)</span>
 <span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="15">
+<div class="cell-output cell-output-display" data-execution_count="16">
 <div><div style="float: left;"><span>768×15 DataFrame</span></div><div style="float: right;"><span style="font-style: italic;">743 rows omitted</span></div><div style="clear: both;"></div></div><div class="data-frame" style="overflow-x: scroll;">
 <table class="data-frame table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
@@ -1134,11 +1149,12 @@ info
 </div>
 </div>
 </div>
-<div id="9f92d28f" class="cell" data-execution_count="7">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>datalayer<span class="op">=</span><span class="fu">data</span>(new_df)</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>maplayer<span class="op">=</span><span class="fu">mapping</span>(<span class="op">:</span>glucose_cat)<span class="fu">*frequency</span>()<span class="fu">*mapping</span>(color<span class="op">=:</span>glucose_cat)</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">draw</span>(datalayer<span class="op">*</span>maplayer)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="16">
+<div id="37a0c776" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>ax<span class="op">=</span>(width<span class="op">=</span><span class="fl">150</span>,height<span class="op">=</span><span class="fl">250</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>datalayer<span class="op">=</span><span class="fu">data</span>(new_df)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>maplayer<span class="op">=</span><span class="fu">mapping</span>(<span class="op">:</span>glucose_cat)<span class="fu">*frequency</span>()<span class="fu">*mapping</span>(color<span class="op">=:</span>glucose_cat)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="fu">draw</span>(datalayer<span class="op">*</span>maplayer,axis<span class="op">=</span>ax)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="17">
 <div>
 <figure class="figure">
 <p><img src="diabetes_files/figure-html/cell-8-output-1.svg" class="img-fluid figure-img"></p>

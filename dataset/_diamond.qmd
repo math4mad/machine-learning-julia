@@ -1,0 +1,53 @@
+---
+title : " 💎💎💎Diamond Dataset"
+---
+
+:::{.callout-note title="info"}
+ref:  [Diamond Price prediction using Regression (98,2%)](https://www.kaggle.com/code/wahyuikbalmaulana/diamond-price-prediction-using-regression-98-2)
+
+ref: [Diamond Price Prediction](https://www.kaggle.com/code/karnikakapoor/diamond-price-prediction)
+:::
+
+
+## 1. load package
+
+```{julia}
+ using CSV,DataFrames,Tidier,Pipe
+ using CairoMakie,AlgebraOfGraphics,MakieThemes
+ using StatsBase,RCall
+ #Makie.set_theme!(ggthemr(:flat))
+
+```
+
+## 2. load csv
+```{julia}
+df=CSV.File("../data/diamonds.csv")|>DataFrame
+df=@chain  df  begin
+    @clean_names
+end
+first(df,5)
+```
+
+## 3. describe df
+```{julia}
+describe(df)
+```
+
+## 4. EDA 
+### 4.1  pairplot of measure variables
+```{julia}
+df41=@chain df begin
+  @select(3,2,6,7,9:11)
+end
+```
+
+```{julia}
+ax=(width=250,height=250)
+datalayer=data(df)
+maplayer=mapping(:depth,:table,color=:cut)
+vislayer=visual(Scatter)
+plt=datalayer*maplayer*vislayer
+draw(plt,axis=ax)
+```
+
+

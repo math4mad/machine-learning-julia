@@ -124,16 +124,6 @@
     "text": "StatsBase.jl"
   },
   {
-    "objectID": "packages/glm.html",
-    "href": "packages/glm.html",
-    "title": "GLM.jl",
-    "section": "",
-    "text": "GLM.jl",
-    "crumbs": [
-      "GLM"
-    ]
-  },
-  {
     "objectID": "learn/pca-explained.html",
     "href": "learn/pca-explained.html",
     "title": "PCA explained",
@@ -389,7 +379,17 @@
     "href": "learn/Ensemble/index.html",
     "title": "Ensemble model",
     "section": "",
-    "text": "Ensemble model",
+    "text": "using HypertextLiteral\nusing MLJ \nLinearRegressor = @load LinearRegressor pkg=MLJLinearModels\nstr=@doc(LinearRegressor);\n\nimport MLJLinearModels ✔\n\n\n[ Info: For silent loading, specify `verbosity=0`.\nGaussian Mixture Model Regression doc  \n  \n \n GMR\n \n \n  \n  LinearRegressor\nA model type for constructing a linear regressor, based on MLJLinearModels.jl, and implementing the MLJ model interface.\nFrom MLJ, the type can be imported using\nLinearRegressor = @load LinearRegressor pkg=MLJLinearModels\nDo model = LinearRegressor() to construct an instance with default hyper-parameters.\nThis model provides standard linear regression with objective function\n$|Xθ - y|₂²/2$\nDifferent solver options exist, as indicated under \"Hyperparameters\" below. \nTraining data\nIn MLJ or MLJBase, bind an instance model to data with\nmach = machine(model, X, y)\nwhere:\n\nX is any table of input features (eg, a DataFrame) whose columns have Continuous scitype; check column scitypes with schema(X)\n\ny is the target, which can be any AbstractVector whose element scitype is Continuous; check the scitype with scitype(y)\n\n\nTrain the machine using fit!(mach, rows=...).\nHyperparameters\n\nfit_intercept::Bool: whether to fit the intercept or not. Default: true\n\nsolver::Union{Nothing, MLJLinearModels.Solver}: \"any instance of MLJLinearModels.Analytical. Use Analytical() for Cholesky and CG()=Analytical(iterative=true) for conjugate-gradient.\nIf solver = nothing (default) then Analytical() is used.  Default: nothing\n\n\nExample\nusing MLJ\nX, y = make_regression()\nmach = fit!(machine(LinearRegressor(), X, y))\npredict(mach, X)\nfitted_params(mach)",
+    "crumbs": [
+      "Ensemble  Intro"
+    ]
+  },
+  {
+    "objectID": "learn/Ensemble/index.html#tailwind-and-daisyui",
+    "href": "learn/Ensemble/index.html#tailwind-and-daisyui",
+    "title": "Ensemble model",
+    "section": "tailwind and daisyui",
+    "text": "tailwind and daisyui\n\n\n  \n  \n\n\n\n\nneutral \nprimary \nsecondary \naccent \nghost\n\n\n\n\n  在这里拷贝样式模板 \n  组件样式在这里有介绍",
     "crumbs": [
       "Ensemble  Intro"
     ]
@@ -545,6 +545,76 @@
     ]
   },
   {
+    "objectID": "learn/Classfication/2-mnist-classification.html",
+    "href": "learn/Classfication/2-mnist-classification.html",
+    "title": "2-Mnist Classification",
+    "section": "",
+    "text": "using CSV,DataFrames,Tidier,Pipe\n using CairoMakie,AlgebraOfGraphics,MakieThemes\n using MLJ,MLJModelInterface,Random\n import MLJ:transform,predict\n #Makie.set_theme!(ggthemr(:flat))",
+    "crumbs": [
+      "2-mnist-classification.qmd"
+    ]
+  },
+  {
+    "objectID": "learn/Classfication/2-mnist-classification.html#load-package",
+    "href": "learn/Classfication/2-mnist-classification.html#load-package",
+    "title": "2-Mnist Classification",
+    "section": "",
+    "text": "using CSV,DataFrames,Tidier,Pipe\n using CairoMakie,AlgebraOfGraphics,MakieThemes\n using MLJ,MLJModelInterface,Random\n import MLJ:transform,predict\n #Makie.set_theme!(ggthemr(:flat))",
+    "crumbs": [
+      "2-mnist-classification.qmd"
+    ]
+  },
+  {
+    "objectID": "learn/Classfication/2-mnist-classification.html#load-csv",
+    "href": "learn/Classfication/2-mnist-classification.html#load-csv",
+    "title": "2-Mnist Classification",
+    "section": "2. load csv",
+    "text": "2. load csv\n\ndf=CSV.File(\"../../data/mnist_train.csv\")|&gt;DataFrame\ndf=coerce(df,:label=&gt;Multiclass)\nfirst(df,5)\n\n5×785 DataFrame685 columns omitted\n\n\n\nRow\nlabel\n1x1\n1x2\n1x3\n1x4\n1x5\n1x6\n1x7\n1x8\n1x9\n1x10\n1x11\n1x12\n1x13\n1x14\n1x15\n1x16\n1x17\n1x18\n1x19\n1x20\n1x21\n1x22\n1x23\n1x24\n1x25\n1x26\n1x27\n1x28\n2x1\n2x2\n2x3\n2x4\n2x5\n2x6\n2x7\n2x8\n2x9\n2x10\n2x11\n2x12\n2x13\n2x14\n2x15\n2x16\n2x17\n2x18\n2x19\n2x20\n2x21\n2x22\n2x23\n2x24\n2x25\n2x26\n2x27\n2x28\n3x1\n3x2\n3x3\n3x4\n3x5\n3x6\n3x7\n3x8\n3x9\n3x10\n3x11\n3x12\n3x13\n3x14\n3x15\n3x16\n3x17\n3x18\n3x19\n3x20\n3x21\n3x22\n3x23\n3x24\n3x25\n3x26\n3x27\n3x28\n4x1\n4x2\n4x3\n4x4\n4x5\n4x6\n4x7\n4x8\n4x9\n4x10\n4x11\n4x12\n4x13\n4x14\n4x15\n⋯\n\n\n\nCat…\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\n⋯\n\n\n\n\n1\n5\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n⋯\n\n\n2\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n⋯\n\n\n3\n4\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n⋯\n\n\n4\n1\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n⋯\n\n\n5\n9\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n⋯",
+    "crumbs": [
+      "2-mnist-classification.qmd"
+    ]
+  },
+  {
+    "objectID": "learn/Classfication/2-mnist-classification.html#describe-df",
+    "href": "learn/Classfication/2-mnist-classification.html#describe-df",
+    "title": "2-Mnist Classification",
+    "section": "3. describe df",
+    "text": "3. describe df\n\ndescribe(df)\n\n785×7 DataFrame760 rows omitted\n\n\n\nRow\nvariable\nmean\nmin\nmedian\nmax\nnmissing\neltype\n\n\n\nSymbol\nUnion…\nAny\nUnion…\nAny\nInt64\nDataType\n\n\n\n\n1\nlabel\n\n0\n\n9\n0\nCategoricalValue{Int64, UInt32}\n\n\n2\n1x1\n0.0\n0\n0.0\n0\n0\nInt64\n\n\n3\n1x2\n0.0\n0\n0.0\n0\n0\nInt64\n\n\n4\n1x3\n0.0\n0\n0.0\n0\n0\nInt64\n\n\n5\n1x4\n0.0\n0\n0.0\n0\n0\nInt64\n\n\n6\n1x5\n0.0\n0\n0.0\n0\n0\nInt64\n\n\n7\n1x6\n0.0\n0\n0.0\n0\n0\nInt64\n\n\n8\n1x7\n0.0\n0\n0.0\n0\n0\nInt64\n\n\n9\n1x8\n0.0\n0\n0.0\n0\n0\nInt64\n\n\n10\n1x9\n0.0\n0\n0.0\n0\n0\nInt64\n\n\n11\n1x10\n0.0\n0\n0.0\n0\n0\nInt64\n\n\n12\n1x11\n0.0\n0\n0.0\n0\n0\nInt64\n\n\n13\n1x12\n0.0\n0\n0.0\n0\n0\nInt64\n\n\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n\n\n774\n28x17\n0.482733\n0\n0.0\n255\n0\nInt64\n\n\n775\n28x18\n0.343517\n0\n0.0\n255\n0\nInt64\n\n\n776\n28x19\n0.200433\n0\n0.0\n254\n0\nInt64\n\n\n777\n28x20\n0.0888667\n0\n0.0\n254\n0\nInt64\n\n\n778\n28x21\n0.0456333\n0\n0.0\n253\n0\nInt64\n\n\n779\n28x22\n0.0192833\n0\n0.0\n253\n0\nInt64\n\n\n780\n28x23\n0.0151167\n0\n0.0\n254\n0\nInt64\n\n\n781\n28x24\n0.002\n0\n0.0\n62\n0\nInt64\n\n\n782\n28x25\n0.0\n0\n0.0\n0\n0\nInt64\n\n\n783\n28x26\n0.0\n0\n0.0\n0\n0\nInt64\n\n\n784\n28x27\n0.0\n0\n0.0\n0\n0\nInt64\n\n\n785\n28x28\n0.0\n0\n0.0\n0\n0\nInt64",
+    "crumbs": [
+      "2-mnist-classification.qmd"
+    ]
+  },
+  {
+    "objectID": "learn/Classfication/2-mnist-classification.html#split-data",
+    "href": "learn/Classfication/2-mnist-classification.html#split-data",
+    "title": "2-Mnist Classification",
+    "section": "4. split data",
+    "text": "4. split data\n\ny, X= unpack(df, ==(:label), rng=123);\ncat=y|&gt;levels\n(Xtrain, Xtest), (ytrain, ytest)  = partition((X, y), 0.2, multi=true,shuffle=true)\n\n\n((12000×784 DataFrame\n   Row │ 1x1    1x2    1x3    1x4    1x5    1x6    1x7    1x8    1x9    1x10   ⋯\n       │ Int64  Int64  Int64  Int64  Int64  Int64  Int64  Int64  Int64  Int64  ⋯\n───────┼────────────────────────────────────────────────────────────────────────\n     1 │     0      0      0      0      0      0      0      0      0      0  ⋯\n     2 │     0      0      0      0      0      0      0      0      0      0\n     3 │     0      0      0      0      0      0      0      0      0      0\n     4 │     0      0      0      0      0      0      0      0      0      0\n     5 │     0      0      0      0      0      0      0      0      0      0  ⋯\n     6 │     0      0      0      0      0      0      0      0      0      0\n     7 │     0      0      0      0      0      0      0      0      0      0\n     8 │     0      0      0      0      0      0      0      0      0      0\n     9 │     0      0      0      0      0      0      0      0      0      0  ⋯\n    10 │     0      0      0      0      0      0      0      0      0      0\n    11 │     0      0      0      0      0      0      0      0      0      0\n   ⋮   │   ⋮      ⋮      ⋮      ⋮      ⋮      ⋮      ⋮      ⋮      ⋮      ⋮    ⋱\n 11991 │     0      0      0      0      0      0      0      0      0      0\n 11992 │     0      0      0      0      0      0      0      0      0      0  ⋯\n 11993 │     0      0      0      0      0      0      0      0      0      0\n 11994 │     0      0      0      0      0      0      0      0      0      0\n 11995 │     0      0      0      0      0      0      0      0      0      0\n 11996 │     0      0      0      0      0      0      0      0      0      0  ⋯\n 11997 │     0      0      0      0      0      0      0      0      0      0\n 11998 │     0      0      0      0      0      0      0      0      0      0\n 11999 │     0      0      0      0      0      0      0      0      0      0\n 12000 │     0      0      0      0      0      0      0      0      0      0  ⋯\n                                              774 columns and 11979 rows omitted, 48000×784 DataFrame\n   Row │ 1x1    1x2    1x3    1x4    1x5    1x6    1x7    1x8    1x9    1x10   ⋯\n       │ Int64  Int64  Int64  Int64  Int64  Int64  Int64  Int64  Int64  Int64  ⋯\n───────┼────────────────────────────────────────────────────────────────────────\n     1 │     0      0      0      0      0      0      0      0      0      0  ⋯\n     2 │     0      0      0      0      0      0      0      0      0      0\n     3 │     0      0      0      0      0      0      0      0      0      0\n     4 │     0      0      0      0      0      0      0      0      0      0\n     5 │     0      0      0      0      0      0      0      0      0      0  ⋯\n     6 │     0      0      0      0      0      0      0      0      0      0\n     7 │     0      0      0      0      0      0      0      0      0      0\n     8 │     0      0      0      0      0      0      0      0      0      0\n     9 │     0      0      0      0      0      0      0      0      0      0  ⋯\n    10 │     0      0      0      0      0      0      0      0      0      0\n    11 │     0      0      0      0      0      0      0      0      0      0\n   ⋮   │   ⋮      ⋮      ⋮      ⋮      ⋮      ⋮      ⋮      ⋮      ⋮      ⋮    ⋱\n 47991 │     0      0      0      0      0      0      0      0      0      0\n 47992 │     0      0      0      0      0      0      0      0      0      0  ⋯\n 47993 │     0      0      0      0      0      0      0      0      0      0\n 47994 │     0      0      0      0      0      0      0      0      0      0\n 47995 │     0      0      0      0      0      0      0      0      0      0\n 47996 │     0      0      0      0      0      0      0      0      0      0  ⋯\n 47997 │     0      0      0      0      0      0      0      0      0      0\n 47998 │     0      0      0      0      0      0      0      0      0      0\n 47999 │     0      0      0      0      0      0      0      0      0      0\n 48000 │     0      0      0      0      0      0      0      0      0      0  ⋯\n                                              774 columns and 47979 rows omitted), (CategoricalArrays.CategoricalValue{Int64, UInt32}[1, 3, 9, 0, 8, 1, 6, 7, 1, 3  …  5, 2, 5, 4, 4, 2, 3, 3, 3, 1], CategoricalArrays.CategoricalValue{Int64, UInt32}[7, 4, 1, 0, 3, 8, 2, 2, 3, 8  …  4, 0, 3, 8, 8, 1, 5, 2, 7, 1]))",
+    "crumbs": [
+      "2-mnist-classification.qmd"
+    ]
+  },
+  {
+    "objectID": "learn/Classfication/2-mnist-classification.html#pca-workflow",
+    "href": "learn/Classfication/2-mnist-classification.html#pca-workflow",
+    "title": "2-Mnist Classification",
+    "section": "5. pca workflow",
+    "text": "5. pca workflow\n\n5.1 load model\n\nPCA = @load PCA pkg=MultivariateStats;\nmodel=PCA(maxoutdim=3);\n\nimport MLJMultivariateStatsInterface ✔\n\n\n[ Info: For silent loading, specify `verbosity=0`. \n\n\n\n\n  \n     PCA doc \n     \n     \n \n \n doc\n \n \n \n PCA\nA model type for constructing a pca, based on unknown.jl, and implementing the MLJ model interface.\nFrom MLJ, the type can be imported using\nPCA = @load PCA pkg=unknown\nDo model = PCA() to construct an instance with default hyper-parameters. Provide keyword arguments to override hyper-parameter defaults, as in PCA(maxoutdim=...).\nPrincipal component analysis learns a linear projection onto a lower dimensional space while preserving most of the initial variance seen in the training data.\nTraining data\nIn MLJ or MLJBase, bind an instance model to data with\nmach = machine(model, X)\nHere:\n\nX is any table of input features (eg, a DataFrame) whose columns are of scitype Continuous; check column scitypes with schema(X).\n\n\nTrain the machine using fit!(mach, rows=...).\nHyper-parameters\n\nmaxoutdim=0: Together with variance_ratio, controls the output dimension outdim  chosen by the model. Specifically, suppose that k is the smallest integer such that  retaining the k most significant principal components accounts for variance_ratio of  the total variance in the training data. Then outdim = min(outdim, maxoutdim). If  maxoutdim=0 (default) then the effective maxoutdim is min(n, indim - 1) where n  is the number of observations and indim the number of features in the training data.\n\nvariance_ratio::Float64=0.99: The ratio of variance preserved after the transformation\n\nmethod=:auto: The method to use to solve the problem. Choices are\n\n:svd: Support Vector Decomposition of the matrix.\n\n:cov: Covariance matrix decomposition.\n\n:auto: Use :cov if the matrices first dimension is smaller than its second dimension and otherwise use :svd\n\n\n\nmean=nothing: if nothing, centering will be computed and applied, if set to 0 no centering (data is assumed pre-centered); if a vector is passed, the centering is done with that vector.\n\n\nOperations\n\ntransform(mach, Xnew): Return a lower dimensional projection of the input Xnew, which should have the same scitype as X above.\n\ninverse_transform(mach, Xsmall): For a dimension-reduced table Xsmall, such as returned by transform, reconstruct a table, having same the number of columns as the original training data X, that transforms to Xsmall. Mathematically, inverse_transform is a right-inverse for the PCA projection map, whose image is orthogonal to the kernel of that map. In particular, if Xsmall = transform(mach, Xnew), then inverse_transform(Xsmall) is only an approximation to Xnew.\n\n\nFitted parameters\nThe fields of fitted_params(mach) are:\n\nprojection: Returns the projection matrix, which has size (indim, outdim), where indim and outdim are the number of features of the input and output respectively.\n\n\nReport\nThe fields of report(mach) are:\n\nindim: Dimension (number of columns) of the training data and new data to be transformed.\n\noutdim = min(n, indim, maxoutdim) is the output dimension; here n is the number of observations.\n\ntprincipalvar: Total variance of the principal components.\n\ntresidualvar: Total residual variance.\n\ntvar: Total observation variance (principal + residual variance).\n\nmean: The mean of the untransformed training data, of length indim.\n\nprincipalvars: The variance of the principal components.\n\n\nExamples\nusing MLJ\n\nPCA = @load PCA pkg=MultivariateStats\n\nX, y = @load_iris # a table and a vector\n\nmodel = PCA(maxoutdim=2)\nmach = machine(model, X) |&gt; fit!\n\nXproj = transform(mach, X)\nSee also KernelPCA, ICA, FactorAnalysis, PPCA\n\n\n\n \n \n \n\n\n\n\n5.2 fitting model\n\nmach = machine(model, Xtrain) |&gt; fit!\nXtr =transform(mach, Xtrain)\n\n┌ Warning: The number and/or types of data arguments do not match what the specified model\n│ supports. Suppress this type check by specifying `scitype_check_level=0`.\n│ \n│ Run `@doc MultivariateStats.PCA` to learn more about your model's requirements.\n│ \n│ Commonly, but non exclusively, supervised models are constructed using the syntax\n│ `machine(model, X, y)` or `machine(model, X, y, w)` while most other models are\n│ constructed with `machine(model, X)`.  Here `X` are features, `y` a target, and `w`\n│ sample or class weights.\n│ \n│ In general, data in `machine(model, data...)` is expected to satisfy\n│ \n│     scitype(data) &lt;: MLJ.fit_data_scitype(model)\n│ \n│ In the present case:\n│ \n│ scitype(data) = Tuple{Table{AbstractVector{Count}}}\n│ \n│ fit_data_scitype(model) = Tuple{Table{&lt;:AbstractVector{&lt;:Continuous}}}\n└ @ MLJBase ~/.julia/packages/MLJBase/fEiP2/src/machines.jl:230\n[ Info: Training machine(PCA(maxoutdim = 3, …), …).\n\n\n12000×3 DataFrame11975 rows omitted\n\n\n\nRow\nx1\nx2\nx3\n\n\n\nFloat64\nFloat64\nFloat64\n\n\n\n\n1\n-856.852\n-332.575\n-34.3783\n\n\n2\n-245.793\n-112.833\n1046.94\n\n\n3\n-390.243\n401.559\n30.4265\n\n\n4\n966.51\n-359.698\n650.63\n\n\n5\n354.756\n-115.593\n527.175\n\n\n6\n-508.043\n-813.775\n-417.797\n\n\n7\n720.101\n-149.118\n-734.982\n\n\n8\n-461.916\n568.386\n447.195\n\n\n9\n-861.752\n-190.173\n75.7481\n\n\n10\n636.84\n428.198\n563.142\n\n\n11\n-475.992\n-179.361\n-396.116\n\n\n12\n545.461\n-188.282\n697.017\n\n\n13\n-269.984\n-381.653\n705.561\n\n\n⋮\n⋮\n⋮\n⋮\n\n\n11989\n-181.447\n-310.647\n-2.19181\n\n\n11990\n-956.569\n-595.445\n-138.727\n\n\n11991\n-44.6248\n225.234\n466.205\n\n\n11992\n386.423\n-17.1393\n-552.14\n\n\n11993\n566.271\n-80.3966\n-103.541\n\n\n11994\n-498.803\n-52.1383\n-26.2291\n\n\n11995\n3.47708\n500.304\n-260.501\n\n\n11996\n875.924\n44.0938\n-1050.98\n\n\n11997\n154.431\n-141.981\n-450.883\n\n\n11998\n-66.3014\n-687.415\n-39.575\n\n\n11999\n-420.884\n-151.585\n801.763\n\n\n12000\n-763.315\n-403.198\n-129.845",
+    "crumbs": [
+      "2-mnist-classification.qmd"
+    ]
+  },
+  {
+    "objectID": "learn/Classfication/2-mnist-classification.html#plot-pca-results",
+    "href": "learn/Classfication/2-mnist-classification.html#plot-pca-results",
+    "title": "2-Mnist Classification",
+    "section": "6. plot pca results",
+    "text": "6. plot pca results\n\ntable=(x1=Xtr.x1,x2=Xtr.x2,x3=Xtr.x3,labels=ytrain)\ndatalayer=data(table)\nmaplayer=mapping(:x1,:x2,color=:labels)\nvislayer=visual(Scatter,markersize=10,strokewidth=1,strokecolor=:black)\nplt=datalayer*maplayer*vislayer\ndraw(plt)",
+    "crumbs": [
+      "2-mnist-classification.qmd"
+    ]
+  },
+  {
     "objectID": "dataset/penguins.html",
     "href": "dataset/penguins.html",
     "title": "🐧🐧 Penguins dataset",
@@ -644,105 +714,158 @@
     ]
   },
   {
-    "objectID": "dataset/ecommerce-customer-dataset.html",
-    "href": "dataset/ecommerce-customer-dataset.html",
-    "title": "👧👱👳Ecommerce Customer dataset EDA",
+    "objectID": "dataset/florida-lakes.html",
+    "href": "dataset/florida-lakes.html",
+    "title": "11 Florida Lakes",
     "section": "",
-    "text": "info\n\n\n\ndataset: Linear Regression E-commerce Dataset\nmodel : E-commerce Dataset - Linear Regression Model\ndataset standard methods ref: Standardize all columns of DataFrame",
+    "text": "info\n\n\n\nref : FloridaLakes Dataset",
     "crumbs": [
       "Dataset",
-      "12 Ecommerce Customer dataset"
+      "11.Florida Lakes Dataset"
     ]
   },
   {
-    "objectID": "dataset/ecommerce-customer-dataset.html#load-package",
-    "href": "dataset/ecommerce-customer-dataset.html#load-package",
-    "title": "👧👱👳Ecommerce Customer dataset EDA",
+    "objectID": "dataset/florida-lakes.html#load-package",
+    "href": "dataset/florida-lakes.html#load-package",
+    "title": "11 Florida Lakes",
     "section": "1. load package",
-    "text": "1. load package\n\n using CSV,DataFrames,Tidier,Pipe\n using CairoMakie,AlgebraOfGraphics,MakieThemes\n using StatsBase",
+    "text": "1. load package\n\n using CSV,DataFrames,Tidier,Pipe\n using CairoMakie,AlgebraOfGraphics,MakieThemes\n using StatsBase\n #Makie.set_theme!(ggthemr(:flat))",
     "crumbs": [
       "Dataset",
-      "12 Ecommerce Customer dataset"
+      "11.Florida Lakes Dataset"
     ]
   },
   {
-    "objectID": "dataset/ecommerce-customer-dataset.html#load-data",
-    "href": "dataset/ecommerce-customer-dataset.html#load-data",
-    "title": "👧👱👳Ecommerce Customer dataset EDA",
-    "section": "2. load data",
-    "text": "2. load data\n\ndf=CSV.File(\"../data/Ecommerce-Customers.csv\")|&gt;DataFrame\ndf=@chain df begin\n  @select(4:8)\n  @clean_names\n  mapcols(zscore, _)   #standard methods    \nend\n\nfirst(df,5)\n\n5×5 DataFrame\n\n\n\nRow\navg_session_length\ntime_on_app\ntime_on_website\nlength_of_membership\nyearly_amount_spent\n\n\n\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\n\n\n\n\n1\n1.45489\n0.606672\n2.49109\n0.549556\n1.11753\n\n\n2\n-1.13537\n-0.948514\n0.206349\n-0.870056\n-1.35043\n\n\n3\n-0.0526705\n-0.726412\n0.0496314\n0.571495\n-0.148352\n\n\n4\n1.26175\n1.67471\n-0.335642\n-0.413582\n1.04064\n\n\n5\n0.279558\n0.747022\n0.471265\n0.913507\n1.26196",
-    "crumbs": [
-      "Dataset",
-      "12 Ecommerce Customer dataset"
-    ]
-  },
-  {
-    "objectID": "dataset/ecommerce-customer-dataset.html#describe-df",
-    "href": "dataset/ecommerce-customer-dataset.html#describe-df",
-    "title": "👧👱👳Ecommerce Customer dataset EDA",
-    "section": "3. describe df",
-    "text": "3. describe df\n\n describe(df)\n\n5×7 DataFrame\n\n\n\nRow\nvariable\nmean\nmin\nmedian\nmax\nnmissing\neltype\n\n\n\nSymbol\nFloat64\nFloat64\nFloat64\nFloat64\nInt64\nDataType\n\n\n\n\n1\navg_session_length\n-4.32565e-15\n-3.54714\n0.02903\n3.10959\n0\nFloat64\n\n\n2\ntime_on_app\n6.92668e-16\n-3.56496\n-0.0696596\n3.09239\n0\nFloat64\n\n\n3\ntime_on_website\n-1.05427e-15\n-3.11394\n0.00882856\n2.91417\n0\nFloat64\n\n\n4\nlength_of_membership\n-1.803e-16\n-3.26592\n0.000513819\n3.39168\n0\nFloat64\n\n\n5\nyearly_amount_spent\n-1.57718e-15\n-3.05925\n-0.00537306\n3.3563\n0\nFloat64",
-    "crumbs": [
-      "Dataset",
-      "12 Ecommerce Customer dataset"
-    ]
-  },
-  {
-    "objectID": "dataset/ecommerce-customer-dataset.html#wide-to-long-table",
-    "href": "dataset/ecommerce-customer-dataset.html#wide-to-long-table",
-    "title": "👧👱👳Ecommerce Customer dataset EDA",
-    "section": "4. wide to long table",
-    "text": "4. wide to long table\n\nlong_table=@chain df begin\n@pivot_longer(_,1:5)\nend\n\n2500×2 DataFrame2475 rows omitted\n\n\n\nRow\nvariable\nvalue\n\n\n\nString\nFloat64\n\n\n\n\n1\navg_session_length\n1.45489\n\n\n2\navg_session_length\n-1.13537\n\n\n3\navg_session_length\n-0.0526705\n\n\n4\navg_session_length\n1.26175\n\n\n5\navg_session_length\n0.279558\n\n\n6\navg_session_length\n0.823972\n\n\n7\navg_session_length\n-1.03933\n\n\n8\navg_session_length\n-0.316404\n\n\n9\navg_session_length\n0.941582\n\n\n10\navg_session_length\n-1.12501\n\n\n11\navg_session_length\n0.946418\n\n\n12\navg_session_length\n0.832357\n\n\n13\navg_session_length\n-3.54714\n\n\n⋮\n⋮\n⋮\n\n\n2489\nyearly_amount_spent\n1.24095\n\n\n2490\nyearly_amount_spent\n-2.16777\n\n\n2491\nyearly_amount_spent\n0.139789\n\n\n2492\nyearly_amount_spent\n0.141051\n\n\n2493\nyearly_amount_spent\n-1.20399\n\n\n2494\nyearly_amount_spent\n1.61747\n\n\n2495\nyearly_amount_spent\n0.143072\n\n\n2496\nyearly_amount_spent\n0.939716\n\n\n2497\nyearly_amount_spent\n0.374898\n\n\n2498\nyearly_amount_spent\n0.659475\n\n\n2499\nyearly_amount_spent\n-0.540183\n\n\n2500\nyearly_amount_spent\n-0.0193583",
-    "crumbs": [
-      "Dataset",
-      "12 Ecommerce Customer dataset"
-    ]
-  },
-  {
-    "objectID": "dataset/ecommerce-customer-dataset.html#eda",
-    "href": "dataset/ecommerce-customer-dataset.html#eda",
-    "title": "👧👱👳Ecommerce Customer dataset EDA",
-    "section": "5 EDA",
-    "text": "5 EDA\n\n5.1 boxplot\n\nlet\nax=(width=600, height=300,xticklabelrotation = pi/8)\ndatalayer=data(long_table)\nmaplayer=mapping(:variable,:value, color=:variable)\nvislayer=visual(BoxPlot, storkewidth=1,storkecolor=:black)\nplt51=datalayer*maplayer*vislayer\ndraw(plt51,axis=ax)\nend\n\n\n\n\n\n\n\n\n\n\n5.2 pair plot\n\ncats=names(df)\ncats=Symbol.(cats)\nlen=length(cats)\n\ndata_layer=data(df)\n\nfunction make_layer(sy1::Symbol,sy2::Symbol)\n   mapping_layer=sy1==sy2 ? mapping(sy1) : mapping(sy1,sy2)\n   vis_layer=sy1==sy2 ? visual(Density,color=(:green, 0.5)) : visual(Scatter,color=(:purple,0.5),strokewidth=1,strokecolor=:black,markersize=6)\n   return  data_layer*mapping_layer*vis_layer\nend\n\nwith_theme(theme_minimal(),resolution = (800,800)) do\n        cl=0.1\n        fig = Figure()\n        for i in 1:len\n            for  j in 1:len\n                ax=Axis(fig[i,j],yticklabelrotation = pi/8)\n                j==1 ? ax.ylabel= String(cats[i]) : nothing\n                i==len ? ax.xlabel= String(cats[j]) : nothing\n                layer=make_layer(cats[i],cats[j])\n              [i,j]==[len,len] ? cl=draw!(ax,layer) : draw!(ax,layer)\n            end\n        end\n    fig\nend\n\n\n\n\n\n\n\n\n\n\n5.3 heatmap\n\ncats=names(df)\nrow,col=size(df)\ncor_matrix=Matrix(df)|&gt;cor\nrow,col=size(cor_matrix)\n\n(5, 5)\n\n\n\nlet\nfig = Figure(size = (800, 800))\nax = Axis(fig[1, 1], xticks = (1:row, cats), yticks = (1:row, cats),xticklabelrotation = pi/8,ylabelsize=8,xlabelsize=8)\nhmap = heatmap!(ax, cor_matrix, colormap = :plasma)\nColorbar(fig[1, 2], hmap; label = \"values\", width = 10, ticksize = 10)\nfig\nend",
-    "crumbs": [
-      "Dataset",
-      "12 Ecommerce Customer dataset"
-    ]
-  },
-  {
-    "objectID": "dataset/cricket-chirps.html",
-    "href": "dataset/cricket-chirps.html",
-    "title": "10 🦗🦗🦗cricket chirps data",
-    "section": "",
-    "text": "info\n\n\n\nref : snowy tree cricket"
-  },
-  {
-    "objectID": "dataset/cricket-chirps.html#load-package",
-    "href": "dataset/cricket-chirps.html#load-package",
-    "title": "10 🦗🦗🦗cricket chirps data",
-    "section": "1. load package",
-    "text": "1. load package\n\n #| eval: false\n using CSV,DataFrames,Tidier,Pipe\n using CairoMakie,AlgebraOfGraphics,MakieThemes\n using StatsBase,RCall\n #Makie.set_theme!(ggthemr(:flat))"
-  },
-  {
-    "objectID": "dataset/cricket-chirps.html#load-csv",
-    "href": "dataset/cricket-chirps.html#load-csv",
-    "title": "10 🦗🦗🦗cricket chirps data",
+    "objectID": "dataset/florida-lakes.html#load-csv",
+    "href": "dataset/florida-lakes.html#load-csv",
+    "title": "11 Florida Lakes",
     "section": "2. load csv",
-    "text": "2. load csv\n\ndf=CSV.File(\"../data/CricketChirps.csv\")|&gt;DataFrame\ndf=@chain  df  begin\n    @clean_names\n\nend\nfirst(df,5)\n\n5×2 DataFrame\n\n\n\nRow\ntemperature\nchirps\n\n\n\nFloat64\nInt64\n\n\n\n\n1\n54.5\n81\n\n\n2\n59.5\n97\n\n\n3\n63.5\n103\n\n\n4\n67.5\n123\n\n\n5\n72.0\n150"
+    "text": "2. load csv\n\ndf=CSV.File(\"../data/FloridaLakes.csv\")|&gt;DataFrame\ndf=@chain  df  begin\n    @clean_names\nend\nfirst(df,5)\n\n5×12 DataFrame\n\n\n\nRow\ni_d\nlake\nalkalinity\np_h\ncalcium\nchlorophyll\navg_mercury\nnum_samples\nmin_mercury\nmax_mercury\nthree_yr_std_mercury\nage_data\n\n\n\nInt64\nString31\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nInt64\nFloat64\nFloat64\nFloat64\nInt64\n\n\n\n\n1\n1\nAlligator\n5.9\n6.1\n3.0\n0.7\n1.23\n5\n0.85\n1.43\n1.53\n1\n\n\n2\n2\nAnnie\n3.5\n5.1\n1.9\n3.2\n1.33\n7\n0.92\n1.9\n1.33\n0\n\n\n3\n3\nApopka\n116.0\n9.1\n44.1\n128.3\n0.04\n6\n0.04\n0.06\n0.04\n0\n\n\n4\n4\nBlue Cypress\n39.4\n6.9\n16.4\n3.5\n0.44\n12\n0.13\n0.84\n0.44\n0\n\n\n5\n5\nBrick\n2.5\n4.6\n2.9\n1.8\n1.2\n12\n0.69\n1.5\n1.33\n1",
+    "crumbs": [
+      "Dataset",
+      "11.Florida Lakes Dataset"
+    ]
   },
   {
-    "objectID": "dataset/cricket-chirps.html#describe-df",
-    "href": "dataset/cricket-chirps.html#describe-df",
-    "title": "10 🦗🦗🦗cricket chirps data",
+    "objectID": "dataset/florida-lakes.html#describe-df",
+    "href": "dataset/florida-lakes.html#describe-df",
+    "title": "11 Florida Lakes",
     "section": "3. describe df",
-    "text": "3. describe df\n\ndescribe(df)\n\n2×7 DataFrame\n\n\n\nRow\nvariable\nmean\nmin\nmedian\nmax\nnmissing\neltype\n\n\n\nSymbol\nFloat64\nReal\nFloat64\nReal\nInt64\nDataType\n\n\n\n\n1\ntemperature\n68.3571\n54.5\n67.5\n83.0\n0\nFloat64\n\n\n2\nchirps\n133.0\n81\n123.0\n195\n0\nInt64"
+    "text": "3. describe df\n\ndescribe(df)\n\n12×7 DataFrame\n\n\n\nRow\nvariable\nmean\nmin\nmedian\nmax\nnmissing\neltype\n\n\n\nSymbol\nUnion…\nAny\nUnion…\nAny\nInt64\nDataType\n\n\n\n\n1\ni_d\n27.0\n1\n27.0\n53\n0\nInt64\n\n\n2\nlake\n\nAlligator\n\nYale\n0\nString31\n\n\n3\nalkalinity\n37.5302\n1.2\n19.6\n128.0\n0\nFloat64\n\n\n4\np_h\n6.59057\n3.6\n6.8\n9.1\n0\nFloat64\n\n\n5\ncalcium\n22.2019\n1.1\n12.6\n90.7\n0\nFloat64\n\n\n6\nchlorophyll\n23.117\n0.7\n12.8\n152.4\n0\nFloat64\n\n\n7\navg_mercury\n0.52717\n0.04\n0.48\n1.33\n0\nFloat64\n\n\n8\nnum_samples\n13.0566\n4\n12.0\n44\n0\nInt64\n\n\n9\nmin_mercury\n0.279811\n0.04\n0.25\n0.92\n0\nFloat64\n\n\n10\nmax_mercury\n0.874528\n0.06\n0.84\n2.04\n0\nFloat64\n\n\n11\nthree_yr_std_mercury\n0.513208\n0.04\n0.45\n1.53\n0\nFloat64\n\n\n12\nage_data\n0.811321\n0\n1.0\n1\n0\nInt64",
+    "crumbs": [
+      "Dataset",
+      "11.Florida Lakes Dataset"
+    ]
   },
   {
-    "objectID": "dataset/cricket-chirps.html#eda",
-    "href": "dataset/cricket-chirps.html#eda",
-    "title": "10 🦗🦗🦗cricket chirps data",
+    "objectID": "dataset/florida-lakes.html#eda",
+    "href": "dataset/florida-lakes.html#eda",
+    "title": "11 Florida Lakes",
     "section": "4. EDA",
-    "text": "4. EDA\n\ndatalayer=data(df)\nmaplayer=mapping(:temperature,:chirps)\nax=(width=250,height=250)\ndraw(datalayer*maplayer,axis=ax)"
+    "text": "4. EDA\n\n4.1 data processing\nselect numerical features and standarid\n\nnew_df=@chain df begin\n   @select(3:7,9:11)\n   mapcols(zscore,_)\nend\n\n53×8 DataFrame28 rows omitted\n\n\n\nRow\nalkalinity\np_h\ncalcium\nchlorophyll\navg_mercury\nmin_mercury\nmax_mercury\nthree_yr_std_mercury\n\n\n\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\n\n\n\n\n1\n-0.827939\n-0.380741\n-0.770153\n-0.727439\n2.06087\n2.51844\n1.06403\n3.00178\n\n\n2\n-0.89076\n-1.15687\n-0.814272\n-0.646313\n2.35409\n2.82762\n1.96433\n2.41134\n\n\n3\n2.05399\n1.94764\n0.878293\n3.41322\n-1.4285\n-1.05921\n-1.56026\n-1.39701\n\n\n4\n0.0489434\n0.24016\n-0.232703\n-0.636578\n-0.255603\n-0.661694\n-0.0661402\n-0.216124\n\n\n5\n-0.916936\n-1.54493\n-0.774163\n-0.691743\n1.9729\n1.81174\n1.19811\n2.41134\n\n\n6\n-0.469333\n0.550611\n-0.70999\n0.680906\n-0.754085\n-1.05921\n-0.755733\n-0.777044\n\n\n7\n-0.846262\n-0.92403\n-0.778174\n-0.639823\n-0.138313\n0.0891703\n-0.296005\n-0.186602\n\n\n8\n0.886562\n1.17151\n1.32349\n0.343423\n-0.988664\n-0.882536\n-0.947287\n-1.04274\n\n\n9\n-0.291339\n-0.613579\n-0.521482\n-0.698233\n0.887972\n-0.0875036\n1.00656\n0.610495\n\n\n10\n-0.856732\n-0.147903\n-0.70598\n-0.0200212\n0.829327\n0.575024\n1.14065\n0.876193\n\n\n11\n-0.809616\n-0.92403\n-0.782185\n-0.266644\n0.536103\n1.06088\n-0.0278295\n0.580972\n\n\n12\n-0.550478\n0.472998\n-0.336984\n-0.620352\n-0.0796685\n-0.794199\n-0.276849\n-0.00946935\n\n\n13\n-0.317515\n0.472998\n0.120249\n-0.37373\n-0.108991\n-0.0875036\n0.259501\n0.0790969\n\n\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n\n\n42\n1.56975\n0.162547\n0.934445\n-0.548962\n-1.25257\n-1.01504\n-1.17715\n-0.954176\n\n\n43\n-0.673503\n-0.535967\n0.0801407\n-0.698233\n-0.138313\n-0.0433351\n0.336122\n-0.216124\n\n\n44\n0.758302\n1.32674\n0.152335\n1.46296\n-0.93002\n-1.01504\n-0.755733\n-1.04274\n\n\n45\n-0.563565\n0.0849346\n0.76198\n0.0318993\n0.97594\n0.354181\n1.00656\n0.462884\n\n\n46\n-0.851497\n-0.303129\n0.0560758\n-0.438631\n-0.0210236\n0.133339\n0.144569\n0.108619\n\n\n47\n-0.31228\n-0.303129\n-0.385114\n0.148721\n0.360168\n0.0891703\n0.431899\n0.197185\n\n\n48\n1.15094\n1.79241\n-0.0682596\n-0.438631\n-0.754085\n-1.05921\n-0.908976\n-0.718\n\n\n49\n-0.950964\n-1.77777\n-0.80625\n-0.542472\n1.21052\n1.37006\n0.700074\n1.37807\n\n\n50\n-0.0924048\n0.317773\n-0.36506\n-0.600882\n-0.372893\n-0.882536\n0.048792\n-0.599911\n\n\n51\n-0.576653\n0.24016\n-0.681915\n-0.214723\n-0.284926\n-0.220009\n-0.353471\n-0.245646\n\n\n52\n-0.529537\n-1.07926\n-0.770153\n-0.665783\n-0.81273\n-0.573357\n-0.908976\n-0.688477\n\n\n53\n0.897033\n1.01629\n-0.0682596\n-0.464591\n-0.754085\n-0.573357\n-0.698267\n-0.777044\n\n\n\n\n\n\n\n\n4.2 heatmap\n\ncats=names(new_df)\nrow,col=size(new_df)\ncor_matrix=Matrix(new_df)|&gt;cor\nrow,col=size(cor_matrix)\n\n(8, 8)\n\n\n\nfig = Figure(size = (800, 800))\nax = Axis(fig[1, 1], xticks = (1:row, cats), yticks = (1:row, cats),xticklabelrotation = pi/8,ylabelsize=8,xlabelsize=8)\nhmap = heatmap!(ax, cor_matrix, colormap = :plasma)\nColorbar(fig[1, 2], hmap; label = \"values\", width = 10, ticksize = 10)\nfig\n\n\n\n\n\n\n\n\n\n\n4.3 pair plot\n\ndata_layer=data(new_df)\nfunction make_layer(sy1::Symbol,sy2::Symbol)\n   mapping_layer=sy1==sy2 ? mapping(sy1,) : mapping(sy1,sy2)\n   vis_layer=sy1==sy2 ? visual(Density,color=(:green,0.6)) : visual(Scatter,strokewidth=1,storkecolor=:black,color=:red,markersize=4)\n   return  data_layer*mapping_layer*vis_layer\nend\n\ncats=@pipe names(new_df)|&gt;Symbol.(_)\nlen=length(cats)\n\n8\n\n\n\nwith_theme(theme_minimal(),resolution = (1200,1200)) do\n        cl=0.1\n        fig = Figure()\n        for i in 1:len\n            for  j in 1:len\n                ax=Axis(fig[i,j])\n                j==1 ? ax.ylabel= String(cats[i]) : nothing\n                i==len ? ax.xlabel= String(cats[j]) : nothing\n                layer=make_layer(cats[i],cats[j])\n              [i,j]==[len,len] ? cl=draw!(ax,layer) : draw!(ax,layer)\n            end\n        end\n        \n        fig\nend",
+    "crumbs": [
+      "Dataset",
+      "11.Florida Lakes Dataset"
+    ]
+  },
+  {
+    "objectID": "dataset/diabetes.html",
+    "href": "dataset/diabetes.html",
+    "title": "Diabetes Diagnosis Dataset",
+    "section": "",
+    "text": "info\n\n\n\nref : Diabetes Classification|EDA|SVM|LR|DT|RF|XGBOOST\nref : EDA, Feature and ComparisonML 0.87(Diabetes)",
+    "crumbs": [
+      "Dataset",
+      "8.Diabetes diagnosis dataset"
+    ]
+  },
+  {
+    "objectID": "dataset/diabetes.html#load-package",
+    "href": "dataset/diabetes.html#load-package",
+    "title": "Diabetes Diagnosis Dataset",
+    "section": "1. load package",
+    "text": "1. load package\n\n using CSV,DataFrames,Tidier,Pipe\n using CairoMakie,AlgebraOfGraphics,MakieThemes\n using ScientificTypes,StatsBase,RCall\n #Makie.set_theme!(ggthemr(:flat))",
+    "crumbs": [
+      "Dataset",
+      "8.Diabetes diagnosis dataset"
+    ]
+  },
+  {
+    "objectID": "dataset/diabetes.html#load-csv",
+    "href": "dataset/diabetes.html#load-csv",
+    "title": "Diabetes Diagnosis Dataset",
+    "section": "2. load csv",
+    "text": "2. load csv\n\ndf=CSV.File(\"../data/diabetes.csv\")|&gt;DataFrame\ndf=@chain  df  begin\n    @clean_names\nend\nfirst(df,5)\n\n5×9 DataFrame\n\n\n\nRow\npregnancies\nglucose\nblood_pressure\nskin_thickness\ninsulin\nb_m_i\ndiabetes_pedigree_function\nage\noutcome\n\n\n\nInt64\nInt64\nInt64\nInt64\nInt64\nFloat64\nFloat64\nInt64\nInt64\n\n\n\n\n1\n6\n148\n72\n35\n0\n33.6\n0.627\n50\n1\n\n\n2\n1\n85\n66\n29\n0\n26.6\n0.351\n31\n0\n\n\n3\n8\n183\n64\n0\n0\n23.3\n0.672\n32\n1\n\n\n4\n1\n89\n66\n23\n94\n28.1\n0.167\n21\n0\n\n\n5\n0\n137\n40\n35\n168\n43.1\n2.288\n33\n1",
+    "crumbs": [
+      "Dataset",
+      "8.Diabetes diagnosis dataset"
+    ]
+  },
+  {
+    "objectID": "dataset/diabetes.html#describe-df",
+    "href": "dataset/diabetes.html#describe-df",
+    "title": "Diabetes Diagnosis Dataset",
+    "section": "3. describe df",
+    "text": "3. describe df\n\ndescribe(df)\n\n9×7 DataFrame\n\n\n\nRow\nvariable\nmean\nmin\nmedian\nmax\nnmissing\neltype\n\n\n\nSymbol\nFloat64\nReal\nFloat64\nReal\nInt64\nDataType\n\n\n\n\n1\npregnancies\n3.84505\n0\n3.0\n17\n0\nInt64\n\n\n2\nglucose\n120.895\n0\n117.0\n199\n0\nInt64\n\n\n3\nblood_pressure\n69.1055\n0\n72.0\n122\n0\nInt64\n\n\n4\nskin_thickness\n20.5365\n0\n23.0\n99\n0\nInt64\n\n\n5\ninsulin\n79.7995\n0\n30.5\n846\n0\nInt64\n\n\n6\nb_m_i\n31.9926\n0.0\n32.0\n67.1\n0\nFloat64\n\n\n7\ndiabetes_pedigree_function\n0.471876\n0.078\n0.3725\n2.42\n0\nFloat64\n\n\n8\nage\n33.2409\n21\n29.0\n81\n0\nInt64\n\n\n9\noutcome\n0.348958\n0\n0.0\n1\n0\nInt64",
+    "crumbs": [
+      "Dataset",
+      "8.Diabetes diagnosis dataset"
+    ]
+  },
+  {
+    "objectID": "dataset/diabetes.html#eda",
+    "href": "dataset/diabetes.html#eda",
+    "title": "Diabetes Diagnosis Dataset",
+    "section": "4. EDA",
+    "text": "4. EDA\n\n4.1 cor of eachcol\n\ndf41=@chain df begin\n    @select(1:8)\nend\noutcome=df.outcome\n\ncors=[cor(col, outcome) for col in eachcol(df41)]\nfeatures=names(df41)\n\n8-element Vector{String}:\n \"pregnancies\"\n \"glucose\"\n \"blood_pressure\"\n \"skin_thickness\"\n \"insulin\"\n \"b_m_i\"\n \"diabetes_pedigree_function\"\n \"age\"\n\n\n\nax=(width=250,height=250,xticklabelrotation = pi/8)\ndatalayer=data(DataFrame(cors=cors,features=features))\nmaplayer=mapping(:features,:cors,color=:features)\nvislayer=visual(BarPlot,strokewidth=1,strokecolor=:black)\nplt=datalayer*maplayer*vislayer\ndraw(plt;axis=ax)\n\n\n\n\n\n\n\n\n\n\n4.2 Feature Engineering\n\nnew_df=@chain df begin\n  @mutate(age_cat = case_when(age&lt;21 =&gt; \"young\",\n                                age&gt;50 =&gt; \"elder\",\n                                true =&gt; \"mature\"\n                                ))\n  @mutate(glucose_cat=case_when(\n                                glucose&gt;=140=&gt;\"at_rist\",\n                                true=&gt;\"normal\"\n  )) \n\n  @mutate(age_gul_cat=case_when((glucose&lt;140) & (age&lt;=50) =&gt; \"normal_mature\", \n                                 (glucose&lt;140) & (age&gt;50) =&gt; \"normal_elder\",\n                                 (glucose&gt;140) & (age&lt;50) =&gt; \"at_risk_mature\",\n                                 true=&gt;\"at_risk_elder\"\n  ))\n\n  @mutate(age_insul_level=case_when(\n\n                                   (insulin&lt;126) & (age&lt;=50) =&gt; \"is_normal_mature\",\n                                   (insulin&lt;126) & (age&gt;50) =&gt; \"is_normal_elder\",\n                                   (insulin&gt;=126) & (age&lt;=50) =&gt; \"not_normal_mature\",\n                                   (insulin&gt;=126) & (age&gt;50) =&gt; \"not_normal_elder\",\n\n\n  ))\n  @mutate(insulin_level=case_when(insulin&lt;126 =&gt;\"is_normal\",\n                                  insulin&gt;=126 =&gt;\"not_normal\"\n                            \n                                 \n  ))\n\n  @mutate(gulcose_insulin=glucose*insulin)\nend\n\n768×15 DataFrame743 rows omitted\n\n\n\nRow\npregnancies\nglucose\nblood_pressure\nskin_thickness\ninsulin\nb_m_i\ndiabetes_pedigree_function\nage\noutcome\nage_cat\nglucose_cat\nage_gul_cat\nage_insul_level\ninsulin_level\ngulcose_insulin\n\n\n\nInt64\nInt64\nInt64\nInt64\nInt64\nFloat64\nFloat64\nInt64\nInt64\nString\nString\nString\nString\nString\nInt64\n\n\n\n\n1\n6\n148\n72\n35\n0\n33.6\n0.627\n50\n1\nmature\nat_rist\nat_risk_elder\nis_normal_mature\nis_normal\n0\n\n\n2\n1\n85\n66\n29\n0\n26.6\n0.351\n31\n0\nmature\nnormal\nnormal_mature\nis_normal_mature\nis_normal\n0\n\n\n3\n8\n183\n64\n0\n0\n23.3\n0.672\n32\n1\nmature\nat_rist\nat_risk_mature\nis_normal_mature\nis_normal\n0\n\n\n4\n1\n89\n66\n23\n94\n28.1\n0.167\n21\n0\nmature\nnormal\nnormal_mature\nis_normal_mature\nis_normal\n8366\n\n\n5\n0\n137\n40\n35\n168\n43.1\n2.288\n33\n1\nmature\nnormal\nnormal_mature\nnot_normal_mature\nnot_normal\n23016\n\n\n6\n5\n116\n74\n0\n0\n25.6\n0.201\n30\n0\nmature\nnormal\nnormal_mature\nis_normal_mature\nis_normal\n0\n\n\n7\n3\n78\n50\n32\n88\n31.0\n0.248\n26\n1\nmature\nnormal\nnormal_mature\nis_normal_mature\nis_normal\n6864\n\n\n8\n10\n115\n0\n0\n0\n35.3\n0.134\n29\n0\nmature\nnormal\nnormal_mature\nis_normal_mature\nis_normal\n0\n\n\n9\n2\n197\n70\n45\n543\n30.5\n0.158\n53\n1\nelder\nat_rist\nat_risk_elder\nnot_normal_elder\nnot_normal\n106971\n\n\n10\n8\n125\n96\n0\n0\n0.0\n0.232\n54\n1\nelder\nnormal\nnormal_elder\nis_normal_elder\nis_normal\n0\n\n\n11\n4\n110\n92\n0\n0\n37.6\n0.191\n30\n0\nmature\nnormal\nnormal_mature\nis_normal_mature\nis_normal\n0\n\n\n12\n10\n168\n74\n0\n0\n38.0\n0.537\n34\n1\nmature\nat_rist\nat_risk_mature\nis_normal_mature\nis_normal\n0\n\n\n13\n10\n139\n80\n0\n0\n27.1\n1.441\n57\n0\nelder\nnormal\nnormal_elder\nis_normal_elder\nis_normal\n0\n\n\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n\n\n757\n7\n137\n90\n41\n0\n32.0\n0.391\n39\n0\nmature\nnormal\nnormal_mature\nis_normal_mature\nis_normal\n0\n\n\n758\n0\n123\n72\n0\n0\n36.3\n0.258\n52\n1\nelder\nnormal\nnormal_elder\nis_normal_elder\nis_normal\n0\n\n\n759\n1\n106\n76\n0\n0\n37.5\n0.197\n26\n0\nmature\nnormal\nnormal_mature\nis_normal_mature\nis_normal\n0\n\n\n760\n6\n190\n92\n0\n0\n35.5\n0.278\n66\n1\nelder\nat_rist\nat_risk_elder\nis_normal_elder\nis_normal\n0\n\n\n761\n2\n88\n58\n26\n16\n28.4\n0.766\n22\n0\nmature\nnormal\nnormal_mature\nis_normal_mature\nis_normal\n1408\n\n\n762\n9\n170\n74\n31\n0\n44.0\n0.403\n43\n1\nmature\nat_rist\nat_risk_mature\nis_normal_mature\nis_normal\n0\n\n\n763\n9\n89\n62\n0\n0\n22.5\n0.142\n33\n0\nmature\nnormal\nnormal_mature\nis_normal_mature\nis_normal\n0\n\n\n764\n10\n101\n76\n48\n180\n32.9\n0.171\n63\n0\nelder\nnormal\nnormal_elder\nnot_normal_elder\nnot_normal\n18180\n\n\n765\n2\n122\n70\n27\n0\n36.8\n0.34\n27\n0\nmature\nnormal\nnormal_mature\nis_normal_mature\nis_normal\n0\n\n\n766\n5\n121\n72\n23\n112\n26.2\n0.245\n30\n0\nmature\nnormal\nnormal_mature\nis_normal_mature\nis_normal\n13552\n\n\n767\n1\n126\n60\n0\n0\n30.1\n0.349\n47\n1\nmature\nnormal\nnormal_mature\nis_normal_mature\nis_normal\n0\n\n\n768\n1\n93\n70\n31\n0\n30.4\n0.315\n23\n0\nmature\nnormal\nnormal_mature\nis_normal_mature\nis_normal\n0\n\n\n\n\n\n\n\nax=(width=150,height=250)\ndatalayer=data(new_df)\nmaplayer=mapping(:glucose_cat)*frequency()*mapping(color=:glucose_cat)\ndraw(datalayer*maplayer,axis=ax)",
+    "crumbs": [
+      "Dataset",
+      "8.Diabetes diagnosis dataset"
+    ]
+  },
+  {
+    "objectID": "dataset/clustering-dataset.html",
+    "href": "dataset/clustering-dataset.html",
+    "title": "Clustering Data Set",
+    "section": "",
+    "text": "info\n\n\n\nref: Clustering Exercises include lots of csv files",
+    "crumbs": [
+      "Dataset",
+      "14 clustering datset(kaggle)"
+    ]
+  },
+  {
+    "objectID": "dataset/clustering-dataset.html#load-package",
+    "href": "dataset/clustering-dataset.html#load-package",
+    "title": "Clustering Data Set",
+    "section": "1. load package",
+    "text": "1. load package\n\n #| eval: false\n using CSV,DataFrames,Tidier,FreqTables,PrettyTables\n using CairoMakie,AlgebraOfGraphics\n using MLJ",
+    "crumbs": [
+      "Dataset",
+      "14 clustering datset(kaggle)"
+    ]
+  },
+  {
+    "objectID": "dataset/clustering-dataset.html#load-csv",
+    "href": "dataset/clustering-dataset.html#load-csv",
+    "title": "Clustering Data Set",
+    "section": "2. load csv",
+    "text": "2. load csv\n\nconst path = \"../data/clustering-datasets/\"\ndfArr = DataFrame[] # store dataframe by files\nnameArr = String[]  # csv file names\n\n\nfor (root, dirs, files) in walkdir(path)\n    for file in files\n        name,suffix = split(file, \".\")\n        if suffix == \"csv\"\n            res = CSV.File(joinpath(path, file)) |&gt; DataFrame\n            res.name=fill(name,nrow(res))\n            push!(dfArr, res)\n            #push!(nameArr, name)\n        else\n            continue\n        end\n    end\nend\n\ntotal_df=reduce(vcat,[dfArr...],cols=:union)\nsize(total_df)",
+    "crumbs": [
+      "Dataset",
+      "14 clustering datset(kaggle)"
+    ]
+  },
+  {
+    "objectID": "dataset/clustering-dataset.html#plot",
+    "href": "dataset/clustering-dataset.html#plot",
+    "title": "Clustering Data Set",
+    "section": "3. plot",
+    "text": "3. plot\n\n\n\n    function group_data(df)\n    gdf = groupby(df, :color)\n    label_size = length(keys(gdf))\n    return gdf, label_size\n    end\n    function plot_examples()\n    fig = Figure(resolution=(1200, 1100))\n    for idx in eachindex(dfArr)\n        row,col=fldmod1(idx,6)\n        gdf, label_size = group_data(dfArr[idx])\n            ax = Axis(fig[row, col], title=nameArr[idx])\n            for k in 1:label_size\n                scatter!(ax, gdf[k][:, :x], gdf[k][:, :y])\n                #hidespines!(ax)\n                hidedecorations!(ax)\n            end\n    end\n    fig\nend\nplot_examples()\n\n\n\n\nclustering-datasets plots",
+    "crumbs": [
+      "Dataset",
+      "14 clustering datset(kaggle)"
+    ]
   },
   {
     "objectID": "dataset/boston-house.html",
@@ -851,113 +974,148 @@
     ]
   },
   {
-    "objectID": "dataset/diabetes.html",
-    "href": "dataset/diabetes.html",
-    "title": "Diabetes Diagnosis Dataset",
+    "objectID": "dataset/cricket-chirps.html",
+    "href": "dataset/cricket-chirps.html",
+    "title": "10 🦗🦗🦗cricket chirps data",
     "section": "",
-    "text": "info\n\n\n\nref : Diabetes Classification|EDA|SVM|LR|DT|RF|XGBOOST\nref : EDA, Feature and ComparisonML 0.87(Diabetes)",
-    "crumbs": [
-      "Dataset",
-      "8.Diabetes diagnosis dataset"
-    ]
+    "text": "info\n\n\n\nref : snowy tree cricket"
   },
   {
-    "objectID": "dataset/diabetes.html#load-package",
-    "href": "dataset/diabetes.html#load-package",
-    "title": "Diabetes Diagnosis Dataset",
+    "objectID": "dataset/cricket-chirps.html#load-package",
+    "href": "dataset/cricket-chirps.html#load-package",
+    "title": "10 🦗🦗🦗cricket chirps data",
     "section": "1. load package",
-    "text": "1. load package\n\n using CSV,DataFrames,Tidier,Pipe\n using CairoMakie,AlgebraOfGraphics,MakieThemes\n using ScientificTypes,StatsBase,RCall\n #Makie.set_theme!(ggthemr(:flat))",
-    "crumbs": [
-      "Dataset",
-      "8.Diabetes diagnosis dataset"
-    ]
+    "text": "1. load package\n\n #| eval: false\n using CSV,DataFrames,Tidier,Pipe\n using CairoMakie,AlgebraOfGraphics,MakieThemes\n using StatsBase,RCall\n #Makie.set_theme!(ggthemr(:flat))"
   },
   {
-    "objectID": "dataset/diabetes.html#load-csv",
-    "href": "dataset/diabetes.html#load-csv",
-    "title": "Diabetes Diagnosis Dataset",
+    "objectID": "dataset/cricket-chirps.html#load-csv",
+    "href": "dataset/cricket-chirps.html#load-csv",
+    "title": "10 🦗🦗🦗cricket chirps data",
     "section": "2. load csv",
-    "text": "2. load csv\n\ndf=CSV.File(\"../data/diabetes.csv\")|&gt;DataFrame\ndf=@chain  df  begin\n    @clean_names\nend\nfirst(df,5)\n\n5×9 DataFrame\n\n\n\nRow\npregnancies\nglucose\nblood_pressure\nskin_thickness\ninsulin\nb_m_i\ndiabetes_pedigree_function\nage\noutcome\n\n\n\nInt64\nInt64\nInt64\nInt64\nInt64\nFloat64\nFloat64\nInt64\nInt64\n\n\n\n\n1\n6\n148\n72\n35\n0\n33.6\n0.627\n50\n1\n\n\n2\n1\n85\n66\n29\n0\n26.6\n0.351\n31\n0\n\n\n3\n8\n183\n64\n0\n0\n23.3\n0.672\n32\n1\n\n\n4\n1\n89\n66\n23\n94\n28.1\n0.167\n21\n0\n\n\n5\n0\n137\n40\n35\n168\n43.1\n2.288\n33\n1",
-    "crumbs": [
-      "Dataset",
-      "8.Diabetes diagnosis dataset"
-    ]
+    "text": "2. load csv\n\ndf=CSV.File(\"../data/CricketChirps.csv\")|&gt;DataFrame\ndf=@chain  df  begin\n    @clean_names\n\nend\nfirst(df,5)\n\n5×2 DataFrame\n\n\n\nRow\ntemperature\nchirps\n\n\n\nFloat64\nInt64\n\n\n\n\n1\n54.5\n81\n\n\n2\n59.5\n97\n\n\n3\n63.5\n103\n\n\n4\n67.5\n123\n\n\n5\n72.0\n150"
   },
   {
-    "objectID": "dataset/diabetes.html#describe-df",
-    "href": "dataset/diabetes.html#describe-df",
-    "title": "Diabetes Diagnosis Dataset",
+    "objectID": "dataset/cricket-chirps.html#describe-df",
+    "href": "dataset/cricket-chirps.html#describe-df",
+    "title": "10 🦗🦗🦗cricket chirps data",
     "section": "3. describe df",
-    "text": "3. describe df\n\ndescribe(df)\n\n9×7 DataFrame\n\n\n\nRow\nvariable\nmean\nmin\nmedian\nmax\nnmissing\neltype\n\n\n\nSymbol\nFloat64\nReal\nFloat64\nReal\nInt64\nDataType\n\n\n\n\n1\npregnancies\n3.84505\n0\n3.0\n17\n0\nInt64\n\n\n2\nglucose\n120.895\n0\n117.0\n199\n0\nInt64\n\n\n3\nblood_pressure\n69.1055\n0\n72.0\n122\n0\nInt64\n\n\n4\nskin_thickness\n20.5365\n0\n23.0\n99\n0\nInt64\n\n\n5\ninsulin\n79.7995\n0\n30.5\n846\n0\nInt64\n\n\n6\nb_m_i\n31.9926\n0.0\n32.0\n67.1\n0\nFloat64\n\n\n7\ndiabetes_pedigree_function\n0.471876\n0.078\n0.3725\n2.42\n0\nFloat64\n\n\n8\nage\n33.2409\n21\n29.0\n81\n0\nInt64\n\n\n9\noutcome\n0.348958\n0\n0.0\n1\n0\nInt64",
-    "crumbs": [
-      "Dataset",
-      "8.Diabetes diagnosis dataset"
-    ]
+    "text": "3. describe df\n\ndescribe(df)\n\n2×7 DataFrame\n\n\n\nRow\nvariable\nmean\nmin\nmedian\nmax\nnmissing\neltype\n\n\n\nSymbol\nFloat64\nReal\nFloat64\nReal\nInt64\nDataType\n\n\n\n\n1\ntemperature\n68.3571\n54.5\n67.5\n83.0\n0\nFloat64\n\n\n2\nchirps\n133.0\n81\n123.0\n195\n0\nInt64"
   },
   {
-    "objectID": "dataset/diabetes.html#eda",
-    "href": "dataset/diabetes.html#eda",
-    "title": "Diabetes Diagnosis Dataset",
+    "objectID": "dataset/cricket-chirps.html#eda",
+    "href": "dataset/cricket-chirps.html#eda",
+    "title": "10 🦗🦗🦗cricket chirps data",
     "section": "4. EDA",
-    "text": "4. EDA\n\n4.1 cor of eachcol\n\ndf41=@chain df begin\n    @select(1:8)\nend\noutcome=df.outcome\n\ncors=[cor(col, outcome) for col in eachcol(df41)]\nfeatures=names(df41)\n\n8-element Vector{String}:\n \"pregnancies\"\n \"glucose\"\n \"blood_pressure\"\n \"skin_thickness\"\n \"insulin\"\n \"b_m_i\"\n \"diabetes_pedigree_function\"\n \"age\"\n\n\n\nax=(width=250,height=250,xticklabelrotation = pi/8)\ndatalayer=data(DataFrame(cors=cors,features=features))\nmaplayer=mapping(:features,:cors,color=:features)\nvislayer=visual(BarPlot,strokewidth=1,strokecolor=:black)\nplt=datalayer*maplayer*vislayer\ndraw(plt;axis=ax)\n\n\n\n\n\n\n\n\n\n\n4.2 Feature Engineering\n\nnew_df=@chain df begin\n  @mutate(age_cat = case_when(age&lt;21 =&gt; \"young\",\n                                age&gt;50 =&gt; \"elder\",\n                                true =&gt; \"mature\"\n                                ))\n  @mutate(glucose_cat=case_when(\n                                glucose&gt;=140=&gt;\"at_rist\",\n                                true=&gt;\"normal\"\n  )) \n\n  @mutate(age_gul_cat=case_when((glucose&lt;140) & (age&lt;=50) =&gt; \"normal_mature\", \n                                 (glucose&lt;140) & (age&gt;50) =&gt; \"normal_elder\",\n                                 (glucose&gt;140) & (age&lt;50) =&gt; \"at_risk_mature\",\n                                 true=&gt;\"at_risk_elder\"\n  ))\n\n  @mutate(age_insul_level=case_when(\n\n                                   (insulin&lt;126) & (age&lt;=50) =&gt; \"is_normal_mature\",\n                                   (insulin&lt;126) & (age&gt;50) =&gt; \"is_normal_elder\",\n                                   (insulin&gt;=126) & (age&lt;=50) =&gt; \"not_normal_mature\",\n                                   (insulin&gt;=126) & (age&gt;50) =&gt; \"not_normal_elder\",\n\n\n  ))\n  @mutate(insulin_level=case_when(insulin&lt;126 =&gt;\"is_normal\",\n                                  insulin&gt;=126 =&gt;\"not_normal\"\n                            \n                                 \n  ))\n\n  @mutate(gulcose_insulin=glucose*insulin)\nend\n\n768×15 DataFrame743 rows omitted\n\n\n\nRow\npregnancies\nglucose\nblood_pressure\nskin_thickness\ninsulin\nb_m_i\ndiabetes_pedigree_function\nage\noutcome\nage_cat\nglucose_cat\nage_gul_cat\nage_insul_level\ninsulin_level\ngulcose_insulin\n\n\n\nInt64\nInt64\nInt64\nInt64\nInt64\nFloat64\nFloat64\nInt64\nInt64\nString\nString\nString\nString\nString\nInt64\n\n\n\n\n1\n6\n148\n72\n35\n0\n33.6\n0.627\n50\n1\nmature\nat_rist\nat_risk_elder\nis_normal_mature\nis_normal\n0\n\n\n2\n1\n85\n66\n29\n0\n26.6\n0.351\n31\n0\nmature\nnormal\nnormal_mature\nis_normal_mature\nis_normal\n0\n\n\n3\n8\n183\n64\n0\n0\n23.3\n0.672\n32\n1\nmature\nat_rist\nat_risk_mature\nis_normal_mature\nis_normal\n0\n\n\n4\n1\n89\n66\n23\n94\n28.1\n0.167\n21\n0\nmature\nnormal\nnormal_mature\nis_normal_mature\nis_normal\n8366\n\n\n5\n0\n137\n40\n35\n168\n43.1\n2.288\n33\n1\nmature\nnormal\nnormal_mature\nnot_normal_mature\nnot_normal\n23016\n\n\n6\n5\n116\n74\n0\n0\n25.6\n0.201\n30\n0\nmature\nnormal\nnormal_mature\nis_normal_mature\nis_normal\n0\n\n\n7\n3\n78\n50\n32\n88\n31.0\n0.248\n26\n1\nmature\nnormal\nnormal_mature\nis_normal_mature\nis_normal\n6864\n\n\n8\n10\n115\n0\n0\n0\n35.3\n0.134\n29\n0\nmature\nnormal\nnormal_mature\nis_normal_mature\nis_normal\n0\n\n\n9\n2\n197\n70\n45\n543\n30.5\n0.158\n53\n1\nelder\nat_rist\nat_risk_elder\nnot_normal_elder\nnot_normal\n106971\n\n\n10\n8\n125\n96\n0\n0\n0.0\n0.232\n54\n1\nelder\nnormal\nnormal_elder\nis_normal_elder\nis_normal\n0\n\n\n11\n4\n110\n92\n0\n0\n37.6\n0.191\n30\n0\nmature\nnormal\nnormal_mature\nis_normal_mature\nis_normal\n0\n\n\n12\n10\n168\n74\n0\n0\n38.0\n0.537\n34\n1\nmature\nat_rist\nat_risk_mature\nis_normal_mature\nis_normal\n0\n\n\n13\n10\n139\n80\n0\n0\n27.1\n1.441\n57\n0\nelder\nnormal\nnormal_elder\nis_normal_elder\nis_normal\n0\n\n\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n\n\n757\n7\n137\n90\n41\n0\n32.0\n0.391\n39\n0\nmature\nnormal\nnormal_mature\nis_normal_mature\nis_normal\n0\n\n\n758\n0\n123\n72\n0\n0\n36.3\n0.258\n52\n1\nelder\nnormal\nnormal_elder\nis_normal_elder\nis_normal\n0\n\n\n759\n1\n106\n76\n0\n0\n37.5\n0.197\n26\n0\nmature\nnormal\nnormal_mature\nis_normal_mature\nis_normal\n0\n\n\n760\n6\n190\n92\n0\n0\n35.5\n0.278\n66\n1\nelder\nat_rist\nat_risk_elder\nis_normal_elder\nis_normal\n0\n\n\n761\n2\n88\n58\n26\n16\n28.4\n0.766\n22\n0\nmature\nnormal\nnormal_mature\nis_normal_mature\nis_normal\n1408\n\n\n762\n9\n170\n74\n31\n0\n44.0\n0.403\n43\n1\nmature\nat_rist\nat_risk_mature\nis_normal_mature\nis_normal\n0\n\n\n763\n9\n89\n62\n0\n0\n22.5\n0.142\n33\n0\nmature\nnormal\nnormal_mature\nis_normal_mature\nis_normal\n0\n\n\n764\n10\n101\n76\n48\n180\n32.9\n0.171\n63\n0\nelder\nnormal\nnormal_elder\nnot_normal_elder\nnot_normal\n18180\n\n\n765\n2\n122\n70\n27\n0\n36.8\n0.34\n27\n0\nmature\nnormal\nnormal_mature\nis_normal_mature\nis_normal\n0\n\n\n766\n5\n121\n72\n23\n112\n26.2\n0.245\n30\n0\nmature\nnormal\nnormal_mature\nis_normal_mature\nis_normal\n13552\n\n\n767\n1\n126\n60\n0\n0\n30.1\n0.349\n47\n1\nmature\nnormal\nnormal_mature\nis_normal_mature\nis_normal\n0\n\n\n768\n1\n93\n70\n31\n0\n30.4\n0.315\n23\n0\nmature\nnormal\nnormal_mature\nis_normal_mature\nis_normal\n0\n\n\n\n\n\n\n\nax=(width=150,height=250)\ndatalayer=data(new_df)\nmaplayer=mapping(:glucose_cat)*frequency()*mapping(color=:glucose_cat)\ndraw(datalayer*maplayer,axis=ax)",
-    "crumbs": [
-      "Dataset",
-      "8.Diabetes diagnosis dataset"
-    ]
+    "text": "4. EDA\n\ndatalayer=data(df)\nmaplayer=mapping(:temperature,:chirps)\nax=(width=250,height=250)\ndraw(datalayer*maplayer,axis=ax)"
   },
   {
-    "objectID": "dataset/florida-lakes.html",
-    "href": "dataset/florida-lakes.html",
-    "title": "11 Florida Lakes",
+    "objectID": "dataset/ecommerce-customer-dataset.html",
+    "href": "dataset/ecommerce-customer-dataset.html",
+    "title": "👧👱👳Ecommerce Customer dataset EDA",
     "section": "",
-    "text": "info\n\n\n\nref : FloridaLakes Dataset",
+    "text": "info\n\n\n\ndataset: Linear Regression E-commerce Dataset\nmodel : E-commerce Dataset - Linear Regression Model\ndataset standard methods ref: Standardize all columns of DataFrame",
     "crumbs": [
       "Dataset",
-      "11.Florida Lakes Dataset"
+      "12.Ecommerce Customer dataset"
     ]
   },
   {
-    "objectID": "dataset/florida-lakes.html#load-package",
-    "href": "dataset/florida-lakes.html#load-package",
-    "title": "11 Florida Lakes",
+    "objectID": "dataset/ecommerce-customer-dataset.html#load-package",
+    "href": "dataset/ecommerce-customer-dataset.html#load-package",
+    "title": "👧👱👳Ecommerce Customer dataset EDA",
     "section": "1. load package",
-    "text": "1. load package\n\n using CSV,DataFrames,Tidier,Pipe\n using CairoMakie,AlgebraOfGraphics,MakieThemes\n using StatsBase\n #Makie.set_theme!(ggthemr(:flat))",
+    "text": "1. load package\n\n using CSV,DataFrames,Tidier,Pipe\n using CairoMakie,AlgebraOfGraphics,MakieThemes\n using StatsBase",
     "crumbs": [
       "Dataset",
-      "11.Florida Lakes Dataset"
+      "12.Ecommerce Customer dataset"
     ]
   },
   {
-    "objectID": "dataset/florida-lakes.html#load-csv",
-    "href": "dataset/florida-lakes.html#load-csv",
-    "title": "11 Florida Lakes",
-    "section": "2. load csv",
-    "text": "2. load csv\n\ndf=CSV.File(\"../data/FloridaLakes.csv\")|&gt;DataFrame\ndf=@chain  df  begin\n    @clean_names\nend\nfirst(df,5)\n\n5×12 DataFrame\n\n\n\nRow\ni_d\nlake\nalkalinity\np_h\ncalcium\nchlorophyll\navg_mercury\nnum_samples\nmin_mercury\nmax_mercury\nthree_yr_std_mercury\nage_data\n\n\n\nInt64\nString31\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nInt64\nFloat64\nFloat64\nFloat64\nInt64\n\n\n\n\n1\n1\nAlligator\n5.9\n6.1\n3.0\n0.7\n1.23\n5\n0.85\n1.43\n1.53\n1\n\n\n2\n2\nAnnie\n3.5\n5.1\n1.9\n3.2\n1.33\n7\n0.92\n1.9\n1.33\n0\n\n\n3\n3\nApopka\n116.0\n9.1\n44.1\n128.3\n0.04\n6\n0.04\n0.06\n0.04\n0\n\n\n4\n4\nBlue Cypress\n39.4\n6.9\n16.4\n3.5\n0.44\n12\n0.13\n0.84\n0.44\n0\n\n\n5\n5\nBrick\n2.5\n4.6\n2.9\n1.8\n1.2\n12\n0.69\n1.5\n1.33\n1",
+    "objectID": "dataset/ecommerce-customer-dataset.html#load-data",
+    "href": "dataset/ecommerce-customer-dataset.html#load-data",
+    "title": "👧👱👳Ecommerce Customer dataset EDA",
+    "section": "2. load data",
+    "text": "2. load data\n\ndf=CSV.File(\"../data/Ecommerce-Customers.csv\")|&gt;DataFrame\ndf=@chain df begin\n  @select(4:8)\n  @clean_names\n  mapcols(zscore, _)   #standard methods    \nend\n\nfirst(df,5)\n\n5×5 DataFrame\n\n\n\nRow\navg_session_length\ntime_on_app\ntime_on_website\nlength_of_membership\nyearly_amount_spent\n\n\n\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\n\n\n\n\n1\n1.45489\n0.606672\n2.49109\n0.549556\n1.11753\n\n\n2\n-1.13537\n-0.948514\n0.206349\n-0.870056\n-1.35043\n\n\n3\n-0.0526705\n-0.726412\n0.0496314\n0.571495\n-0.148352\n\n\n4\n1.26175\n1.67471\n-0.335642\n-0.413582\n1.04064\n\n\n5\n0.279558\n0.747022\n0.471265\n0.913507\n1.26196",
     "crumbs": [
       "Dataset",
-      "11.Florida Lakes Dataset"
+      "12.Ecommerce Customer dataset"
     ]
   },
   {
-    "objectID": "dataset/florida-lakes.html#describe-df",
-    "href": "dataset/florida-lakes.html#describe-df",
-    "title": "11 Florida Lakes",
+    "objectID": "dataset/ecommerce-customer-dataset.html#describe-df",
+    "href": "dataset/ecommerce-customer-dataset.html#describe-df",
+    "title": "👧👱👳Ecommerce Customer dataset EDA",
     "section": "3. describe df",
-    "text": "3. describe df\n\ndescribe(df)\n\n12×7 DataFrame\n\n\n\nRow\nvariable\nmean\nmin\nmedian\nmax\nnmissing\neltype\n\n\n\nSymbol\nUnion…\nAny\nUnion…\nAny\nInt64\nDataType\n\n\n\n\n1\ni_d\n27.0\n1\n27.0\n53\n0\nInt64\n\n\n2\nlake\n\nAlligator\n\nYale\n0\nString31\n\n\n3\nalkalinity\n37.5302\n1.2\n19.6\n128.0\n0\nFloat64\n\n\n4\np_h\n6.59057\n3.6\n6.8\n9.1\n0\nFloat64\n\n\n5\ncalcium\n22.2019\n1.1\n12.6\n90.7\n0\nFloat64\n\n\n6\nchlorophyll\n23.117\n0.7\n12.8\n152.4\n0\nFloat64\n\n\n7\navg_mercury\n0.52717\n0.04\n0.48\n1.33\n0\nFloat64\n\n\n8\nnum_samples\n13.0566\n4\n12.0\n44\n0\nInt64\n\n\n9\nmin_mercury\n0.279811\n0.04\n0.25\n0.92\n0\nFloat64\n\n\n10\nmax_mercury\n0.874528\n0.06\n0.84\n2.04\n0\nFloat64\n\n\n11\nthree_yr_std_mercury\n0.513208\n0.04\n0.45\n1.53\n0\nFloat64\n\n\n12\nage_data\n0.811321\n0\n1.0\n1\n0\nInt64",
+    "text": "3. describe df\n\n describe(df)\n\n5×7 DataFrame\n\n\n\nRow\nvariable\nmean\nmin\nmedian\nmax\nnmissing\neltype\n\n\n\nSymbol\nFloat64\nFloat64\nFloat64\nFloat64\nInt64\nDataType\n\n\n\n\n1\navg_session_length\n-4.32565e-15\n-3.54714\n0.02903\n3.10959\n0\nFloat64\n\n\n2\ntime_on_app\n6.92668e-16\n-3.56496\n-0.0696596\n3.09239\n0\nFloat64\n\n\n3\ntime_on_website\n-1.05427e-15\n-3.11394\n0.00882856\n2.91417\n0\nFloat64\n\n\n4\nlength_of_membership\n-1.803e-16\n-3.26592\n0.000513819\n3.39168\n0\nFloat64\n\n\n5\nyearly_amount_spent\n-1.57718e-15\n-3.05925\n-0.00537306\n3.3563\n0\nFloat64",
     "crumbs": [
       "Dataset",
-      "11.Florida Lakes Dataset"
+      "12.Ecommerce Customer dataset"
     ]
   },
   {
-    "objectID": "dataset/florida-lakes.html#eda",
-    "href": "dataset/florida-lakes.html#eda",
-    "title": "11 Florida Lakes",
-    "section": "4. EDA",
-    "text": "4. EDA\n\n4.1 data processing\nselect numerical features and standarid\n\nnew_df=@chain df begin\n   @select(3:7,9:11)\n   mapcols(zscore,_)\nend\n\n53×8 DataFrame28 rows omitted\n\n\n\nRow\nalkalinity\np_h\ncalcium\nchlorophyll\navg_mercury\nmin_mercury\nmax_mercury\nthree_yr_std_mercury\n\n\n\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\n\n\n\n\n1\n-0.827939\n-0.380741\n-0.770153\n-0.727439\n2.06087\n2.51844\n1.06403\n3.00178\n\n\n2\n-0.89076\n-1.15687\n-0.814272\n-0.646313\n2.35409\n2.82762\n1.96433\n2.41134\n\n\n3\n2.05399\n1.94764\n0.878293\n3.41322\n-1.4285\n-1.05921\n-1.56026\n-1.39701\n\n\n4\n0.0489434\n0.24016\n-0.232703\n-0.636578\n-0.255603\n-0.661694\n-0.0661402\n-0.216124\n\n\n5\n-0.916936\n-1.54493\n-0.774163\n-0.691743\n1.9729\n1.81174\n1.19811\n2.41134\n\n\n6\n-0.469333\n0.550611\n-0.70999\n0.680906\n-0.754085\n-1.05921\n-0.755733\n-0.777044\n\n\n7\n-0.846262\n-0.92403\n-0.778174\n-0.639823\n-0.138313\n0.0891703\n-0.296005\n-0.186602\n\n\n8\n0.886562\n1.17151\n1.32349\n0.343423\n-0.988664\n-0.882536\n-0.947287\n-1.04274\n\n\n9\n-0.291339\n-0.613579\n-0.521482\n-0.698233\n0.887972\n-0.0875036\n1.00656\n0.610495\n\n\n10\n-0.856732\n-0.147903\n-0.70598\n-0.0200212\n0.829327\n0.575024\n1.14065\n0.876193\n\n\n11\n-0.809616\n-0.92403\n-0.782185\n-0.266644\n0.536103\n1.06088\n-0.0278295\n0.580972\n\n\n12\n-0.550478\n0.472998\n-0.336984\n-0.620352\n-0.0796685\n-0.794199\n-0.276849\n-0.00946935\n\n\n13\n-0.317515\n0.472998\n0.120249\n-0.37373\n-0.108991\n-0.0875036\n0.259501\n0.0790969\n\n\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n\n\n42\n1.56975\n0.162547\n0.934445\n-0.548962\n-1.25257\n-1.01504\n-1.17715\n-0.954176\n\n\n43\n-0.673503\n-0.535967\n0.0801407\n-0.698233\n-0.138313\n-0.0433351\n0.336122\n-0.216124\n\n\n44\n0.758302\n1.32674\n0.152335\n1.46296\n-0.93002\n-1.01504\n-0.755733\n-1.04274\n\n\n45\n-0.563565\n0.0849346\n0.76198\n0.0318993\n0.97594\n0.354181\n1.00656\n0.462884\n\n\n46\n-0.851497\n-0.303129\n0.0560758\n-0.438631\n-0.0210236\n0.133339\n0.144569\n0.108619\n\n\n47\n-0.31228\n-0.303129\n-0.385114\n0.148721\n0.360168\n0.0891703\n0.431899\n0.197185\n\n\n48\n1.15094\n1.79241\n-0.0682596\n-0.438631\n-0.754085\n-1.05921\n-0.908976\n-0.718\n\n\n49\n-0.950964\n-1.77777\n-0.80625\n-0.542472\n1.21052\n1.37006\n0.700074\n1.37807\n\n\n50\n-0.0924048\n0.317773\n-0.36506\n-0.600882\n-0.372893\n-0.882536\n0.048792\n-0.599911\n\n\n51\n-0.576653\n0.24016\n-0.681915\n-0.214723\n-0.284926\n-0.220009\n-0.353471\n-0.245646\n\n\n52\n-0.529537\n-1.07926\n-0.770153\n-0.665783\n-0.81273\n-0.573357\n-0.908976\n-0.688477\n\n\n53\n0.897033\n1.01629\n-0.0682596\n-0.464591\n-0.754085\n-0.573357\n-0.698267\n-0.777044\n\n\n\n\n\n\n\n\n4.2 heatmap\n\ncats=names(new_df)\nrow,col=size(new_df)\ncor_matrix=Matrix(new_df)|&gt;cor\nrow,col=size(cor_matrix)\n\n(8, 8)\n\n\n\nfig = Figure(size = (800, 800))\nax = Axis(fig[1, 1], xticks = (1:row, cats), yticks = (1:row, cats),xticklabelrotation = pi/8,ylabelsize=8,xlabelsize=8)\nhmap = heatmap!(ax, cor_matrix, colormap = :plasma)\nColorbar(fig[1, 2], hmap; label = \"values\", width = 10, ticksize = 10)\nfig\n\n\n\n\n\n\n\n\n\n\n4.3 pair plot\n\ndata_layer=data(new_df)\nfunction make_layer(sy1::Symbol,sy2::Symbol)\n   mapping_layer=sy1==sy2 ? mapping(sy1,) : mapping(sy1,sy2)\n   vis_layer=sy1==sy2 ? visual(Density,color=(:green,0.6)) : visual(Scatter,strokewidth=1,storkecolor=:black,color=:red,markersize=4)\n   return  data_layer*mapping_layer*vis_layer\nend\n\ncats=@pipe names(new_df)|&gt;Symbol.(_)\nlen=length(cats)\n\n8\n\n\n\nwith_theme(theme_minimal(),resolution = (1200,1200)) do\n        cl=0.1\n        fig = Figure()\n        for i in 1:len\n            for  j in 1:len\n                ax=Axis(fig[i,j])\n                j==1 ? ax.ylabel= String(cats[i]) : nothing\n                i==len ? ax.xlabel= String(cats[j]) : nothing\n                layer=make_layer(cats[i],cats[j])\n              [i,j]==[len,len] ? cl=draw!(ax,layer) : draw!(ax,layer)\n            end\n        end\n        \n        fig\nend",
+    "objectID": "dataset/ecommerce-customer-dataset.html#wide-to-long-table",
+    "href": "dataset/ecommerce-customer-dataset.html#wide-to-long-table",
+    "title": "👧👱👳Ecommerce Customer dataset EDA",
+    "section": "4. wide to long table",
+    "text": "4. wide to long table\n\nlong_table=@chain df begin\n@pivot_longer(_,1:5)\nend\n\n2500×2 DataFrame2475 rows omitted\n\n\n\nRow\nvariable\nvalue\n\n\n\nString\nFloat64\n\n\n\n\n1\navg_session_length\n1.45489\n\n\n2\navg_session_length\n-1.13537\n\n\n3\navg_session_length\n-0.0526705\n\n\n4\navg_session_length\n1.26175\n\n\n5\navg_session_length\n0.279558\n\n\n6\navg_session_length\n0.823972\n\n\n7\navg_session_length\n-1.03933\n\n\n8\navg_session_length\n-0.316404\n\n\n9\navg_session_length\n0.941582\n\n\n10\navg_session_length\n-1.12501\n\n\n11\navg_session_length\n0.946418\n\n\n12\navg_session_length\n0.832357\n\n\n13\navg_session_length\n-3.54714\n\n\n⋮\n⋮\n⋮\n\n\n2489\nyearly_amount_spent\n1.24095\n\n\n2490\nyearly_amount_spent\n-2.16777\n\n\n2491\nyearly_amount_spent\n0.139789\n\n\n2492\nyearly_amount_spent\n0.141051\n\n\n2493\nyearly_amount_spent\n-1.20399\n\n\n2494\nyearly_amount_spent\n1.61747\n\n\n2495\nyearly_amount_spent\n0.143072\n\n\n2496\nyearly_amount_spent\n0.939716\n\n\n2497\nyearly_amount_spent\n0.374898\n\n\n2498\nyearly_amount_spent\n0.659475\n\n\n2499\nyearly_amount_spent\n-0.540183\n\n\n2500\nyearly_amount_spent\n-0.0193583",
     "crumbs": [
       "Dataset",
-      "11.Florida Lakes Dataset"
+      "12.Ecommerce Customer dataset"
+    ]
+  },
+  {
+    "objectID": "dataset/ecommerce-customer-dataset.html#eda",
+    "href": "dataset/ecommerce-customer-dataset.html#eda",
+    "title": "👧👱👳Ecommerce Customer dataset EDA",
+    "section": "5 EDA",
+    "text": "5 EDA\n\n5.1 boxplot\n\nlet\nax=(width=600, height=300,xticklabelrotation = pi/8)\ndatalayer=data(long_table)\nmaplayer=mapping(:variable,:value, color=:variable)\nvislayer=visual(BoxPlot, storkewidth=1,storkecolor=:black)\nplt51=datalayer*maplayer*vislayer\ndraw(plt51,axis=ax)\nend\n\n\n\n\n\n\n\n\n\n\n5.2 pair plot\n\ncats=names(df)\ncats=Symbol.(cats)\nlen=length(cats)\n\ndata_layer=data(df)\n\nfunction make_layer(sy1::Symbol,sy2::Symbol)\n   mapping_layer=sy1==sy2 ? mapping(sy1) : mapping(sy1,sy2)\n   vis_layer=sy1==sy2 ? visual(Density,color=(:green, 0.5)) : visual(Scatter,color=(:purple,0.5),strokewidth=1,strokecolor=:black,markersize=6)\n   return  data_layer*mapping_layer*vis_layer\nend\n\nwith_theme(theme_minimal(),resolution = (800,800)) do\n        cl=0.1\n        fig = Figure()\n        for i in 1:len\n            for  j in 1:len\n                ax=Axis(fig[i,j],yticklabelrotation = pi/8)\n                j==1 ? ax.ylabel= String(cats[i]) : nothing\n                i==len ? ax.xlabel= String(cats[j]) : nothing\n                layer=make_layer(cats[i],cats[j])\n              [i,j]==[len,len] ? cl=draw!(ax,layer) : draw!(ax,layer)\n            end\n        end\n    fig\nend\n\n\n\n\n\n\n\n\n\n\n5.3 heatmap\n\ncats=names(df)\nrow,col=size(df)\ncor_matrix=Matrix(df)|&gt;cor\nrow,col=size(cor_matrix)\n\n(5, 5)\n\n\n\nlet\nfig = Figure(size = (800, 800))\nax = Axis(fig[1, 1], xticks = (1:row, cats), yticks = (1:row, cats),xticklabelrotation = pi/8,ylabelsize=8,xlabelsize=8)\nhmap = heatmap!(ax, cor_matrix, colormap = :plasma)\nColorbar(fig[1, 2], hmap; label = \"values\", width = 10, ticksize = 10)\nfig\nend",
+    "crumbs": [
+      "Dataset",
+      "12.Ecommerce Customer dataset"
+    ]
+  },
+  {
+    "objectID": "dataset/german-credit-card.html",
+    "href": "dataset/german-credit-card.html",
+    "title": "German Credit Card Dataset",
+    "section": "",
+    "text": "info\n\n\n\n\ndataset1 : Analysis of German Credit Data\ndataset2 : Predicting Credit Risk - Model Pipeline\n\nthere are two dataset name german credit .dataset1 is original data,but now we use dataset2, here is why change to dataset2 : Content",
+    "crumbs": [
+      "Dataset",
+      "13. German Credit Card dataset"
+    ]
+  },
+  {
+    "objectID": "dataset/german-credit-card.html#load-package",
+    "href": "dataset/german-credit-card.html#load-package",
+    "title": "German Credit Card Dataset",
+    "section": "1. load package",
+    "text": "1. load package\n\n using CSV,DataFrames,Tidier,FreqTables,PrettyTables\n using CairoMakie,AlgebraOfGraphics\n using MLJ",
+    "crumbs": [
+      "Dataset",
+      "13. German Credit Card dataset"
+    ]
+  },
+  {
+    "objectID": "dataset/german-credit-card.html#load-csv",
+    "href": "dataset/german-credit-card.html#load-csv",
+    "title": "German Credit Card Dataset",
+    "section": "2. load csv",
+    "text": "2. load csv\n\ndf=CSV.File(\"../data/german_credit_data.csv\")|&gt;DataFrame\ndf=@chain df begin\n   #coerce(_, :creditability =&gt;Multiclass)\n   @clean_names()\n   \nend\nfirst(df,5)\n\n5×11 DataFrame\n\n\n\nRow\ncolumn1\nage\nsex\njob\nhousing\nsaving_accounts\nchecking_account\ncredit_amount\nduration\npurpose\nrisk\n\n\n\nInt64\nInt64\nString7\nInt64\nString7\nString15\nString15\nInt64\nInt64\nString31\nString7\n\n\n\n\n1\n0\n67\nmale\n2\nown\nNA\nlittle\n1169\n6\nradio/TV\ngood\n\n\n2\n1\n22\nfemale\n2\nown\nlittle\nmoderate\n5951\n48\nradio/TV\nbad\n\n\n3\n2\n49\nmale\n1\nown\nlittle\nNA\n2096\n12\neducation\ngood\n\n\n4\n3\n45\nmale\n2\nfree\nlittle\nlittle\n7882\n42\nfurniture/equipment\ngood\n\n\n5\n4\n53\nmale\n2\nfree\nlittle\nlittle\n4870\n24\ncar\nbad\n\n\n\n\n\n\n\n\n  \n     CatBoostClassifier \n     \n     \n \n \n doc\n \n \n \n No documentation found.\nBinding catboost does not exist.\n\n \n \n \n\n\n\ndescribe(df)\n\n11×7 DataFrame\n\n\n\nRow\nvariable\nmean\nmin\nmedian\nmax\nnmissing\neltype\n\n\n\nSymbol\nUnion…\nAny\nUnion…\nAny\nInt64\nDataType\n\n\n\n\n1\ncolumn1\n499.5\n0\n499.5\n999\n0\nInt64\n\n\n2\nage\n35.546\n19\n33.0\n75\n0\nInt64\n\n\n3\nsex\n\nfemale\n\nmale\n0\nString7\n\n\n4\njob\n1.904\n0\n2.0\n3\n0\nInt64\n\n\n5\nhousing\n\nfree\n\nrent\n0\nString7\n\n\n6\nsaving_accounts\n\nNA\n\nrich\n0\nString15\n\n\n7\nchecking_account\n\nNA\n\nrich\n0\nString15\n\n\n8\ncredit_amount\n3271.26\n250\n2319.5\n18424\n0\nInt64\n\n\n9\nduration\n20.903\n4\n18.0\n72\n0\nInt64\n\n\n10\npurpose\n\nbusiness\n\nvacation/others\n0\nString31\n\n\n11\nrisk\n\nbad\n\ngood\n0\nString7\n\n\n\n\n\n\n\nschema(df)\n\n\n┌──────────────────┬──────────┬──────────┐\n│ names            │ scitypes │ types    │\n├──────────────────┼──────────┼──────────┤\n│ column1          │ Count    │ Int64    │\n│ age              │ Count    │ Int64    │\n│ sex              │ Textual  │ String7  │\n│ job              │ Count    │ Int64    │\n│ housing          │ Textual  │ String7  │\n│ saving_accounts  │ Textual  │ String15 │\n│ checking_account │ Textual  │ String15 │\n│ credit_amount    │ Count    │ Int64    │\n│ duration         │ Count    │ Int64    │\n│ purpose          │ Textual  │ String31 │\n│ risk             │ Textual  │ String7  │\n└──────────────────┴──────────┴──────────┘",
+    "crumbs": [
+      "Dataset",
+      "13. German Credit Card dataset"
+    ]
+  },
+  {
+    "objectID": "dataset/german-credit-card.html#eda",
+    "href": "dataset/german-credit-card.html#eda",
+    "title": "German Credit Card Dataset",
+    "section": "3. EDA",
+    "text": "3. EDA\n\n3.1 saving_account_type\n\ndf31=@chain df @filter(saving_accounts !=\"NA\")\nax=(width=400, height=300)\nlet\n  datalayer31=data(df31)\n  maplayer31=mapping(:saving_accounts,color=:risk,dodge=:risk)\n  vislayer31=visual(BarPlot, strokewidth=1,strokecolor=:black)\n  plt31=datalayer31*frequency()*maplayer31*vislayer31\n  draw(plt31,axis=ax)\nend\n\n\n\n\n\n\n\n\n\n\n3.2 saving_account_type and job relation\n\nlet\n  datalayer32=data(df31)\n  maplayer32=mapping(:saving_accounts,:job,color=:risk,dodge=:saving_accounts,\n  side=:risk)\n  vislayer32=visual(Violin)\n  plt32=datalayer32*maplayer32*vislayer32\n  draw(plt32,axis=ax)\nend\n\n\n\n\n\n\n\n\n\n\n3.3 saving_account_type and credit amount\n\nlet\n  datalayer33=data(df31)\n  maplayer33=mapping(:saving_accounts,:credit_amount,color=:risk,dodge=:risk)\n  vislayer33=visual(BoxPlot,show_notch=true)\n  plt33=datalayer33*maplayer33*vislayer33\n  draw(plt33,axis=ax)\nend\n\n\n\n\n\n\n\n\n\n\n3.4 explore purpose of creditcard use\n\n3.4.1 purpose count\n\nlet\n  ax=(width=400, height=300,xticklabelrotation = pi/8)\n  datalayer34=data(df)\n  maplayer341=mapping(:purpose,color=:risk,dodge=:risk)\n  plt341=datalayer34*frequency()*maplayer341\n  draw(plt341,axis=ax)\n\nend\n\n\n\n\n\n\n\n\n\n\n3.4.2 purpose and age relation\n\nlet\n  ax=(width=400, height=200,xticklabelrotation = pi/8)\n  datalayer342=data(df)\n  maplayer342=mapping(:purpose,:age,color=:risk,dodge=:purpose,\n  side=:risk)\n  vislayer342=visual(Violin,datalimits=extrema)\n  plt342=datalayer342*maplayer342*vislayer342\n  draw(plt342,axis=ax)\n\nend\n\n\n\n\n\n\n\n\n\n\n3.4.3 purpose and credit amount\n\nlet\n  ax=(width=500, height=300,xticklabelrotation = pi/8)\n  datalayer343=data(df)\n  maplayer343=mapping(:purpose,:credit_amount,color=:risk,dodge=:risk)\n  vislayer343=visual(BoxPlot,show_notch=true)\n  plt343=datalayer343*maplayer343*vislayer343\n  draw(plt343,axis=ax)\nend\n\n\n\n\n\n\n\n\n\n\n\n3.5 duration count\n\nlet\n ax=(width=800, height=500,xticklabelrotation = pi/8)\n datalayer=data(df)\n maplayer=mapping(:duration,color=:risk,dodge=:risk)\n vislayer=visual(BarPlot)\n plt35=datalayer*maplayer*frequency()*vislayer\n draw(plt35,axis=ax)\nend\n#show(df.duration)\n\n\n\n\n\n\n\n\n\n\n3.6 duration density\n\nlet\n ax=(width=800, height=300,xticklabelrotation = pi/8)\n datalayer=data(df)\n maplayer=mapping(:duration,color=:risk)\n vislayer=(visual(Hist,normalization=:pdf)+\n visual(Density,strokewidth=1,strokecolor=:red))*visual(alpha=0.5)\n plt=datalayer*maplayer*vislayer\n draw(plt,axis=ax)\nend\n\n\n\n\n\n\n\n\n\n\n3.7 purpose and sex freqtable\n\n  tbl = freqtable(df,:purpose,:sex)\n\n8×2 Named Matrix{Int64}\n      purpose ╲ sex │ female    male\n────────────────────┼───────────────\nbusiness            │     19      78\ncar                 │     94     243\ndomestic appliances │      6       6\neducation           │     24      35\nfurniture/equipment │     74     107\nradio/TV            │     85     195\nrepairs             │      5      17\nvacation/others     │      3       9",
+    "crumbs": [
+      "Dataset",
+      "13. German Credit Card dataset"
     ]
   },
   {
@@ -1046,6 +1204,66 @@
     "crumbs": [
       "Dataset",
       "6.telecom customer churn"
+    ]
+  },
+  {
+    "objectID": "learn/Classfication/1-diabetes-catboost-classification.html",
+    "href": "learn/Classfication/1-diabetes-catboost-classification.html",
+    "title": "1 Diabetes CatBoost Classification",
+    "section": "",
+    "text": "info\n\n\n\nref gradient-boosting-decision-trees/",
+    "crumbs": [
+      "1-Diabetes Catboost Classification"
+    ]
+  },
+  {
+    "objectID": "learn/Classfication/1-diabetes-catboost-classification.html#load-package",
+    "href": "learn/Classfication/1-diabetes-catboost-classification.html#load-package",
+    "title": "1 Diabetes CatBoost Classification",
+    "section": "1. load package",
+    "text": "1. load package\n\n import MLJ:transform,predict\n using CSV,DataFrames,Tidier,Pipe\n using CairoMakie,AlgebraOfGraphics,MakieThemes\n using MLJ,MLJModelInterface,Random\n #Makie.set_theme!(ggthemr(:flat))",
+    "crumbs": [
+      "1-Diabetes Catboost Classification"
+    ]
+  },
+  {
+    "objectID": "learn/Classfication/1-diabetes-catboost-classification.html#load-csv",
+    "href": "learn/Classfication/1-diabetes-catboost-classification.html#load-csv",
+    "title": "1 Diabetes CatBoost Classification",
+    "section": "2. load csv",
+    "text": "2. load csv\n\ndf=CSV.File(\"../../data/diabetes.csv\")|&gt;DataFrame\ndf=@chain  df  begin\n    @clean_names\n    coerce(_,:outcome=&gt; Multiclass,\n             :glucose =&gt;Continuous,\n             :blood_pressure=&gt;Continuous,\n             :skin_thickness=&gt;Continuous,\n             :insulin=&gt;Continuous,  \n             :b_m_i =&gt;Continuous                       \n    )\nend\nfirst(df,5)\n\n5×9 DataFrame\n\n\n\nRow\npregnancies\nglucose\nblood_pressure\nskin_thickness\ninsulin\nb_m_i\ndiabetes_pedigree_function\nage\noutcome\n\n\n\nInt64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nInt64\nCat…\n\n\n\n\n1\n6\n148.0\n72.0\n35.0\n0.0\n33.6\n0.627\n50\n1\n\n\n2\n1\n85.0\n66.0\n29.0\n0.0\n26.6\n0.351\n31\n0\n\n\n3\n8\n183.0\n64.0\n0.0\n0.0\n23.3\n0.672\n32\n1\n\n\n4\n1\n89.0\n66.0\n23.0\n94.0\n28.1\n0.167\n21\n0\n\n\n5\n0\n137.0\n40.0\n35.0\n168.0\n43.1\n2.288\n33\n1",
+    "crumbs": [
+      "1-Diabetes Catboost Classification"
+    ]
+  },
+  {
+    "objectID": "learn/Classfication/1-diabetes-catboost-classification.html#schema-of-df",
+    "href": "learn/Classfication/1-diabetes-catboost-classification.html#schema-of-df",
+    "title": "1 Diabetes CatBoost Classification",
+    "section": "3. schema of df",
+    "text": "3. schema of df\n\nschema(df)\n\n\n┌────────────────────────────┬───────────────┬──────────────────────────────────\n│ names                      │ scitypes      │ types                           ⋯\n├────────────────────────────┼───────────────┼──────────────────────────────────\n│ pregnancies                │ Count         │ Int64                           ⋯\n│ glucose                    │ Continuous    │ Float64                         ⋯\n│ blood_pressure             │ Continuous    │ Float64                         ⋯\n│ skin_thickness             │ Continuous    │ Float64                         ⋯\n│ insulin                    │ Continuous    │ Float64                         ⋯\n│ b_m_i                      │ Continuous    │ Float64                         ⋯\n│ diabetes_pedigree_function │ Continuous    │ Float64                         ⋯\n│ age                        │ Count         │ Int64                           ⋯\n│ outcome                    │ Multiclass{2} │ CategoricalValue{Int64, UInt32} ⋯\n└────────────────────────────┴───────────────┴──────────────────────────────────",
+    "crumbs": [
+      "1-Diabetes Catboost Classification"
+    ]
+  },
+  {
+    "objectID": "learn/Classfication/1-diabetes-catboost-classification.html#split-data",
+    "href": "learn/Classfication/1-diabetes-catboost-classification.html#split-data",
+    "title": "1 Diabetes CatBoost Classification",
+    "section": "4. split data",
+    "text": "4. split data\n\ny, X =  unpack(df, ==(:outcome), rng=123);\n#schema(X)\n(Xtrain, Xtest), (ytrain, ytest)  = partition((X, y), 0.7, multi=true,  rng=123)\n\n\n((538×8 DataFrame\n Row │ pregnancies  glucose  blood_pressure  skin_thickness  insulin  b_m_i    ⋯\n     │ Int64        Float64  Float64         Float64         Float64  Float64  ⋯\n─────┼──────────────────────────────────────────────────────────────────────────\n   1 │           0    126.0            86.0            27.0    120.0     27.4  ⋯\n   2 │           0    120.0            74.0            18.0     63.0     30.5\n   3 │           4     99.0            76.0            15.0     51.0     23.2\n   4 │           2    118.0            80.0             0.0      0.0     42.9\n   5 │           1     86.0            66.0            52.0     65.0     41.3  ⋯\n   6 │           3    191.0            68.0            15.0    130.0     30.9\n   7 │           2    108.0            62.0            10.0    278.0     25.3\n   8 │           6     99.0            60.0            19.0     54.0     26.9\n   9 │          11    143.0            94.0            33.0    146.0     36.6  ⋯\n  10 │           5    112.0            66.0             0.0      0.0     37.8\n  11 │           3    125.0            58.0             0.0      0.0     31.6\n  ⋮  │      ⋮          ⋮           ⋮               ⋮            ⋮        ⋮     ⋱\n 529 │           3     88.0            58.0            11.0     54.0     24.8\n 530 │           0    188.0            82.0            14.0    185.0     32.0  ⋯\n 531 │           4    110.0            66.0             0.0      0.0     31.9\n 532 │           0     67.0            76.0             0.0      0.0     45.3\n 533 │           0    125.0            68.0             0.0      0.0     24.7\n 534 │           7    196.0            90.0             0.0      0.0     39.8  ⋯\n 535 │           3    150.0            76.0             0.0      0.0     21.0\n 536 │           6     87.0            80.0             0.0      0.0     23.2\n 537 │           0    146.0            70.0             0.0      0.0     37.9\n 538 │           0     78.0            88.0            29.0     40.0     36.9  ⋯\n                                                  2 columns and 517 rows omitted, 230×8 DataFrame\n Row │ pregnancies  glucose  blood_pressure  skin_thickness  insulin  b_m_i    ⋯\n     │ Int64        Float64  Float64         Float64         Float64  Float64  ⋯\n─────┼──────────────────────────────────────────────────────────────────────────\n   1 │           0    139.0            62.0            17.0    210.0     22.1  ⋯\n   2 │           2     94.0            68.0            18.0     76.0     26.0\n   3 │          12    100.0            84.0            33.0    105.0     30.0\n   4 │           8    133.0            72.0             0.0      0.0     32.9\n   5 │           0    137.0            84.0            27.0      0.0     27.3  ⋯\n   6 │           6    108.0            44.0            20.0    130.0     24.0\n   7 │          13    152.0            90.0            33.0     29.0     26.8\n   8 │           5    122.0            86.0             0.0      0.0     34.7\n   9 │           4    131.0            68.0            21.0    166.0     33.1  ⋯\n  10 │           9    122.0            56.0             0.0      0.0     33.3\n  11 │           8    167.0           106.0            46.0    231.0     37.6\n  ⋮  │      ⋮          ⋮           ⋮               ⋮            ⋮        ⋮     ⋱\n 221 │           7    152.0            88.0            44.0      0.0     50.0\n 222 │           0     94.0             0.0             0.0      0.0      0.0  ⋯\n 223 │           3     87.0            60.0            18.0      0.0     21.8\n 224 │           6    194.0            78.0             0.0      0.0     23.5\n 225 │           3    111.0            62.0             0.0      0.0     22.6\n 226 │           7    142.0            90.0            24.0    480.0     30.4  ⋯\n 227 │           0     93.0           100.0            39.0     72.0     43.4\n 228 │           4    146.0            78.0             0.0      0.0     38.5\n 229 │          11    136.0            84.0            35.0    130.0     28.3\n 230 │           0     74.0            52.0            10.0     36.0     27.8  ⋯\n                                                  2 columns and 209 rows omitted), (CategoricalArrays.CategoricalValue{Int64, UInt32}[0, 0, 0, 1, 0, 0, 0, 0, 1, 1  …  0, 1, 0, 0, 0, 1, 0, 0, 1, 0], CategoricalArrays.CategoricalValue{Int64, UInt32}[0, 0, 0, 1, 0, 0, 1, 0, 0, 1  …  1, 0, 0, 1, 0, 1, 0, 1, 1, 0]))",
+    "crumbs": [
+      "1-Diabetes Catboost Classification"
+    ]
+  },
+  {
+    "objectID": "learn/Classfication/1-diabetes-catboost-classification.html#catboost-workflow",
+    "href": "learn/Classfication/1-diabetes-catboost-classification.html#catboost-workflow",
+    "title": "1 Diabetes CatBoost Classification",
+    "section": "5. catboost workflow",
+    "text": "5. catboost workflow\n\n5.1 load model\n\nusing CatBoost.MLJCatBoostInterface\ncatboost = CatBoostClassifier(iterations=5,learning_rate=0.20,depth=6,loss_function=\"Logloss\",);\n\n\n\n  \n     CatBoostClassifier \n     \n     \n \n \n doc\n \n \n \n No documentation found.\ncatboost is of type CatBoostClassifier.\nSummary\nmutable struct CatBoostClassifier\nFields\niterations                     :: Int64\nlearning_rate                  :: Float64\ndepth                          :: Int64\nl2_leaf_reg                    :: Float64\nmodel_size_reg                 :: Float64\nrsm                            :: Float64\nloss_function                  :: Union{Nothing, String}\nborder_count                   :: Union{Nothing, Int64}\nfeature_border_type            :: Union{Nothing, String}\nper_float_feature_quantization :: Union{Nothing, PythonCall.Py}\ninput_borders                  :: Union{Nothing, String}\noutput_borders                 :: Union{Nothing, String}\nfold_permutation_block         :: Int64\nnan_mode                       :: String\ncounter_calc_method            :: String\nleaf_estimation_iterations     :: Union{Nothing, Int64}\nleaf_estimation_method         :: Union{Nothing, String}\nthread_count                   :: Int64\nrandom_seed                    :: Union{Nothing, Int64}\nmetric_period                  :: Int64\nctr_leaf_count_limit           :: Union{Nothing, Int64}\nstore_all_simple_ctr           :: Bool\nmax_ctr_complexity             :: Union{Nothing, Bool}\nhas_time                       :: Bool\nallow_const_label              :: Bool\ntarget_border                  :: Union{Nothing, Float64}\nclass_weights                  :: Union{Nothing, PythonCall.Py}\nauto_class_weights             :: Union{Nothing, Bool}\none_hot_max_size               :: Union{Nothing, Int64}\nrandom_strength                :: Float64\nbagging_temperature            :: Float64\nfold_len_multiplier            :: Float64\nused_ram_limit                 :: Union{Nothing, Int64}\ngpu_ram_part                   :: Float64\npinned_memory_size             :: Int64\nallow_writing_files            :: Union{Nothing, Bool}\napprox_on_full_history         :: Bool\nboosting_type                  :: Union{Nothing, String}\nsimple_ctr                     :: Union{Nothing, PythonCall.Py}\ncombinations_ctr               :: Union{Nothing, PythonCall.Py}\nper_feature_ctr                :: Union{Nothing, PythonCall.Py}\ntask_type                      :: Union{Nothing, String}\ndevices                        :: Union{Nothing, String}\nbootstrap_type                 :: Union{Nothing, String}\nsubsample                      :: Union{Nothing, Int64}\nsampling_frequency             :: String\nsampling_unit                  :: String\ngpu_cat_features_storage       :: String\ndata_partition                 :: Union{Nothing, String}\nearly_stopping_rounds          :: Union{Nothing, Int64}\ngrow_policy                    :: String\nmin_data_in_leaf               :: Int64\nmax_leaves                     :: Int64\nleaf_estimation_backtracking   :: String\nfeature_weights                :: Union{Nothing, PythonCall.Py}\npenalties_coefficient          :: Float64\nmodel_shrink_rate              :: Union{Nothing, Float64}\nmodel_shrink_mode              :: String\nlangevin                       :: Bool\ndiffusion_temperature          :: Float64\nposterior_sampling             :: Bool\nboost_from_average             :: Union{Nothing, Bool}\ntext_processing                :: Union{Nothing, PythonCall.Py}\nSupertype Hierarchy\nCatBoostClassifier &lt;: Probabilistic &lt;: Supervised &lt;: Model &lt;: MLJType &lt;: Any\n\n \n \n \n\n\n\n\n5.2 fitting model ,predict test data\n\nmach = machine(catboost, Xtrain, ytrain)|&gt;fit!\n\n# #probs = predict(mach, Xtrain)\nyhat = predict_mode(mach, Xtest) \nshow(yhat)\n\n[ Info: Training machine(CatBoostClassifier(iterations = 5, …), …).\n\n\n[0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0]\n\n\n\n\n5.3 performance\n\naccuracy(yhat,ytest)\n\n0.782608695652174",
+    "crumbs": [
+      "1-Diabetes Catboost Classification"
     ]
   },
   {
@@ -1530,7 +1748,10 @@
     "href": "packages/index.html",
     "title": "Packages",
     "section": "",
-    "text": "List\n\nGLM.jl"
+    "text": "List\n\nGLM.jl",
+    "crumbs": [
+      "Packages"
+    ]
   },
   {
     "objectID": "start/index.html",

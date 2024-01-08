@@ -1,0 +1,76 @@
+---
+title: "1 Diabetes CatBoost Classification"
+---
+
+:::{.callout-note title="info"}
+ ref [gradient-boosting-decision-trees/](https://www.machinelearningplus.com/machine-learning
+/an-introduction-to-gradient-boosting-decision-trees/)
+:::
+
+## 1. load package
+```{julia}
+ import MLJ:transform,predict
+ using CSV,DataFrames,Tidier,Pipe
+ using CairoMakie,AlgebraOfGraphics,MakieThemes
+ using MLJ,MLJModelInterface,Random
+ #Makie.set_theme!(ggthemr(:flat))
+
+```
+
+## 2. load csv
+```{julia}
+
+df=CSV.File("../../data/diabetes.csv")|>DataFrame
+df=@chain  df  begin
+    @clean_names
+    coerce(_,:outcome=> Multiclass,
+             :glucose =>Continuous,
+             :blood_pressure=>Continuous,
+             :skin_thickness=>Continuous,
+             :insulin=>Continuous,  
+             :b_m_i =>Continuous                       
+    )
+end
+first(df,5)
+```
+
+## 3. schema of df 
+```{julia}
+schema(df)
+```
+
+## 4. split data 
+```{julia}
+y, X =  unpack(df, ==(:outcome), rng=123);
+#schema(X)
+(Xtrain, Xtest), (ytrain, ytest)  = partition((X, y), 0.7, multi=true,  rng=123)
+```
+
+
+## 5. catboost workflow
+### 5.1 load model
+
+```{julia}
+using CatBoost.MLJCatBoostInterface
+catboost = CatBoostClassifier(iterations=5,learning_rate=0.20,depth=6,loss_function="Logloss",);
+```
+```{julia}
+#| echo: false
+ include("../../components/off-canvas.jl")
+ show_doc_offcanvas("CatBoostClassifier",@doc(catboost))
+```
+
+### 5.2 fitting model ,predict test data
+```{julia}
+mach = machine(catboost, Xtrain, ytrain)|>fit!
+
+# #probs = predict(mach, Xtrain)
+yhat = predict_mode(mach, Xtest) 
+show(yhat)
+```
+
+### 5.3 performance
+```{julia}
+accuracy(yhat,ytest)
+
+```

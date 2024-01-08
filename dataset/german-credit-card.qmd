@@ -1,0 +1,178 @@
+---
+title: "German Credit Card Dataset"
+execute:
+  warning: false
+---
+
+:::{.callout-note title="info"}
+1. dataset1 :  [Analysis of German Credit Data](https://online.stat.psu.edu/stat857/node/215/)
+
+
+2. dataset2 : [Predicting Credit Risk - Model Pipeline](https://www.kaggle.com/code/kabure/predicting-credit-risk-model-pipeline)
+
+
+there are two dataset name german credit .dataset1 is original data,**but now we use dataset2**,
+here is why change to dataset2 : [Content](https://www.kaggleusercontent.com/kf/7037624/eyJhbGciOiJkaXIiLCJlbmMiOiJBMTI4Q0JDLUhTMjU2In0..x53MHBMn5_4SYrWRuRSDOA.bupB6bBbpNE_ph9oSpdRBRV36M4fCy0_JE5jT0e9eYVEkF-PuWUxl-aBYbpmS3G1CAieCv1BkYKv15c8IadpEtZMC_psOUIZlg0h7pSPFOo_ehGwmlrZ8TSoOyaJfEDqYAI6rEh-rhS-bVPnVo90xmBKrNpvyVCCg42vKTKvx6pt-RD_nBjkzRxGOutzZ3bnGHivsW_xVyl_9krialuwwrhg1zYyUEPfpOiK3EBKR4O05RpnEP-RyG7RCfc0rJEWf7C88lJSqMq9OyiZpp218MnlAnBnnk1vNLrxPF-QSwoPrNQUYaMtzhhNuaoFz5MMg7s3Zaf5yDZrCAL_OiBeDHYXEA_BnPLlpo6aZIWKtv1Dbo0xe59Gn5UeeH-4UYZ3_p2wrAXzCfEnT7IBX1OMzhqeriVmjqmySE5PW2FQfIjGjJ3JmwXsnC9y2bGSG4TPzCqZs_oQMDjqxWAz2fFazkrNgMd0pL-OgI0AYAygb18tXVliQWPiSNECZazi1_CDRP1PajztadfFAiLNZQkJ5hCNEotReNdAUptl28ntrdsnCM_fMJxlJnUbZ7PfStxXmT39ShleUKojLwR2iLPoDS69jhEPxEcBoCtJxWacCMEyEa5rMNZbxFVPzD9nU-6kjOOlxc75nwJC5krdgfUcQlSaDZFFIQ7QKdzeUB2IDQzh0K4Ct_GKz7_hksBJS72G.AydzCZ4cme34p0w0SrDoCQ/__results__.html?sharingControls=true)
+
+:::
+
+## 1. load package
+
+```{julia}
+ using CSV,DataFrames,Tidier,FreqTables,PrettyTables
+ using CairoMakie,AlgebraOfGraphics
+ using MLJ
+ 
+```
+
+## 2. load csv 
+```{julia}
+df=CSV.File("../data/german_credit_data.csv")|>DataFrame
+df=@chain df begin
+   #coerce(_, :creditability =>Multiclass)
+   @clean_names()
+   
+end
+first(df,5)
+```
+```{julia}
+#| echo: false
+ include("../components/off-canvas.jl")
+ show_doc_offcanvas("CatBoostClassifier",@doc(catboost))
+```
+
+```{julia}
+describe(df)
+```
+```{julia}
+schema(df)
+```
+
+
+
+## 3. EDA  
+
+### 3.1 saving_account_type
+```{julia}
+#| fig-align: "center"
+df31=@chain df @filter(saving_accounts !="NA")
+ax=(width=400, height=300)
+let
+  datalayer31=data(df31)
+  maplayer31=mapping(:saving_accounts,color=:risk,dodge=:risk)
+  vislayer31=visual(BarPlot, strokewidth=1,strokecolor=:black)
+  plt31=datalayer31*frequency()*maplayer31*vislayer31
+  draw(plt31,axis=ax)
+end
+```
+
+### 3.2  saving_account_type and job relation
+```{julia}
+#| fig-align: "center"
+let
+  datalayer32=data(df31)
+  maplayer32=mapping(:saving_accounts,:job,color=:risk,dodge=:saving_accounts,
+  side=:risk)
+  vislayer32=visual(Violin)
+  plt32=datalayer32*maplayer32*vislayer32
+  draw(plt32,axis=ax)
+end
+```
+
+### 3.3  saving_account_type and credit amount
+```{julia}
+#| fig-align: "center"
+let
+  datalayer33=data(df31)
+  maplayer33=mapping(:saving_accounts,:credit_amount,color=:risk,dodge=:risk)
+  vislayer33=visual(BoxPlot,show_notch=true)
+  plt33=datalayer33*maplayer33*vislayer33
+  draw(plt33,axis=ax)
+end
+```
+
+### 3.4 explore purpose of creditcard use 
+
+
+#### 3.4.1 purpose count
+```{julia}
+#| fig-align: "center"
+ 
+let
+  ax=(width=400, height=300,xticklabelrotation = pi/8)
+  datalayer34=data(df)
+  maplayer341=mapping(:purpose,color=:risk,dodge=:risk)
+  plt341=datalayer34*frequency()*maplayer341
+  draw(plt341,axis=ax)
+
+end
+```
+
+#### 3.4.2 purpose and age relation
+```{julia}
+#| fig-align: "center"
+ 
+let
+  ax=(width=400, height=200,xticklabelrotation = pi/8)
+  datalayer342=data(df)
+  maplayer342=mapping(:purpose,:age,color=:risk,dodge=:purpose,
+  side=:risk)
+  vislayer342=visual(Violin,datalimits=extrema)
+  plt342=datalayer342*maplayer342*vislayer342
+  draw(plt342,axis=ax)
+
+end
+```
+
+#### 3.4.3 purpose and credit amount
+```{julia}
+#| fig-align: "center"
+ 
+let
+  ax=(width=500, height=300,xticklabelrotation = pi/8)
+  datalayer343=data(df)
+  maplayer343=mapping(:purpose,:credit_amount,color=:risk,dodge=:risk)
+  vislayer343=visual(BoxPlot,show_notch=true)
+  plt343=datalayer343*maplayer343*vislayer343
+  draw(plt343,axis=ax)
+end
+
+```
+
+### 3.5 duration count
+```{julia}
+#| fig-align: "center"
+let
+ ax=(width=800, height=500,xticklabelrotation = pi/8)
+ datalayer=data(df)
+ maplayer=mapping(:duration,color=:risk,dodge=:risk)
+ vislayer=visual(BarPlot)
+ plt35=datalayer*maplayer*frequency()*vislayer
+ draw(plt35,axis=ax)
+end
+#show(df.duration)
+```
+
+### 3.6  duration density 
+```{julia}
+#| fig-align: "center"
+let
+ ax=(width=800, height=300,xticklabelrotation = pi/8)
+ datalayer=data(df)
+ maplayer=mapping(:duration,color=:risk)
+ vislayer=(visual(Hist,normalization=:pdf)+
+ visual(Density,strokewidth=1,strokecolor=:red))*visual(alpha=0.5)
+ plt=datalayer*maplayer*vislayer
+ draw(plt,axis=ax)
+end
+
+```
+
+### 3.7  purpose and sex  freqtable
+```{julia}
+  tbl = freqtable(df,:purpose,:sex)
+
+```
+
+
+

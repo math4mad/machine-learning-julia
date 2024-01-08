@@ -1,0 +1,65 @@
+---
+title: "2-Mnist Classification"
+---
+
+
+
+## 1. load package
+```{julia}
+ using CSV,DataFrames,Tidier,Pipe
+ using CairoMakie,AlgebraOfGraphics,MakieThemes
+ using MLJ,MLJModelInterface,Random
+ import MLJ:transform,predict
+ #Makie.set_theme!(ggthemr(:flat))
+
+```
+
+## 2. load csv
+```{julia}
+
+df=CSV.File("../../data/mnist_train.csv")|>DataFrame
+df=coerce(df,:label=>Multiclass)
+first(df,5)
+```
+
+## 3. describe df
+```{julia}
+describe(df)
+```
+
+## 4. split data
+```{julia}
+y, X= unpack(df, ==(:label), rng=123);
+cat=y|>levels
+(Xtrain, Xtest), (ytrain, ytest)  = partition((X, y), 0.2, multi=true,shuffle=true)
+```
+
+## 5. pca workflow
+### 5.1 load model
+```{julia}
+PCA = @load PCA pkg=MultivariateStats;
+model=PCA(maxoutdim=3);
+```
+```{julia}
+#| echo: false
+ include("../../components/off-canvas.jl")
+ show_doc_offcanvas("PCA doc",@doc(PCA))
+
+```
+
+### 5.2 fitting model
+```{julia}
+mach = machine(model, Xtrain) |> fit!
+Xtr =transform(mach, Xtrain)
+```
+
+## 6. plot pca results
+```{julia}
+table=(x1=Xtr.x1,x2=Xtr.x2,x3=Xtr.x3,labels=ytrain)
+datalayer=data(table)
+maplayer=mapping(:x1,:x2,color=:labels)
+vislayer=visual(Scatter,markersize=8,strokewidth=1,strokecolor=:black)
+plt=datalayer*maplayer*vislayer*visual(alpha=0.5)
+draw(plt)
+```
+

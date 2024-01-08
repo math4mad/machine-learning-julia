@@ -2,4 +2,17 @@
 title: "GLM.jl"
 ---
 
-### GLM.jl
+## GLM.jl
+
+```{=html}
+<div class="alert alert-success rounded-3" role="success">
+    <h3>GLM.jl is the main package of Regression model in MLJ</h3>
+</div>
+```
+
+```{=html}
+<iframe width="780" height="780" src="https://juliastats.org/GLM.jl/stable/examples/#Linear-regression" title="GLM.jl Documentation"></iframe>
+```
+
+
+

@@ -1,1 +1,60 @@
 # Ensemble model
+
+```{julia}
+using HypertextLiteral
+using MLJ 
+LinearRegressor = @load LinearRegressor pkg=MLJLinearModels
+str=@doc(LinearRegressor);
+
+```
+
+```{julia}
+#| echo: false
+function off_canvas(str)
+@htl("""
+  <script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+  </script>
+  <button class="btn btn-info rounded-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Gaussian Mixture Model Regression doc  </button>
+  <div class="offcanvas offcanvas-end " tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+ <div class="offcanvas-header">
+ <h5 id="offcanvasRightLabel">GMR</h5>
+ <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+ </div>
+  <div class="offcanvas-body">
+  $(str)
+</div>
+ </div>
+""")
+
+end;
+off_canvas(str)
+```
+
+
+## tailwind and daisyui 
+```{julia}
+#| echo: false
+@htl("""
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2/dist/tailwind.min.css" rel="stylesheet" type="text/css"/>
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@1.24.3/dist/full.css" rel="stylesheet" type="text/css" />
+""")
+
+```
+
+```{julia}
+#| echo: false
+@htl("""<div class="badge">neutral</div> 
+	<div class="badge badge-primary">primary</div> 
+	<div class="badge badge-secondary">secondary</div> 
+	<div class="badge badge-accent">accent</div> 
+	<div class="badge badge-ghost">ghost</div>""")
+```
+
+```{julia}
+#| echo: false
+ @htl("""
+  <div class="badge badge-primary">在这里拷贝样式模板</div> 
+  <a class="link link-primary" href="https://daisyui.com/">组件样式在这里有介绍</a>
+""")
+```

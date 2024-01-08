@@ -1,0 +1,93 @@
+---
+title: "Clustering Data Set"
+execute:
+  warning: false
+---
+
+:::{.callout-note title="info"}
+
+ref: [Clustering Exercises](https://www.kaggle.com/datasets/joonasyoon/clustering-exercises)
+include lots of csv files
+:::
+
+## 1. load package
+
+```{julia}
+ #| eval: false
+ using CSV,DataFrames,Tidier,FreqTables,PrettyTables
+ using CairoMakie,AlgebraOfGraphics
+ using MLJ
+ 
+```
+
+## 2. load csv
+
+```{julia}
+#| eval: false
+const path = "../data/clustering-datasets/"
+dfArr = DataFrame[] # store dataframe by files
+nameArr = String[]  # csv file names
+```
+
+```{julia}
+#| eval: false
+for (root, dirs, files) in walkdir(path)
+    for file in files
+        name,suffix = split(file, ".")
+        if suffix == "csv"
+            res = CSV.File(joinpath(path, file)) |> DataFrame
+            res.name=fill(name,nrow(res))
+            push!(dfArr, res)
+            #push!(nameArr, name)
+        else
+            continue
+        end
+    end
+end
+
+total_df=reduce(vcat,[dfArr...],cols=:union)
+size(total_df)
+```
+
+
+## 3. plot  
+<!-- ```{julia}
+     ax=(width=1200,height=1200)
+     datalayer=data(total_df)
+     maplayer=mapping(:x,:y,color=:color,layout=:name)
+     vislayer=visual(Scatter,strokewidth=1,strokecolor=:black)
+     plt=datalayer*maplayer*vislayer
+     draw(plt,axis=ax)
+``` -->
+
+
+   <!-- datalayer=data(dfArr[1])
+    maplayer=mapping(:x,:y,color=:color)
+    vislayer=visual(Scatter,strokewidth=1,strokecolor=:black)
+    plt=datalayer*maplayer*vislayer
+    draw(plt) -->
+```{julia}
+#| eval: false
+    function group_data(df)
+    gdf = groupby(df, :color)
+    label_size = length(keys(gdf))
+    return gdf, label_size
+    end
+    function plot_examples()
+    fig = Figure(resolution=(1200, 1100))
+    for idx in eachindex(dfArr)
+        row,col=fldmod1(idx,6)
+        gdf, label_size = group_data(dfArr[idx])
+            ax = Axis(fig[row, col], title=nameArr[idx])
+            for k in 1:label_size
+                scatter!(ax, gdf[k][:, :x], gdf[k][:, :y])
+                #hidespines!(ax)
+                hidedecorations!(ax)
+            end
+    end
+    fig
+end
+plot_examples()
+```
+
+![clustering-datasets plots](../data/clustering-datasets/clustering-example.png)

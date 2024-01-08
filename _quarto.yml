@@ -63,7 +63,9 @@ website:
     - id: packages
       collapse-level: 1
       contents:
-        - text: "GLM"
+        - text: "Julia Machine Learning Package Intro"
+        - href: packages/index.qmd
+        - text: "GLM.jl homepage"
           href: packages/glm.qmd 
     - id: workflow
       collapse-level: 1
@@ -97,6 +99,11 @@ website:
       contents:  
         - text: "Classfication Intro"
           href:  learn/Classfication/index.qmd 
+        - text: "1-Diabetes Catboost Classification"
+          href: learn/Classfication/1-diabetes-catboost-classification.qmd
+        - text: "2-mnist-classification.qmd"
+          href:  learn/Classfication/2-mnist-classification.qmd
+        
     - id: clustering
       collapse-level: 1
       contents:  
@@ -155,8 +162,12 @@ website:
           href: dataset/circket-chirps.qmd 
         - text: "11.Florida Lakes Dataset"
           href: dataset/florida-lakes.qmd
-        - text: "12 Ecommerce Customer dataset"
+        - text: "12.Ecommerce Customer dataset"
           href: dataset/ecommerce-customer-dataset.qmd
+        - text: "13. German Credit Card dataset"
+          href: dataset/german-credit-card.qmd
+        - text: "14 clustering datset(kaggle)"
+          href: dataset/clustering-dataset.qmd
       
         
     
@@ -170,7 +181,7 @@ format:
     mermaid:
       theme: forest
     code-block-bg: true
-    code-block-border-left: "#31BAE9"
+    code-block-border-left: "#ff0000"
      
 theme:
   - cosmo

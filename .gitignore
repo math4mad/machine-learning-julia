@@ -7,3 +7,5 @@
 /_site/
 /_freeze/
 Icon?
+mnist_train.csv
+/data/clustering-datasets/

@@ -26,6 +26,7 @@ title: "1 NIR Spectra of Milk"
 df=CSV.File("../../data/nir-spectra-milk.csv")|>DataFrame
 df=@chain  df  begin
     @clean_names
+    
 end
 first(df,5)
 ```

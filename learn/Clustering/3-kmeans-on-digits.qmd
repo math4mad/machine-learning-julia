@@ -1,0 +1,99 @@
+---
+title: "3 Kmeans clustering on Digits"
+---
+
+:::{.callout-note title="info"}
+ 1. ref : [ref](1 source :scikit-learn-docs/auto_examples/cluster/plot_kmeans_digits.html#sphx-glr-auto-examples-cluster-plot-kmeans-digits-py) 
+ 2. data: load-scikit-digits.jl ->csv  
+:::
+
+## 1. load package
+```{julia}
+import MLJ: fit!, predict, transform,fitted_params
+using CSV, DataFrames, GLMakie, Random,Tidier
+using MLJ
+Random.seed!(34343)
+ #Makie.set_theme!(ggthemr(:flat))
+```
+
+## 2. load csv
+```{julia}
+df=CSV.File("../../data/scikit_digits.csv")|>DataFrame
+df=@chain  df  begin
+    @clean_names
+    coerce(_, :target => Multiclass)
+end;
+first(df,5)
+```
+
+## 3. describe df 
+```{julia}
+schema(df)
+```
+
+## 4. split data
+```{julia}
+ytrain, Xtrain = unpack(df, ==(:target); rng = 123);
+```
+
+## 5. MLJ workflow
+### 5.1 load model
+```{julia}
+PCA = @load PCA pkg = MultivariateStats
+KMeans = @load KMeans pkg = Clustering
+
+pca_model = PCA(; maxoutdim = 2)
+kmeans_model = KMeans(; k =9)
+```
+
+### 5.2 fitting and transform data  in pca
+traning data then project data to pca space
+```{julia}
+pca_mach = machine(pca_model, Xtrain) |> fit!
+Xproj = transform(pca_mach, Xtrain)
+```
+
+### 5.3   make test data 
+we project real data to 2-d space ,
+so we get :x1,:x2, extreme to  make test 
+data 
+```{julia}
+function boundary_data(df,;n=200)
+    n1=n2=n
+    xlow,xhigh=extrema(df[:,:x1])
+    ylow,yhigh=extrema(df[:,:x2])
+    tx = range(xlow,xhigh; length=n1)
+    ty = range(ylow,yhigh; length=n2)
+    x_test = mapreduce(collect, hcat, Iterators.product(tx, ty));
+    xtest=MLJ.table(x_test')
+    return tx,ty, xtest
+end
+tx,ty, Xtest=boundary_data(Xproj)
+```
+
+### 5.4 kmeans model fitting and predict 
+```{julia}
+kmeans_mach= machine(kmeans_model, Xproj) |> fit!
+ ypred= predict(kmeans_mach, Xtest)|>Array|>d->reshape(d,200,200)
+ cat=ypred|>Array|>levels
+
+ cen=fitted_params(kmeans_mach)
+
+```
+
+## 6. plot results
+```{julia}
+#|fig-align: "center"
+function plot_model()
+    fig = Figure(resolution=(400,400))
+    ax = Axis(fig[1, 1],title="digits pca kmeans",subtitle="pca->clustering")
+    contourf!(ax, tx,ty,ypred)
+    scatter!(ax,eachcol(Xproj)...;markersize =6,color=(:lightgreen,0.1),strokecolor = :black, strokewidth =1)
+    scatter!(ax,eachrow(cen.centers)...;marker=:xcross,markersize = 24,color=(:red,0.8))
+    fig
+
+end
+plot_model()
+
+
+```

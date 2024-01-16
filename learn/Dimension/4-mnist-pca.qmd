@@ -1,0 +1,57 @@
+---
+title: "4 mnist data  pca"
+---
+
+
+## 1. load package
+```{julia}
+ import MLJ:transform,predict
+ using CSV,DataFrames,Tidier,Pipe
+ using CairoMakie,AlgebraOfGraphics,MakieThemes
+ using MLJ,MLJModelInterface,Random
+ #Makie.set_theme!(ggthemr(:flat))
+```
+
+## 2. load data
+```{julia}
+df=CSV.File("../../data/mnist_train.csv")|>DataFrame
+df=@chain df begin
+   @clean_names
+   coerce(_,:label=>Multiclass)
+end
+first(df,5)
+```
+
+## 3. split data
+```{julia}
+ytrain, Xtrain=  unpack(df, ==(:label), rng=123);
+```
+
+## 4. pca workflow
+### 4.1 load data, fitting model
+```{julia}
+PCA = @load PCA pkg=MultivariateStats
+
+maxdim=50
+model=PCA(maxoutdim=maxdim)
+mach = machine(model, Xtrain) |> fit!
+Ytr =transform(mach, Xtrain)
+
+```
+
+### 4.2 plot results
+```{julia}
+plot_data=hcat(Ytr,DataFrames.select(df,:label))
+fig=Figure(resolution=(600,300))
+ax1=Axis(fig[1,1])
+ax2=Axis3(fig[1,2])
+datalayer=data(plot_data)
+maplayer2d=mapping(:x1,:x2,color=:label)
+maplayer3d=mapping(:x1,:x2,:x3,color=:label)
+vislayer=visual(Scatter, strokewidth=0.5,strokecolor=:black,markersize=6)
+plt1=datalayer*maplayer2d*vislayer*visual(alpha = 0.5)
+plt2=datalayer*maplayer3d*vislayer*visual(alpha = 0.5)
+draw!(ax1,plt1)
+draw!(ax2,plt2)
+fig
+```

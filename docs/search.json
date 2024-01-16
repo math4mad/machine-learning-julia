@@ -395,6 +395,76 @@
     ]
   },
   {
+    "objectID": "learn/Dimension/5-texture-pca.html",
+    "href": "learn/Dimension/5-texture-pca.html",
+    "title": "5 texture data pca",
+    "section": "",
+    "text": "info\n\n\n\ndataset ref: data",
+    "crumbs": [
+      "5. texture  PCA "
+    ]
+  },
+  {
+    "objectID": "learn/Dimension/5-texture-pca.html#load-package",
+    "href": "learn/Dimension/5-texture-pca.html#load-package",
+    "title": "5 texture data pca",
+    "section": "1. load package",
+    "text": "1. load package\n\n import MLJ:transform,predict\n using CSV,DataFrames,Tidier,Pipe\n using CairoMakie,AlgebraOfGraphics,MakieThemes\n using MLJ,MLJModelInterface,Random\n #Makie.set_theme!(ggthemr(:flat))",
+    "crumbs": [
+      "5. texture  PCA "
+    ]
+  },
+  {
+    "objectID": "learn/Dimension/5-texture-pca.html#load-csv",
+    "href": "learn/Dimension/5-texture-pca.html#load-csv",
+    "title": "5 texture data pca",
+    "section": "2. load csv",
+    "text": "2. load csv\n\ndf=CSV.File(\"../../data/Texture.csv\")|&gt;DataFrame\ndf=@chain df begin\n   @clean_names \n   coerce(_,:a41=&gt; Multiclass)\nend\n\n\nfirst(df,5)\n\n5×41 DataFrame\n\n\n\nRow\na1\na2\na3\na4\na5\na6\na7\na8\na9\na10\na11\na12\na13\na14\na15\na16\na17\na18\na19\na20\na21\na22\na23\na24\na25\na26\na27\na28\na29\na30\na31\na32\na33\na34\na35\na36\na37\na38\na39\na40\na41\n\n\n\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nCat…\n\n\n\n\n1\n-1.223\n-0.798\n-0.867\n-0.639\n-0.545\n-0.412\n-0.795\n-0.629\n-0.547\n-0.868\n-1.223\n-0.879\n-0.747\n-0.818\n-0.671\n-0.718\n-0.991\n-0.778\n-0.759\n-0.892\n-1.223\n-0.899\n-0.987\n-0.75\n-0.699\n-0.566\n-0.911\n-0.786\n-0.7\n-1.015\n-1.223\n-0.766\n-0.555\n-0.714\n-0.545\n-0.587\n-0.871\n-0.62\n-0.568\n-0.607\n2\n\n\n2\n-1.41\n-1.029\n-1.013\n-0.895\n-0.762\n-0.676\n-1.043\n-0.851\n-0.775\n-1.037\n-1.41\n-1.083\n-0.894\n-1.015\n-0.825\n-0.829\n-1.172\n-0.941\n-0.891\n-1.01\n-1.41\n-1.081\n-1.094\n-0.932\n-0.808\n-0.681\n-1.071\n-0.899\n-0.812\n-1.074\n-1.41\n-0.919\n-0.77\n-0.847\n-0.663\n-0.723\n-1.013\n-0.748\n-0.698\n-0.817\n2\n\n\n3\n-1.107\n-0.649\n-0.629\n-0.492\n-0.367\n-0.298\n-0.682\n-0.478\n-0.395\n-0.681\n-1.107\n-0.718\n-0.533\n-0.671\n-0.496\n-0.533\n-0.849\n-0.603\n-0.575\n-0.673\n-1.107\n-0.839\n-0.853\n-0.7\n-0.596\n-0.443\n-0.829\n-0.68\n-0.595\n-0.87\n-1.107\n-0.692\n-0.445\n-0.588\n-0.371\n-0.368\n-0.746\n-0.457\n-0.379\n-0.469\n2\n\n\n4\n-1.27\n-0.855\n-0.958\n-0.707\n-0.619\n-0.469\n-0.872\n-0.705\n-0.62\n-0.988\n-1.27\n-0.909\n-0.83\n-0.853\n-0.716\n-0.75\n-1.018\n-0.806\n-0.778\n-0.92\n-1.27\n-1.019\n-1.035\n-0.917\n-0.813\n-0.721\n-1.027\n-0.877\n-0.822\n-1.039\n-1.27\n-0.829\n-0.719\n-0.774\n-0.617\n-0.688\n-0.937\n-0.693\n-0.657\n-0.779\n2\n\n\n5\n-1.331\n-0.862\n-0.761\n-0.689\n-0.498\n-0.361\n-0.857\n-0.6\n-0.496\n-0.779\n-1.331\n-0.914\n-0.712\n-0.845\n-0.652\n-0.662\n-1.003\n-0.74\n-0.686\n-0.78\n-1.331\n-1.016\n-0.992\n-0.874\n-0.738\n-0.63\n-1.018\n-0.825\n-0.767\n-1.02\n-1.331\n-0.861\n-0.571\n-0.784\n-0.545\n-0.562\n-0.952\n-0.642\n-0.578\n-0.648\n2",
+    "crumbs": [
+      "5. texture  PCA "
+    ]
+  },
+  {
+    "objectID": "learn/Dimension/5-texture-pca.html#describe-df",
+    "href": "learn/Dimension/5-texture-pca.html#describe-df",
+    "title": "5 texture data pca",
+    "section": "3. describe df",
+    "text": "3. describe df\n\nschema(df)\n\n\n┌───────┬────────────┬─────────┐\n│ names │ scitypes   │ types   │\n├───────┼────────────┼─────────┤\n│ a1    │ Continuous │ Float64 │\n│ a2    │ Continuous │ Float64 │\n│ a3    │ Continuous │ Float64 │\n│ a4    │ Continuous │ Float64 │\n│ a5    │ Continuous │ Float64 │\n│ a6    │ Continuous │ Float64 │\n│ a7    │ Continuous │ Float64 │\n│ a8    │ Continuous │ Float64 │\n│ a9    │ Continuous │ Float64 │\n│ a10   │ Continuous │ Float64 │\n│ a11   │ Continuous │ Float64 │\n│ a12   │ Continuous │ Float64 │\n│ a13   │ Continuous │ Float64 │\n│ a14   │ Continuous │ Float64 │\n│ a15   │ Continuous │ Float64 │\n│ a16   │ Continuous │ Float64 │\n│ a17   │ Continuous │ Float64 │\n│ a18   │ Continuous │ Float64 │\n│ a19   │ Continuous │ Float64 │\n│ a20   │ Continuous │ Float64 │\n│ a21   │ Continuous │ Float64 │\n│ a22   │ Continuous │ Float64 │\n│   ⋮   │     ⋮      │    ⋮    │\n└───────┴────────────┴─────────┘\n                 19 rows omitted",
+    "crumbs": [
+      "5. texture  PCA "
+    ]
+  },
+  {
+    "objectID": "learn/Dimension/5-texture-pca.html#split-data",
+    "href": "learn/Dimension/5-texture-pca.html#split-data",
+    "title": "5 texture data pca",
+    "section": "4. split data",
+    "text": "4. split data\n\nytrain, Xtrain =  unpack(df, ==(:a41), rng=123);\nrows,cols=size(Xtrain)\n\n(5500, 40)",
+    "crumbs": [
+      "5. texture  PCA "
+    ]
+  },
+  {
+    "objectID": "learn/Dimension/5-texture-pca.html#mlj-pca-workflow",
+    "href": "learn/Dimension/5-texture-pca.html#mlj-pca-workflow",
+    "title": "5 texture data pca",
+    "section": "5. MLJ PCA workflow",
+    "text": "5. MLJ PCA workflow\n\n5.1 load model\nget mutliple dimension reduction storage in res_arr\n\nPCA = @load PCA pkg=MultivariateStats\nres_arr=[]\n\nimport MLJMultivariateStatsInterface ✔\n\n\n[ Info: For silent loading, specify `verbosity=0`. \n\n\nAny[]\n\n\n\n\n5.2 fitting model\nreduce to 2-d data\n\nmodel=PCA(maxoutdim=2)\nmach = machine(model, Xtrain) |&gt; fit!\nYtr =transform(mach, Xtrain)\n#cat=levels(ytrain)|&gt;unique\n#cats=select(df,:a41)\n\n[ Info: Training machine(PCA(maxoutdim = 2, …), …).\n\n\n5500×2 DataFrame5475 rows omitted\n\n\n\nRow\nx1\nx2\n\n\n\nFloat64\nFloat64\n\n\n\n\n1\n-1.25642\n-0.308682\n\n\n2\n-0.740266\n-0.397532\n\n\n3\n1.75078\n0.169165\n\n\n4\n-0.622888\n0.375062\n\n\n5\n-0.636353\n-0.484824\n\n\n6\n0.890232\n0.0337364\n\n\n7\n-0.47026\n0.532758\n\n\n8\n0.67807\n-0.131215\n\n\n9\n-0.899491\n-0.910433\n\n\n10\n0.401573\n-0.101068\n\n\n11\n-1.1246\n-0.198562\n\n\n12\n-1.8657\n-0.12294\n\n\n13\n1.01029\n-0.307558\n\n\n⋮\n⋮\n⋮\n\n\n5489\n-0.598308\n-0.508119\n\n\n5490\n0.84949\n0.128737\n\n\n5491\n0.756821\n-0.076106\n\n\n5492\n2.24622\n0.23815\n\n\n5493\n-2.72006\n0.519569\n\n\n5494\n-0.420476\n-0.991829\n\n\n5495\n-0.934581\n0.183474\n\n\n5496\n-1.53643\n0.408634\n\n\n5497\n-0.175742\n-0.88779\n\n\n5498\n1.72544\n0.254954\n\n\n5499\n1.61296\n0.345779\n\n\n5500\n0.50651\n0.211842\n\n\n\n\n\n\n\n\n5.3 plot results\n\nlet\n    ax=(width=400, height=300)\n    table=DataFrame(x1=Ytr.x1,x2=Ytr.x2,cat=df.a41)\n    datalayer=data(table)\n    maplayer=mapping(:x1,:x2,color=:cat)\n    vislayer=visual(Scatter, strokecolor=:black, strokewidth=0.5)\n    plt=datalayer*maplayer*vislayer\n    draw(plt,axis=ax)\nend",
+    "crumbs": [
+      "5. texture  PCA "
+    ]
+  },
+  {
+    "objectID": "learn/Dimension/5-texture-pca.html#project-to-serval-dimension",
+    "href": "learn/Dimension/5-texture-pca.html#project-to-serval-dimension",
+    "title": "5 texture data pca",
+    "section": "6. project to serval dimension",
+    "text": "6. project to serval dimension\nusing pca=&gt;lda workflow\n\n6.1 split data,load model\n\n(Xtrain, Xtest), (ytrain, ytest)  = partition((Xtrain, ytrain), 0.7, multi=true,  rng=123)\nLDA = @load LDA pkg=MultivariateStats\nPCA = @load PCA pkg=MultivariateStats\n\nimport MLJMultivariateStatsInterface ✔\nimport MLJMultivariateStatsInterface ✔\n\n\n[ Info: For silent loading, specify `verbosity=0`. \n[ Info: For silent loading, specify `verbosity=0`. \n\n\nMLJMultivariateStatsInterface.PCA\n\n\n\n\n6.2 fitting model\n\nfunction different_pca_components(;n=3)\n    acc_arr=[]\n    for i in 1:n\n        model1=PCA(maxoutdim=i)\n        model2 = LDA()\n        mach1 = machine(model1, Xtrain) |&gt; fit!\n        Ytr =transform(mach1, Xtrain)\n        mach2 = machine(model2, Ytr, ytrain)|&gt;fit!\n        Yte=transform(mach1, Xtest)\n        yhat = predict_mode(mach2, Yte)\n        res=accuracy(yhat,ytest)\n        push!(acc_arr,res)\n    end\n    return acc_arr\nend\nacc_arr=different_pca_components(;n=15)\n\n[ Info: Training machine(PCA(maxoutdim = 1, …), …).\n[ Info: Training machine(LDA(method = gevd, …), …).\n[ Info: Training machine(PCA(maxoutdim = 2, …), …).\n[ Info: Training machine(LDA(method = gevd, …), …).\n[ Info: Training machine(PCA(maxoutdim = 3, …), …).\n[ Info: Training machine(LDA(method = gevd, …), …).\n[ Info: Training machine(PCA(maxoutdim = 4, …), …).\n[ Info: Training machine(LDA(method = gevd, …), …).\n[ Info: Training machine(PCA(maxoutdim = 5, …), …).\n[ Info: Training machine(LDA(method = gevd, …), …).\n[ Info: Training machine(PCA(maxoutdim = 6, …), …).\n[ Info: Training machine(LDA(method = gevd, …), …).\n[ Info: Training machine(PCA(maxoutdim = 7, …), …).\n[ Info: Training machine(LDA(method = gevd, …), …).\n[ Info: Training machine(PCA(maxoutdim = 8, …), …).\n[ Info: Training machine(LDA(method = gevd, …), …).\n[ Info: Training machine(PCA(maxoutdim = 9, …), …).\n[ Info: Training machine(LDA(method = gevd, …), …).\n[ Info: Training machine(PCA(maxoutdim = 10, …), …).\n[ Info: Training machine(LDA(method = gevd, …), …).\n[ Info: Training machine(PCA(maxoutdim = 11, …), …).\n[ Info: Training machine(LDA(method = gevd, …), …).\n[ Info: Training machine(PCA(maxoutdim = 12, …), …).\n[ Info: Training machine(LDA(method = gevd, …), …).\n[ Info: Training machine(PCA(maxoutdim = 13, …), …).\n[ Info: Training machine(LDA(method = gevd, …), …).\n[ Info: Training machine(PCA(maxoutdim = 14, …), …).\n[ Info: Training machine(LDA(method = gevd, …), …).\n[ Info: Training machine(PCA(maxoutdim = 15, …), …).\n[ Info: Training machine(LDA(method = gevd, …), …).\n\n\n15-element Vector{Any}:\n 0.3575757575757576\n 0.5787878787878787\n 0.673939393939394\n 0.8375757575757575\n 0.9212121212121213\n 0.9436363636363636\n 0.9551515151515152\n 0.9636363636363636\n 0.9636363636363636\n 0.9636363636363636\n 0.9636363636363636\n 0.9636363636363636\n 0.9636363636363636\n 0.9636363636363636\n 0.9636363636363636\n\n\n\n\n6.3 plot results\n\nfunction plot_accuracy(acc_arr)\n    len=length(acc_arr)\n    fig=Figure()\n    ax=Axis(fig[1,1],xlabel=\"pcs\",ylabel=\"accuracy\",title=\"LDA accruacy with n primary components\")\n    xs=1:len\n    acc_arr=round.(acc_arr,digits=3)\n    scatterlines!(ax,xs,acc_arr,markercolor = (:red,0.5))\n    fig\n    #save(\"16-texture-PCA-LDA.png\",fig)\nend\n\nplot_accuracy(acc_arr)",
+    "crumbs": [
+      "5. texture  PCA "
+    ]
+  },
+  {
     "objectID": "learn/Dimension/3-iris-pca.html",
     "href": "learn/Dimension/3-iris-pca.html",
     "title": "3 IRIS PCA",
@@ -475,73 +545,73 @@
     ]
   },
   {
-    "objectID": "learn/Clustering/1-iris-pca-kmeans.html",
-    "href": "learn/Clustering/1-iris-pca-kmeans.html",
-    "title": "1 IRIS PCA-Kmeans clustering",
+    "objectID": "learn/Clustering/2-iris-kernelpca-kmeans.html",
+    "href": "learn/Clustering/2-iris-kernelpca-kmeans.html",
+    "title": "2 IRIS KernnelPCA-Kmeans clustering",
     "section": "",
-    "text": "using CSV,DataFrames,Tidier,Pipe\n using CairoMakie,AlgebraOfGraphics,MakieThemes\n using MLJ,MLJModelInterface,Random\n import MLJ:transform,predict\n #Makie.set_theme!(ggthemr(:flat))",
+    "text": "info\n\n\n\nusing kernel methods mapping dataset to feature space",
     "crumbs": [
-      "1-IRIS PCA-Kmeans clustering"
+      "2-IRIS KernelPCA-Kmeans clustering"
     ]
   },
   {
-    "objectID": "learn/Clustering/1-iris-pca-kmeans.html#load-package",
-    "href": "learn/Clustering/1-iris-pca-kmeans.html#load-package",
-    "title": "1 IRIS PCA-Kmeans clustering",
-    "section": "",
-    "text": "using CSV,DataFrames,Tidier,Pipe\n using CairoMakie,AlgebraOfGraphics,MakieThemes\n using MLJ,MLJModelInterface,Random\n import MLJ:transform,predict\n #Makie.set_theme!(ggthemr(:flat))",
+    "objectID": "learn/Clustering/2-iris-kernelpca-kmeans.html#load-package",
+    "href": "learn/Clustering/2-iris-kernelpca-kmeans.html#load-package",
+    "title": "2 IRIS KernnelPCA-Kmeans clustering",
+    "section": "1. load package",
+    "text": "1. load package\n\n using CSV,DataFrames,Tidier,Pipe\n using CairoMakie,AlgebraOfGraphics,MakieThemes\n using MLJ,MLJModelInterface,Random\n import MLJ:transform,predict\n using LinearAlgebra\n #Makie.set_theme!(ggthemr(:flat))",
     "crumbs": [
-      "1-IRIS PCA-Kmeans clustering"
+      "2-IRIS KernelPCA-Kmeans clustering"
     ]
   },
   {
-    "objectID": "learn/Clustering/1-iris-pca-kmeans.html#load-csv",
-    "href": "learn/Clustering/1-iris-pca-kmeans.html#load-csv",
-    "title": "1 IRIS PCA-Kmeans clustering",
+    "objectID": "learn/Clustering/2-iris-kernelpca-kmeans.html#load-csv",
+    "href": "learn/Clustering/2-iris-kernelpca-kmeans.html#load-csv",
+    "title": "2 IRIS KernnelPCA-Kmeans clustering",
     "section": "2. load csv",
-    "text": "2. load csv\n\ndf=CSV.File(\"../../data/iris.csv\")|&gt;DataFrame\ndf=@chain  df  begin\n    @clean_names\nend\nfirst(df,5)\n\n5×5 DataFrame\n\n\n\nRow\nsepal_length\nsepal_width\npetal_length\npetal_width\nspecies\n\n\n\nFloat64\nFloat64\nFloat64\nFloat64\nString15\n\n\n\n\n1\n5.1\n3.5\n1.4\n0.2\nsetosa\n\n\n2\n4.9\n3.0\n1.4\n0.2\nsetosa\n\n\n3\n4.7\n3.2\n1.3\n0.2\nsetosa\n\n\n4\n4.6\n3.1\n1.5\n0.2\nsetosa\n\n\n5\n5.0\n3.6\n1.4\n0.2\nsetosa",
+    "text": "2. load csv\n\ndf=CSV.File(\"../../data/iris.csv\")|&gt;DataFrame\ndf=@chain  df  begin\n    @clean_names\nend;",
     "crumbs": [
-      "1-IRIS PCA-Kmeans clustering"
+      "2-IRIS KernelPCA-Kmeans clustering"
     ]
   },
   {
-    "objectID": "learn/Clustering/1-iris-pca-kmeans.html#describe-df",
-    "href": "learn/Clustering/1-iris-pca-kmeans.html#describe-df",
-    "title": "1 IRIS PCA-Kmeans clustering",
-    "section": "3. describe df",
-    "text": "3. describe df\n\ndescribe(df)\n\n5×7 DataFrame\n\n\n\nRow\nvariable\nmean\nmin\nmedian\nmax\nnmissing\neltype\n\n\n\nSymbol\nUnion…\nAny\nUnion…\nAny\nInt64\nDataType\n\n\n\n\n1\nsepal_length\n5.84333\n4.3\n5.8\n7.9\n0\nFloat64\n\n\n2\nsepal_width\n3.054\n2.0\n3.0\n4.4\n0\nFloat64\n\n\n3\npetal_length\n3.75867\n1.0\n4.35\n6.9\n0\nFloat64\n\n\n4\npetal_width\n1.19867\n0.1\n1.3\n2.5\n0\nFloat64\n\n\n5\nspecies\n\nsetosa\n\nvirginica\n0\nString15",
+    "objectID": "learn/Clustering/2-iris-kernelpca-kmeans.html#data-processing",
+    "href": "learn/Clustering/2-iris-kernelpca-kmeans.html#data-processing",
+    "title": "2 IRIS KernnelPCA-Kmeans clustering",
+    "section": "3. data processing",
+    "text": "3. data processing\n\n    coerce!(df,:labels=&gt;Multiclass)\n    ytrain, Xtrain=  unpack(df, ==(:species), rng=123)\n    cat=levels(ytrain)\n    rows,cols=size(Xtrain)\n\n(150, 4)",
     "crumbs": [
-      "1-IRIS PCA-Kmeans clustering"
+      "2-IRIS KernelPCA-Kmeans clustering"
     ]
   },
   {
-    "objectID": "learn/Clustering/1-iris-pca-kmeans.html#data-processing",
-    "href": "learn/Clustering/1-iris-pca-kmeans.html#data-processing",
-    "title": "1 IRIS PCA-Kmeans clustering",
-    "section": "4. data processing",
-    "text": "4. data processing\n\n    coerce!(df,:labels=&gt;Multiclass)\n    ytrain, Xtrain=  unpack(df, ==(:species), rng=123)\n    cat=levels(ytrain)\n    rows,cols=size(Xtrain)\n\n(150, 4)",
+    "objectID": "learn/Clustering/2-iris-kernelpca-kmeans.html#mlj-workflow",
+    "href": "learn/Clustering/2-iris-kernelpca-kmeans.html#mlj-workflow",
+    "title": "2 IRIS KernnelPCA-Kmeans clustering",
+    "section": "4. MLJ workflow",
+    "text": "4. MLJ workflow\n\n4.1 load model\nusing KernelPCA from MultivariateStats.jl package\n\nKernelPCA doc \n\n\n\n\nKernelPCA\n\n\n\n\n\n\n@doc(KernelPCA)\n\nKernelPCA\nA model type for constructing a kernel prinicipal component analysis model, based on unknown.jl, and implementing the MLJ model interface.\nFrom MLJ, the type can be imported using\nKernelPCA = @load KernelPCA pkg=unknown\nDo model = KernelPCA() to construct an instance with default hyper-parameters. Provide keyword arguments to override hyper-parameter defaults, as in KernelPCA(maxoutdim=...).\nIn kernel PCA the linear operations of ordinary principal component analysis are performed in a reproducing Hilbert space.\n\nTraining data\nIn MLJ or MLJBase, bind an instance model to data with\nmach = machine(model, X)\nHere:\n\nX is any table of input features (eg, a DataFrame) whose columns are of scitype Continuous; check column scitypes with schema(X).\n\nTrain the machine using fit!(mach, rows=...).\n\n\nHyper-parameters\n\nmaxoutdim=0: Controls the the dimension (number of columns) of the output, outdim. Specifically, outdim = min(n, indim, maxoutdim), where n is the number of observations and indim the input dimension.\nkernel::Function=(x,y)-&gt;x'y: The kernel function, takes in 2 vector arguments x and y, returns a scalar value. Defaults to the dot product of x and y.\nsolver::Symbol=:eig: solver to use for the eigenvalues, one of :eig(default, uses LinearAlgebra.eigen), :eigs(uses Arpack.eigs).\ninverse::Bool=true: perform calculations needed for inverse transform\nbeta::Real=1.0: strength of the ridge regression that learns the inverse transform when inverse is true.\ntol::Real=0.0: Convergence tolerance for eigenvalue solver.\nmaxiter::Int=300: maximum number of iterations for eigenvalue solver.\n\n\n\nOperations\n\ntransform(mach, Xnew): Return a lower dimensional projection of the input Xnew, which should have the same scitype as X above.\ninverse_transform(mach, Xsmall): For a dimension-reduced table Xsmall, such as returned by transform, reconstruct a table, having same the number of columns as the original training data X, that transforms to Xsmall. Mathematically, inverse_transform is a right-inverse for the PCA projection map, whose image is orthogonal to the kernel of that map. In particular, if Xsmall = transform(mach, Xnew), then inverse_transform(Xsmall) is only an approximation to Xnew.\n\n\n\nFitted parameters\nThe fields of fitted_params(mach) are:\n\nprojection: Returns the projection matrix, which has size (indim, outdim), where indim and outdim are the number of features of the input and ouput respectively.\n\n\n\nReport\nThe fields of report(mach) are:\n\nindim: Dimension (number of columns) of the training data and new data to be transformed.\noutdim: Dimension of transformed data.\nprincipalvars: The variance of the principal components.\n\n\n\nExamples\nusing MLJ\nusing LinearAlgebra\n\nKernelPCA = @load KernelPCA pkg=MultivariateStats\n\nX, y = @load_iris # a table and a vector\n\nfunction rbf_kernel(length_scale)\n    return (x,y) -&gt; norm(x-y)^2 / ((2 * length_scale)^2)\nend\n\nmodel = KernelPCA(maxoutdim=2, kernel=rbf_kernel(1))\nmach = machine(model, X) |&gt; fit!\n\nXproj = transform(mach, X)\nSee also PCA, ICA, FactorAnalysis, PPCA\n\n\n\n\n\n\nKernelPCA = @load KernelPCA pkg=MultivariateStats\nKMeans = @load KMeans pkg=Clustering\n\nimport MLJMultivariateStatsInterface ✔\nimport MLJClusteringInterface ✔\n\n\n[ Info: For silent loading, specify `verbosity=0`. \n[ Info: For silent loading, specify `verbosity=0`. \n\n\nMLJClusteringInterface.KMeans\n\n\n\n\n4.2 defin rbs function\nchange params length_scale\n\nfunction rbf_kernel(length_scale)\n    return (x,y) -&gt; norm(x-y)^2 / ((2 * length_scale)^2)\nend\n\nrbf_kernel (generic function with 1 method)\n\n\n\n\n4.3 define tunning function\n\nfunction tune(i)\n    model1 = KernelPCA(maxoutdim=3, kernel=rbf_kernel(i))\n    mach1 = machine(model1, Xtrain) |&gt; fit!\n    model2 = KMeans(k=3)\n    Xproj = MLJ.transform(mach1, Xtrain)\n    mach2 = machine(model2, Xproj) |&gt; fit!\n    yhat = MLJ.predict(mach2, Xproj)\n    return i,Xproj,yhat\nend\n\ntune (generic function with 1 method)\n\n\n\nlength_scales=1:9\nyhat_arr=[tune(i) for i in length_scales];\n\n[ Info: Training machine(KernelPCA(maxoutdim = 3, …), …).\n[ Info: Training machine(KMeans(k = 3, …), …).\n[ Info: Training machine(KernelPCA(maxoutdim = 3, …), …).\n[ Info: Training machine(KMeans(k = 3, …), …).\n[ Info: Training machine(KernelPCA(maxoutdim = 3, …), …).\n[ Info: Training machine(KMeans(k = 3, …), …).\n[ Info: Training machine(KernelPCA(maxoutdim = 3, …), …).\n[ Info: Training machine(KMeans(k = 3, …), …).\n[ Info: Training machine(KernelPCA(maxoutdim = 3, …), …).\n[ Info: Training machine(KMeans(k = 3, …), …).\n[ Info: Training machine(KernelPCA(maxoutdim = 3, …), …).\n[ Info: Training machine(KMeans(k = 3, …), …).\n[ Info: Training machine(KernelPCA(maxoutdim = 3, …), …).\n[ Info: Training machine(KMeans(k = 3, …), …).\n[ Info: Training machine(KernelPCA(maxoutdim = 3, …), …).\n[ Info: Training machine(KMeans(k = 3, …), …).\n[ Info: Training machine(KernelPCA(maxoutdim = 3, …), …).\n[ Info: Training machine(KMeans(k = 3, …), …).",
     "crumbs": [
-      "1-IRIS PCA-Kmeans clustering"
+      "2-IRIS KernelPCA-Kmeans clustering"
     ]
   },
   {
-    "objectID": "learn/Clustering/1-iris-pca-kmeans.html#mlj-workflow",
-    "href": "learn/Clustering/1-iris-pca-kmeans.html#mlj-workflow",
-    "title": "1 IRIS PCA-Kmeans clustering",
-    "section": "5. MLJ workflow",
-    "text": "5. MLJ workflow\n\n5.1 load model\n\nPCA doc \n\n\n\n\nPCA\n\n\n\n\n\n\n@doc(PCA)\n\nPCA\nA model type for constructing a pca, based on unknown.jl, and implementing the MLJ model interface.\nFrom MLJ, the type can be imported using\nPCA = @load PCA pkg=unknown\nDo model = PCA() to construct an instance with default hyper-parameters. Provide keyword arguments to override hyper-parameter defaults, as in PCA(maxoutdim=...).\nPrincipal component analysis learns a linear projection onto a lower dimensional space while preserving most of the initial variance seen in the training data.\n\nTraining data\nIn MLJ or MLJBase, bind an instance model to data with\nmach = machine(model, X)\nHere:\n\nX is any table of input features (eg, a DataFrame) whose columns are of scitype Continuous; check column scitypes with schema(X).\n\nTrain the machine using fit!(mach, rows=...).\n\n\nHyper-parameters\n\nmaxoutdim=0: Together with variance_ratio, controls the output dimension outdim chosen by the model. Specifically, suppose that k is the smallest integer such that retaining the k most significant principal components accounts for variance_ratio of the total variance in the training data. Then outdim = min(outdim, maxoutdim). If maxoutdim=0 (default) then the effective maxoutdim is min(n, indim - 1) where n is the number of observations and indim the number of features in the training data.\nvariance_ratio::Float64=0.99: The ratio of variance preserved after the transformation\nmethod=:auto: The method to use to solve the problem. Choices are\n\n:svd: Support Vector Decomposition of the matrix.\n:cov: Covariance matrix decomposition.\n:auto: Use :cov if the matrices first dimension is smaller than its second dimension and otherwise use :svd\n\nmean=nothing: if nothing, centering will be computed and applied, if set to 0 no centering (data is assumed pre-centered); if a vector is passed, the centering is done with that vector.\n\n\n\nOperations\n\ntransform(mach, Xnew): Return a lower dimensional projection of the input Xnew, which should have the same scitype as X above.\ninverse_transform(mach, Xsmall): For a dimension-reduced table Xsmall, such as returned by transform, reconstruct a table, having same the number of columns as the original training data X, that transforms to Xsmall. Mathematically, inverse_transform is a right-inverse for the PCA projection map, whose image is orthogonal to the kernel of that map. In particular, if Xsmall = transform(mach, Xnew), then inverse_transform(Xsmall) is only an approximation to Xnew.\n\n\n\nFitted parameters\nThe fields of fitted_params(mach) are:\n\nprojection: Returns the projection matrix, which has size (indim, outdim), where indim and outdim are the number of features of the input and output respectively.\n\n\n\nReport\nThe fields of report(mach) are:\n\nindim: Dimension (number of columns) of the training data and new data to be transformed.\noutdim = min(n, indim, maxoutdim) is the output dimension; here n is the number of observations.\ntprincipalvar: Total variance of the principal components.\ntresidualvar: Total residual variance.\ntvar: Total observation variance (principal + residual variance).\nmean: The mean of the untransformed training data, of length indim.\nprincipalvars: The variance of the principal components.\n\n\n\nExamples\nusing MLJ\n\nPCA = @load PCA pkg=MultivariateStats\n\nX, y = @load_iris # a table and a vector\n\nmodel = PCA(maxoutdim=2)\nmach = machine(model, X) |&gt; fit!\n\nXproj = transform(mach, X)\nSee also KernelPCA, ICA, FactorAnalysis, PPCA\n\n\n\n\n\n\nPCA = @load PCA pkg=MultivariateStats\nKMeans = @load KMeans pkg=Clustering\n\nimport MLJMultivariateStatsInterface ✔\nimport MLJClusteringInterface ✔\n\n\n[ Info: For silent loading, specify `verbosity=0`. \n[ Info: For silent loading, specify `verbosity=0`. \n\n\nMLJClusteringInterface.KMeans\n\n\n\n\n5.2 fitting model\n\nmodel1 : pca model\nmodle2 : kmeans model\n\n\nmodel1 = PCA(maxoutdim=2)\nmach1 = machine(model1, Xtrain) |&gt; fit!\nmodel2 = KMeans(k=3)\nXproj = MLJ.transform(mach1, Xtrain)\nmach2 = machine(model2, Xproj) |&gt; fit!\nyhat = MLJ.predict(mach2, Xproj)\nshow(yhat)\n\nCategoricalArrays.CategoricalValue{Int64, UInt32}[3, 2, 3, 1, 2, 3, 1, 2, 1, 2, 2, 1, 1, 3, 3, 3, 3, 1, 2, 2, 3, 2, 2, 2, 1, 1, 2, 1, 1, 1, 2, 2, 1, 1, 1, 2, 3, 1, 1, 1, 2, 2, 3, 3, 2, 2, 2, 1, 1, 1, 3, 2, 3, 2, 3, 2, 1, 3, 2, 3, 3, 2, 1, 1, 3, 2, 1, 2, 2, 3, 3, 2, 2, 2, 1, 1, 3, 2, 1, 1, 3, 2, 1, 1, 3, 2, 2, 3, 2, 3, 2, 2, 3, 1, 1, 2, 2, 2, 2, 1, 2, 2, 1, 2, 1, 2, 3, 1, 3, 3, 1, 2, 2, 3, 2, 2, 2, 2, 2, 3, 1, 1, 1, 3, 2, 1, 2, 3, 2, 1, 1, 2, 1, 1, 2, 1, 3, 2, 2, 1, 3, 3, 3, 2, 3, 1, 3, 2, 1, 1]\n\n\n[ Info: Training machine(PCA(maxoutdim = 2, …), …).\n[ Info: Training machine(KMeans(k = 3, …), …).",
+    "objectID": "learn/Clustering/2-iris-kernelpca-kmeans.html#plot-results",
+    "href": "learn/Clustering/2-iris-kernelpca-kmeans.html#plot-results",
+    "title": "2 IRIS KernnelPCA-Kmeans clustering",
+    "section": "5 plot results",
+    "text": "5 plot results\n\n5.1 two pcs\n\nfig=Figure()\nfor i in length_scales\n   ls,df,label=yhat_arr[i]\n   row,col=fldmod1(i,3)\n   ax=Axis(fig[row,col],subtitle=\"len_scale=$(ls)\")\n   table=(pc1=df.x1,pc2=df.x2,label=label)\n   datalayer=data(table)\n   maplayer=mapping(:pc1,:pc2,color=:label)\n   vislayer=visual(Scatter,markersize=8,strokewidth=1,strokecolor=:black)\n   plt=datalayer*maplayer*vislayer\n   hidedecorations!(ax)\n   draw!(ax, plt)\nend\nfig\n\n\n\n\n\n\n\n\n\nfig=Figure()\nfor i in length_scales\n   ls,df,label=yhat_arr[i]\n   row,col=fldmod1(i,3)\n   ax=Axis3(fig[row,col],title=\"len_scale=$(ls)\")\n   table=(pc1=df.x1,pc2=df.x2,pc3=df.x3,label=label)\n   datalayer=data(table)\n   maplayer=mapping(:pc1,:pc2,:pc3,color=:label)\n   vislayer=visual(Scatter,markersize=8,strokewidth=1,strokecolor=:black)\n   plt=datalayer*maplayer*vislayer\n   hidedecorations!(ax)\n   draw!(ax, plt)\n   \nend\nfig",
     "crumbs": [
-      "1-IRIS PCA-Kmeans clustering"
+      "2-IRIS KernelPCA-Kmeans clustering"
     ]
   },
   {
-    "objectID": "learn/Clustering/1-iris-pca-kmeans.html#plot-resutls",
-    "href": "learn/Clustering/1-iris-pca-kmeans.html#plot-resutls",
-    "title": "1 IRIS PCA-Kmeans clustering",
-    "section": "6. plot resutls",
-    "text": "6. plot resutls\n\n  ax=(width=400, height=300,title=\"IRIS PCA-Kmeans plot\",subtitle=\"(2pcs)\")\n  table=(pc1=Xproj.x1,pc2=Xproj.x2,cat=yhat)\n  datalayer=data(table)\n  maplayer=mapping(:pc1,:pc2,color=:cat)\n  vislayer=visual(Scatter,markersize=10,strokewidth=1,strokecolor=:black)\n  plt=datalayer*maplayer*vislayer\n  draw(plt,axis=ax)\n\n\n\n\n\n\n\nFigure 1: iris-pca-kmeans-2pcs",
+    "objectID": "learn/Classfication/index.html",
+    "href": "learn/Classfication/index.html",
+    "title": "Classfication Introduction",
+    "section": "",
+    "text": "Classfication Introduction",
     "crumbs": [
-      "1-IRIS PCA-Kmeans clustering"
+      "Classfication Intro"
     ]
   },
   {
@@ -551,7 +621,7 @@
     "section": "",
     "text": "using CSV,DataFrames,Tidier,Pipe\n using CairoMakie,AlgebraOfGraphics,MakieThemes\n using MLJ,MLJModelInterface,Random\n import MLJ:transform,predict\n #Makie.set_theme!(ggthemr(:flat))",
     "crumbs": [
-      "2-mnist-classification.qmd"
+      "2-mnist-classification"
     ]
   },
   {
@@ -561,7 +631,7 @@
     "section": "",
     "text": "using CSV,DataFrames,Tidier,Pipe\n using CairoMakie,AlgebraOfGraphics,MakieThemes\n using MLJ,MLJModelInterface,Random\n import MLJ:transform,predict\n #Makie.set_theme!(ggthemr(:flat))",
     "crumbs": [
-      "2-mnist-classification.qmd"
+      "2-mnist-classification"
     ]
   },
   {
@@ -571,7 +641,7 @@
     "section": "2. load csv",
     "text": "2. load csv\n\ndf=CSV.File(\"../../data/mnist_train.csv\")|&gt;DataFrame\ndf=coerce(df,:label=&gt;Multiclass)\nfirst(df,5)\n\n5×785 DataFrame685 columns omitted\n\n\n\nRow\nlabel\n1x1\n1x2\n1x3\n1x4\n1x5\n1x6\n1x7\n1x8\n1x9\n1x10\n1x11\n1x12\n1x13\n1x14\n1x15\n1x16\n1x17\n1x18\n1x19\n1x20\n1x21\n1x22\n1x23\n1x24\n1x25\n1x26\n1x27\n1x28\n2x1\n2x2\n2x3\n2x4\n2x5\n2x6\n2x7\n2x8\n2x9\n2x10\n2x11\n2x12\n2x13\n2x14\n2x15\n2x16\n2x17\n2x18\n2x19\n2x20\n2x21\n2x22\n2x23\n2x24\n2x25\n2x26\n2x27\n2x28\n3x1\n3x2\n3x3\n3x4\n3x5\n3x6\n3x7\n3x8\n3x9\n3x10\n3x11\n3x12\n3x13\n3x14\n3x15\n3x16\n3x17\n3x18\n3x19\n3x20\n3x21\n3x22\n3x23\n3x24\n3x25\n3x26\n3x27\n3x28\n4x1\n4x2\n4x3\n4x4\n4x5\n4x6\n4x7\n4x8\n4x9\n4x10\n4x11\n4x12\n4x13\n4x14\n4x15\n⋯\n\n\n\nCat…\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\n⋯\n\n\n\n\n1\n5\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n⋯\n\n\n2\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n⋯\n\n\n3\n4\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n⋯\n\n\n4\n1\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n⋯\n\n\n5\n9\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n⋯",
     "crumbs": [
-      "2-mnist-classification.qmd"
+      "2-mnist-classification"
     ]
   },
   {
@@ -581,7 +651,7 @@
     "section": "3. describe df",
     "text": "3. describe df\n\ndescribe(df)\n\n785×7 DataFrame760 rows omitted\n\n\n\nRow\nvariable\nmean\nmin\nmedian\nmax\nnmissing\neltype\n\n\n\nSymbol\nUnion…\nAny\nUnion…\nAny\nInt64\nDataType\n\n\n\n\n1\nlabel\n\n0\n\n9\n0\nCategoricalValue{Int64, UInt32}\n\n\n2\n1x1\n0.0\n0\n0.0\n0\n0\nInt64\n\n\n3\n1x2\n0.0\n0\n0.0\n0\n0\nInt64\n\n\n4\n1x3\n0.0\n0\n0.0\n0\n0\nInt64\n\n\n5\n1x4\n0.0\n0\n0.0\n0\n0\nInt64\n\n\n6\n1x5\n0.0\n0\n0.0\n0\n0\nInt64\n\n\n7\n1x6\n0.0\n0\n0.0\n0\n0\nInt64\n\n\n8\n1x7\n0.0\n0\n0.0\n0\n0\nInt64\n\n\n9\n1x8\n0.0\n0\n0.0\n0\n0\nInt64\n\n\n10\n1x9\n0.0\n0\n0.0\n0\n0\nInt64\n\n\n11\n1x10\n0.0\n0\n0.0\n0\n0\nInt64\n\n\n12\n1x11\n0.0\n0\n0.0\n0\n0\nInt64\n\n\n13\n1x12\n0.0\n0\n0.0\n0\n0\nInt64\n\n\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n\n\n774\n28x17\n0.482733\n0\n0.0\n255\n0\nInt64\n\n\n775\n28x18\n0.343517\n0\n0.0\n255\n0\nInt64\n\n\n776\n28x19\n0.200433\n0\n0.0\n254\n0\nInt64\n\n\n777\n28x20\n0.0888667\n0\n0.0\n254\n0\nInt64\n\n\n778\n28x21\n0.0456333\n0\n0.0\n253\n0\nInt64\n\n\n779\n28x22\n0.0192833\n0\n0.0\n253\n0\nInt64\n\n\n780\n28x23\n0.0151167\n0\n0.0\n254\n0\nInt64\n\n\n781\n28x24\n0.002\n0\n0.0\n62\n0\nInt64\n\n\n782\n28x25\n0.0\n0\n0.0\n0\n0\nInt64\n\n\n783\n28x26\n0.0\n0\n0.0\n0\n0\nInt64\n\n\n784\n28x27\n0.0\n0\n0.0\n0\n0\nInt64\n\n\n785\n28x28\n0.0\n0\n0.0\n0\n0\nInt64",
     "crumbs": [
-      "2-mnist-classification.qmd"
+      "2-mnist-classification"
     ]
   },
   {
@@ -591,7 +661,7 @@
     "section": "4. split data",
     "text": "4. split data\n\ny, X= unpack(df, ==(:label), rng=123);\ncat=y|&gt;levels\n(Xtrain, Xtest), (ytrain, ytest)  = partition((X, y), 0.2, multi=true,shuffle=true)\n\n\n((12000×784 DataFrame\n   Row │ 1x1    1x2    1x3    1x4    1x5    1x6    1x7    1x8    1x9    1x10   ⋯\n       │ Int64  Int64  Int64  Int64  Int64  Int64  Int64  Int64  Int64  Int64  ⋯\n───────┼────────────────────────────────────────────────────────────────────────\n     1 │     0      0      0      0      0      0      0      0      0      0  ⋯\n     2 │     0      0      0      0      0      0      0      0      0      0\n     3 │     0      0      0      0      0      0      0      0      0      0\n     4 │     0      0      0      0      0      0      0      0      0      0\n     5 │     0      0      0      0      0      0      0      0      0      0  ⋯\n     6 │     0      0      0      0      0      0      0      0      0      0\n     7 │     0      0      0      0      0      0      0      0      0      0\n     8 │     0      0      0      0      0      0      0      0      0      0\n     9 │     0      0      0      0      0      0      0      0      0      0  ⋯\n    10 │     0      0      0      0      0      0      0      0      0      0\n    11 │     0      0      0      0      0      0      0      0      0      0\n   ⋮   │   ⋮      ⋮      ⋮      ⋮      ⋮      ⋮      ⋮      ⋮      ⋮      ⋮    ⋱\n 11991 │     0      0      0      0      0      0      0      0      0      0\n 11992 │     0      0      0      0      0      0      0      0      0      0  ⋯\n 11993 │     0      0      0      0      0      0      0      0      0      0\n 11994 │     0      0      0      0      0      0      0      0      0      0\n 11995 │     0      0      0      0      0      0      0      0      0      0\n 11996 │     0      0      0      0      0      0      0      0      0      0  ⋯\n 11997 │     0      0      0      0      0      0      0      0      0      0\n 11998 │     0      0      0      0      0      0      0      0      0      0\n 11999 │     0      0      0      0      0      0      0      0      0      0\n 12000 │     0      0      0      0      0      0      0      0      0      0  ⋯\n                                              774 columns and 11979 rows omitted, 48000×784 DataFrame\n   Row │ 1x1    1x2    1x3    1x4    1x5    1x6    1x7    1x8    1x9    1x10   ⋯\n       │ Int64  Int64  Int64  Int64  Int64  Int64  Int64  Int64  Int64  Int64  ⋯\n───────┼────────────────────────────────────────────────────────────────────────\n     1 │     0      0      0      0      0      0      0      0      0      0  ⋯\n     2 │     0      0      0      0      0      0      0      0      0      0\n     3 │     0      0      0      0      0      0      0      0      0      0\n     4 │     0      0      0      0      0      0      0      0      0      0\n     5 │     0      0      0      0      0      0      0      0      0      0  ⋯\n     6 │     0      0      0      0      0      0      0      0      0      0\n     7 │     0      0      0      0      0      0      0      0      0      0\n     8 │     0      0      0      0      0      0      0      0      0      0\n     9 │     0      0      0      0      0      0      0      0      0      0  ⋯\n    10 │     0      0      0      0      0      0      0      0      0      0\n    11 │     0      0      0      0      0      0      0      0      0      0\n   ⋮   │   ⋮      ⋮      ⋮      ⋮      ⋮      ⋮      ⋮      ⋮      ⋮      ⋮    ⋱\n 47991 │     0      0      0      0      0      0      0      0      0      0\n 47992 │     0      0      0      0      0      0      0      0      0      0  ⋯\n 47993 │     0      0      0      0      0      0      0      0      0      0\n 47994 │     0      0      0      0      0      0      0      0      0      0\n 47995 │     0      0      0      0      0      0      0      0      0      0\n 47996 │     0      0      0      0      0      0      0      0      0      0  ⋯\n 47997 │     0      0      0      0      0      0      0      0      0      0\n 47998 │     0      0      0      0      0      0      0      0      0      0\n 47999 │     0      0      0      0      0      0      0      0      0      0\n 48000 │     0      0      0      0      0      0      0      0      0      0  ⋯\n                                              774 columns and 47979 rows omitted), (CategoricalArrays.CategoricalValue{Int64, UInt32}[1, 3, 9, 0, 8, 1, 6, 7, 1, 3  …  5, 2, 5, 4, 4, 2, 3, 3, 3, 1], CategoricalArrays.CategoricalValue{Int64, UInt32}[7, 4, 1, 0, 3, 8, 2, 2, 3, 8  …  4, 0, 3, 8, 8, 1, 5, 2, 7, 1]))",
     "crumbs": [
-      "2-mnist-classification.qmd"
+      "2-mnist-classification"
     ]
   },
   {
@@ -601,7 +671,7 @@
     "section": "5. pca workflow",
     "text": "5. pca workflow\n\n5.1 load model\n\nPCA = @load PCA pkg=MultivariateStats;\nmodel=PCA(maxoutdim=3);\n\nimport MLJMultivariateStatsInterface ✔\n\n\n[ Info: For silent loading, specify `verbosity=0`. \n\n\n\n\n  \n     PCA doc \n     \n     \n \n \n doc\n \n \n \n PCA\nA model type for constructing a pca, based on unknown.jl, and implementing the MLJ model interface.\nFrom MLJ, the type can be imported using\nPCA = @load PCA pkg=unknown\nDo model = PCA() to construct an instance with default hyper-parameters. Provide keyword arguments to override hyper-parameter defaults, as in PCA(maxoutdim=...).\nPrincipal component analysis learns a linear projection onto a lower dimensional space while preserving most of the initial variance seen in the training data.\nTraining data\nIn MLJ or MLJBase, bind an instance model to data with\nmach = machine(model, X)\nHere:\n\nX is any table of input features (eg, a DataFrame) whose columns are of scitype Continuous; check column scitypes with schema(X).\n\n\nTrain the machine using fit!(mach, rows=...).\nHyper-parameters\n\nmaxoutdim=0: Together with variance_ratio, controls the output dimension outdim  chosen by the model. Specifically, suppose that k is the smallest integer such that  retaining the k most significant principal components accounts for variance_ratio of  the total variance in the training data. Then outdim = min(outdim, maxoutdim). If  maxoutdim=0 (default) then the effective maxoutdim is min(n, indim - 1) where n  is the number of observations and indim the number of features in the training data.\n\nvariance_ratio::Float64=0.99: The ratio of variance preserved after the transformation\n\nmethod=:auto: The method to use to solve the problem. Choices are\n\n:svd: Support Vector Decomposition of the matrix.\n\n:cov: Covariance matrix decomposition.\n\n:auto: Use :cov if the matrices first dimension is smaller than its second dimension and otherwise use :svd\n\n\n\nmean=nothing: if nothing, centering will be computed and applied, if set to 0 no centering (data is assumed pre-centered); if a vector is passed, the centering is done with that vector.\n\n\nOperations\n\ntransform(mach, Xnew): Return a lower dimensional projection of the input Xnew, which should have the same scitype as X above.\n\ninverse_transform(mach, Xsmall): For a dimension-reduced table Xsmall, such as returned by transform, reconstruct a table, having same the number of columns as the original training data X, that transforms to Xsmall. Mathematically, inverse_transform is a right-inverse for the PCA projection map, whose image is orthogonal to the kernel of that map. In particular, if Xsmall = transform(mach, Xnew), then inverse_transform(Xsmall) is only an approximation to Xnew.\n\n\nFitted parameters\nThe fields of fitted_params(mach) are:\n\nprojection: Returns the projection matrix, which has size (indim, outdim), where indim and outdim are the number of features of the input and output respectively.\n\n\nReport\nThe fields of report(mach) are:\n\nindim: Dimension (number of columns) of the training data and new data to be transformed.\n\noutdim = min(n, indim, maxoutdim) is the output dimension; here n is the number of observations.\n\ntprincipalvar: Total variance of the principal components.\n\ntresidualvar: Total residual variance.\n\ntvar: Total observation variance (principal + residual variance).\n\nmean: The mean of the untransformed training data, of length indim.\n\nprincipalvars: The variance of the principal components.\n\n\nExamples\nusing MLJ\n\nPCA = @load PCA pkg=MultivariateStats\n\nX, y = @load_iris # a table and a vector\n\nmodel = PCA(maxoutdim=2)\nmach = machine(model, X) |&gt; fit!\n\nXproj = transform(mach, X)\nSee also KernelPCA, ICA, FactorAnalysis, PPCA\n\n\n\n \n \n \n\n\n\n\n5.2 fitting model\n\nmach = machine(model, Xtrain) |&gt; fit!\nXtr =transform(mach, Xtrain)\n\n┌ Warning: The number and/or types of data arguments do not match what the specified model\n│ supports. Suppress this type check by specifying `scitype_check_level=0`.\n│ \n│ Run `@doc MultivariateStats.PCA` to learn more about your model's requirements.\n│ \n│ Commonly, but non exclusively, supervised models are constructed using the syntax\n│ `machine(model, X, y)` or `machine(model, X, y, w)` while most other models are\n│ constructed with `machine(model, X)`.  Here `X` are features, `y` a target, and `w`\n│ sample or class weights.\n│ \n│ In general, data in `machine(model, data...)` is expected to satisfy\n│ \n│     scitype(data) &lt;: MLJ.fit_data_scitype(model)\n│ \n│ In the present case:\n│ \n│ scitype(data) = Tuple{Table{AbstractVector{Count}}}\n│ \n│ fit_data_scitype(model) = Tuple{Table{&lt;:AbstractVector{&lt;:Continuous}}}\n└ @ MLJBase ~/.julia/packages/MLJBase/fEiP2/src/machines.jl:230\n[ Info: Training machine(PCA(maxoutdim = 3, …), …).\n\n\n12000×3 DataFrame11975 rows omitted\n\n\n\nRow\nx1\nx2\nx3\n\n\n\nFloat64\nFloat64\nFloat64\n\n\n\n\n1\n-856.852\n-332.575\n-34.3783\n\n\n2\n-245.793\n-112.833\n1046.94\n\n\n3\n-390.243\n401.559\n30.4265\n\n\n4\n966.51\n-359.698\n650.63\n\n\n5\n354.756\n-115.593\n527.175\n\n\n6\n-508.043\n-813.775\n-417.797\n\n\n7\n720.101\n-149.118\n-734.982\n\n\n8\n-461.916\n568.386\n447.195\n\n\n9\n-861.752\n-190.173\n75.7481\n\n\n10\n636.84\n428.198\n563.142\n\n\n11\n-475.992\n-179.361\n-396.116\n\n\n12\n545.461\n-188.282\n697.017\n\n\n13\n-269.984\n-381.653\n705.561\n\n\n⋮\n⋮\n⋮\n⋮\n\n\n11989\n-181.447\n-310.647\n-2.19181\n\n\n11990\n-956.569\n-595.445\n-138.727\n\n\n11991\n-44.6248\n225.234\n466.205\n\n\n11992\n386.423\n-17.1393\n-552.14\n\n\n11993\n566.271\n-80.3966\n-103.541\n\n\n11994\n-498.803\n-52.1383\n-26.2291\n\n\n11995\n3.47708\n500.304\n-260.501\n\n\n11996\n875.924\n44.0938\n-1050.98\n\n\n11997\n154.431\n-141.981\n-450.883\n\n\n11998\n-66.3014\n-687.415\n-39.575\n\n\n11999\n-420.884\n-151.585\n801.763\n\n\n12000\n-763.315\n-403.198\n-129.845",
     "crumbs": [
-      "2-mnist-classification.qmd"
+      "2-mnist-classification"
     ]
   },
   {
@@ -611,7 +681,7 @@
     "section": "6. plot pca results",
     "text": "6. plot pca results\n\ntable=(x1=Xtr.x1,x2=Xtr.x2,x3=Xtr.x3,labels=ytrain)\ndatalayer=data(table)\nmaplayer=mapping(:x1,:x2,color=:labels)\nvislayer=visual(Scatter,markersize=10,strokewidth=1,strokecolor=:black)\nplt=datalayer*maplayer*vislayer\ndraw(plt)",
     "crumbs": [
-      "2-mnist-classification.qmd"
+      "2-mnist-classification"
     ]
   },
   {
@@ -1267,73 +1337,203 @@
     ]
   },
   {
-    "objectID": "learn/Classfication/index.html",
-    "href": "learn/Classfication/index.html",
-    "title": "Classfication Introduction",
+    "objectID": "learn/Classfication/3-iris-logistics-classification.html",
+    "href": "learn/Classfication/3-iris-logistics-classification.html",
+    "title": "3-IRIS logistics Classification",
     "section": "",
-    "text": "Classfication Introduction",
+    "text": "using CSV,DataFrames,Tidier,Pipe\n using CairoMakie,AlgebraOfGraphics,MakieThemes\n using MLJ,MLJModelInterface,Random\n import MLJ:transform,predict\n #Makie.set_theme!(ggthemr(:flat))",
     "crumbs": [
-      "Classfication Intro"
+      "3-iris-logistics-classification"
     ]
   },
   {
-    "objectID": "learn/Clustering/2-iris-kernelpca-kmeans.html",
-    "href": "learn/Clustering/2-iris-kernelpca-kmeans.html",
-    "title": "2 IRIS KernnelPCA-Kmeans clustering",
+    "objectID": "learn/Classfication/3-iris-logistics-classification.html#load-package",
+    "href": "learn/Classfication/3-iris-logistics-classification.html#load-package",
+    "title": "3-IRIS logistics Classification",
     "section": "",
-    "text": "info\n\n\n\nusing kernel methods mapping dataset to feature space",
+    "text": "using CSV,DataFrames,Tidier,Pipe\n using CairoMakie,AlgebraOfGraphics,MakieThemes\n using MLJ,MLJModelInterface,Random\n import MLJ:transform,predict\n #Makie.set_theme!(ggthemr(:flat))",
     "crumbs": [
-      "2-IRIS KernelPCA-Kmeans clustering"
+      "3-iris-logistics-classification"
     ]
   },
   {
-    "objectID": "learn/Clustering/2-iris-kernelpca-kmeans.html#load-package",
-    "href": "learn/Clustering/2-iris-kernelpca-kmeans.html#load-package",
-    "title": "2 IRIS KernnelPCA-Kmeans clustering",
-    "section": "1. load package",
-    "text": "1. load package\n\n using CSV,DataFrames,Tidier,Pipe\n using CairoMakie,AlgebraOfGraphics,MakieThemes\n using MLJ,MLJModelInterface,Random\n import MLJ:transform,predict\n using LinearAlgebra\n #Makie.set_theme!(ggthemr(:flat))",
-    "crumbs": [
-      "2-IRIS KernelPCA-Kmeans clustering"
-    ]
-  },
-  {
-    "objectID": "learn/Clustering/2-iris-kernelpca-kmeans.html#load-csv",
-    "href": "learn/Clustering/2-iris-kernelpca-kmeans.html#load-csv",
-    "title": "2 IRIS KernnelPCA-Kmeans clustering",
+    "objectID": "learn/Classfication/3-iris-logistics-classification.html#load-csv",
+    "href": "learn/Classfication/3-iris-logistics-classification.html#load-csv",
+    "title": "3-IRIS logistics Classification",
     "section": "2. load csv",
-    "text": "2. load csv\n\ndf=CSV.File(\"../../data/iris.csv\")|&gt;DataFrame\ndf=@chain  df  begin\n    @clean_names\nend;",
+    "text": "2. load csv\n\nnums=100\niris = load_iris();\niris = DataFrames.DataFrame(iris);\ny, X = unpack(iris, ==(:target); rng=123);\nX=select!(X,3:4)\n\n150×2 DataFrame125 rows omitted\n\n\n\nRow\npetal_length\npetal_width\n\n\n\nFloat64\nFloat64\n\n\n\n\n1\n5.7\n2.1\n\n\n2\n4.1\n1.3\n\n\n3\n5.8\n1.6\n\n\n4\n1.4\n0.2\n\n\n5\n3.9\n1.1\n\n\n6\n5.2\n2.0\n\n\n7\n1.3\n0.2\n\n\n8\n4.7\n1.4\n\n\n9\n1.7\n0.4\n\n\n10\n4.5\n1.7\n\n\n11\n4.9\n1.5\n\n\n12\n1.4\n0.2\n\n\n13\n1.5\n0.2\n\n\n⋮\n⋮\n⋮\n\n\n139\n4.8\n1.8\n\n\n140\n1.7\n0.2\n\n\n141\n5.3\n1.9\n\n\n142\n5.9\n2.3\n\n\n143\n5.4\n2.1\n\n\n144\n4.0\n1.3\n\n\n145\n5.8\n1.8\n\n\n146\n1.3\n0.3\n\n\n147\n6.6\n2.1\n\n\n148\n5.0\n1.9\n\n\n149\n1.6\n0.2\n\n\n150\n1.4\n0.2",
     "crumbs": [
-      "2-IRIS KernelPCA-Kmeans clustering"
+      "3-iris-logistics-classification"
     ]
   },
   {
-    "objectID": "learn/Clustering/2-iris-kernelpca-kmeans.html#data-processing",
-    "href": "learn/Clustering/2-iris-kernelpca-kmeans.html#data-processing",
-    "title": "2 IRIS KernnelPCA-Kmeans clustering",
+    "objectID": "learn/Classfication/3-iris-logistics-classification.html#data-processing",
+    "href": "learn/Classfication/3-iris-logistics-classification.html#data-processing",
+    "title": "3-IRIS logistics Classification",
     "section": "3. data processing",
-    "text": "3. data processing\n\n    coerce!(df,:labels=&gt;Multiclass)\n    ytrain, Xtrain=  unpack(df, ==(:species), rng=123)\n    cat=levels(ytrain)\n    rows,cols=size(Xtrain)\n\n(150, 4)",
+    "text": "3. data processing\n\nbyCat = iris.target\ncats = unique(byCat)\ncolors = [:orange,:lightgreen,:purple]\nmarkers= [:utriangle,:circle,:diamond]\n\n3-element Vector{Symbol}:\n :utriangle\n :circle\n :diamond\n\n\nget boundary data from extreme of 2 features\n\nfunction boundary_data(df,;n=nums)\n    n1=n2=n\n    xlow,xhigh=extrema(df[:,1])\n    ylow,yhigh=extrema(df[:,2])\n    tx = LinRange(xlow,xhigh,n1)\n    ty = LinRange(ylow,yhigh,n2)\n    x_test = mapreduce(collect, hcat, Iterators.product(tx, ty));\n    x_test=MLJ.table(x_test')\n    return tx,ty,x_test\nend\ntx,ty,x_test=boundary_data(X)\n\n(LinRange{Float64}(1.0, 6.9, 100), LinRange{Float64}(0.1, 2.5, 100), Tables.MatrixTable{LinearAlgebra.Adjoint{Float64, Matrix{Float64}}} with 10000 rows, 2 columns, and schema:\n :x1  Float64\n :x2  Float64)",
     "crumbs": [
-      "2-IRIS KernelPCA-Kmeans clustering"
+      "3-iris-logistics-classification"
     ]
   },
   {
-    "objectID": "learn/Clustering/2-iris-kernelpca-kmeans.html#mlj-workflow",
-    "href": "learn/Clustering/2-iris-kernelpca-kmeans.html#mlj-workflow",
-    "title": "2 IRIS KernnelPCA-Kmeans clustering",
+    "objectID": "learn/Classfication/3-iris-logistics-classification.html#mlj-workflow",
+    "href": "learn/Classfication/3-iris-logistics-classification.html#mlj-workflow",
+    "title": "3-IRIS logistics Classification",
     "section": "4. MLJ workflow",
-    "text": "4. MLJ workflow\n\n4.1 load model\nusing KernelPCA from MultivariateStats.jl package\n\nKernelPCA doc \n\n\n\n\nKernelPCA\n\n\n\n\n\n\n@doc(KernelPCA)\n\nKernelPCA\nA model type for constructing a kernel prinicipal component analysis model, based on unknown.jl, and implementing the MLJ model interface.\nFrom MLJ, the type can be imported using\nKernelPCA = @load KernelPCA pkg=unknown\nDo model = KernelPCA() to construct an instance with default hyper-parameters. Provide keyword arguments to override hyper-parameter defaults, as in KernelPCA(maxoutdim=...).\nIn kernel PCA the linear operations of ordinary principal component analysis are performed in a reproducing Hilbert space.\n\nTraining data\nIn MLJ or MLJBase, bind an instance model to data with\nmach = machine(model, X)\nHere:\n\nX is any table of input features (eg, a DataFrame) whose columns are of scitype Continuous; check column scitypes with schema(X).\n\nTrain the machine using fit!(mach, rows=...).\n\n\nHyper-parameters\n\nmaxoutdim=0: Controls the the dimension (number of columns) of the output, outdim. Specifically, outdim = min(n, indim, maxoutdim), where n is the number of observations and indim the input dimension.\nkernel::Function=(x,y)-&gt;x'y: The kernel function, takes in 2 vector arguments x and y, returns a scalar value. Defaults to the dot product of x and y.\nsolver::Symbol=:eig: solver to use for the eigenvalues, one of :eig(default, uses LinearAlgebra.eigen), :eigs(uses Arpack.eigs).\ninverse::Bool=true: perform calculations needed for inverse transform\nbeta::Real=1.0: strength of the ridge regression that learns the inverse transform when inverse is true.\ntol::Real=0.0: Convergence tolerance for eigenvalue solver.\nmaxiter::Int=300: maximum number of iterations for eigenvalue solver.\n\n\n\nOperations\n\ntransform(mach, Xnew): Return a lower dimensional projection of the input Xnew, which should have the same scitype as X above.\ninverse_transform(mach, Xsmall): For a dimension-reduced table Xsmall, such as returned by transform, reconstruct a table, having same the number of columns as the original training data X, that transforms to Xsmall. Mathematically, inverse_transform is a right-inverse for the PCA projection map, whose image is orthogonal to the kernel of that map. In particular, if Xsmall = transform(mach, Xnew), then inverse_transform(Xsmall) is only an approximation to Xnew.\n\n\n\nFitted parameters\nThe fields of fitted_params(mach) are:\n\nprojection: Returns the projection matrix, which has size (indim, outdim), where indim and outdim are the number of features of the input and ouput respectively.\n\n\n\nReport\nThe fields of report(mach) are:\n\nindim: Dimension (number of columns) of the training data and new data to be transformed.\noutdim: Dimension of transformed data.\nprincipalvars: The variance of the principal components.\n\n\n\nExamples\nusing MLJ\nusing LinearAlgebra\n\nKernelPCA = @load KernelPCA pkg=MultivariateStats\n\nX, y = @load_iris # a table and a vector\n\nfunction rbf_kernel(length_scale)\n    return (x,y) -&gt; norm(x-y)^2 / ((2 * length_scale)^2)\nend\n\nmodel = KernelPCA(maxoutdim=2, kernel=rbf_kernel(1))\nmach = machine(model, X) |&gt; fit!\n\nXproj = transform(mach, X)\nSee also PCA, ICA, FactorAnalysis, PPCA\n\n\n\n\n\n\nKernelPCA = @load KernelPCA pkg=MultivariateStats\nKMeans = @load KMeans pkg=Clustering\n\nimport MLJMultivariateStatsInterface ✔\nimport MLJClusteringInterface ✔\n\n\n[ Info: For silent loading, specify `verbosity=0`. \n[ Info: For silent loading, specify `verbosity=0`. \n\n\nMLJClusteringInterface.KMeans\n\n\n\n\n4.2 defin rbs function\nchange params length_scale\n\nfunction rbf_kernel(length_scale)\n    return (x,y) -&gt; norm(x-y)^2 / ((2 * length_scale)^2)\nend\n\nrbf_kernel (generic function with 1 method)\n\n\n\n\n4.3 define tunning function\n\nfunction tune(i)\n    model1 = KernelPCA(maxoutdim=3, kernel=rbf_kernel(i))\n    mach1 = machine(model1, Xtrain) |&gt; fit!\n    model2 = KMeans(k=3)\n    Xproj = MLJ.transform(mach1, Xtrain)\n    mach2 = machine(model2, Xproj) |&gt; fit!\n    yhat = MLJ.predict(mach2, Xproj)\n    return i,Xproj,yhat\nend\n\ntune (generic function with 1 method)\n\n\n\nlength_scales=1:9\nyhat_arr=[tune(i) for i in length_scales];\n\n[ Info: Training machine(KernelPCA(maxoutdim = 3, …), …).\n[ Info: Training machine(KMeans(k = 3, …), …).\n[ Info: Training machine(KernelPCA(maxoutdim = 3, …), …).\n[ Info: Training machine(KMeans(k = 3, …), …).\n[ Info: Training machine(KernelPCA(maxoutdim = 3, …), …).\n[ Info: Training machine(KMeans(k = 3, …), …).\n[ Info: Training machine(KernelPCA(maxoutdim = 3, …), …).\n[ Info: Training machine(KMeans(k = 3, …), …).\n[ Info: Training machine(KernelPCA(maxoutdim = 3, …), …).\n[ Info: Training machine(KMeans(k = 3, …), …).\n[ Info: Training machine(KernelPCA(maxoutdim = 3, …), …).\n[ Info: Training machine(KMeans(k = 3, …), …).\n[ Info: Training machine(KernelPCA(maxoutdim = 3, …), …).\n[ Info: Training machine(KMeans(k = 3, …), …).\n[ Info: Training machine(KernelPCA(maxoutdim = 3, …), …).\n[ Info: Training machine(KMeans(k = 3, …), …).\n[ Info: Training machine(KernelPCA(maxoutdim = 3, …), …).\n[ Info: Training machine(KMeans(k = 3, …), …).",
+    "text": "4. MLJ workflow\n\n    LogisticClassifier = @load LogisticClassifier pkg=MLJLinearModels\n    mach = fit!(machine(LogisticClassifier(), X, y))\n    yhat=predict_mode(mach, x_test)|&gt;Array|&gt;d-&gt;reshape(d,nums,nums)  \n    probs=predict(mach, x_test)|&gt;Array\n    probs_res=broadcast(pdf, probs, \"versicolor\").|&gt;(d-&gt;round(d,digits=2))|&gt;d-&gt;reshape(d,nums,nums)\n\n[ Info: For silent loading, specify `verbosity=0`. \n[ Info: Training machine(LogisticClassifier(lambda = 2.220446049250313e-16, …), …).\n┌ Info: Solver: MLJLinearModels.LBFGS{Optim.Options{Float64, Nothing}, NamedTuple{(), Tuple{}}}\n│   optim_options: Optim.Options{Float64, Nothing}\n└   lbfgs_options: NamedTuple{(), Tuple{}} NamedTuple()\n\n\nimport MLJLinearModels ✔\n\n\n100×100 Matrix{Float64}:\n 0.0   0.0   0.0   0.0   0.0   0.0   …  1.0  1.0  1.0  1.0  1.0  1.0  1.0\n 0.0   0.0   0.0   0.0   0.0   0.0      1.0  1.0  1.0  1.0  1.0  1.0  1.0\n 0.0   0.0   0.0   0.0   0.0   0.0      1.0  1.0  1.0  1.0  1.0  1.0  1.0\n 0.0   0.0   0.0   0.0   0.0   0.0      1.0  1.0  1.0  1.0  1.0  1.0  1.0\n 0.0   0.0   0.0   0.0   0.0   0.0      1.0  1.0  1.0  1.0  1.0  1.0  1.0\n 0.0   0.0   0.0   0.0   0.0   0.0   …  1.0  1.0  1.0  1.0  1.0  1.0  1.0\n 0.0   0.0   0.0   0.0   0.0   0.0      1.0  1.0  1.0  1.0  1.0  1.0  1.0\n 0.0   0.0   0.0   0.0   0.0   0.0      1.0  1.0  1.0  1.0  1.0  1.0  1.0\n 0.0   0.0   0.0   0.0   0.0   0.0      1.0  1.0  1.0  1.0  1.0  1.0  1.0\n 0.0   0.0   0.0   0.0   0.0   0.0      1.0  1.0  1.0  1.0  1.0  1.0  1.0\n 0.0   0.0   0.0   0.0   0.0   0.0   …  1.0  1.0  1.0  1.0  1.0  1.0  1.0\n 0.0   0.0   0.0   0.0   0.0   0.0      1.0  1.0  1.0  1.0  1.0  1.0  1.0\n 0.0   0.0   0.0   0.0   0.0   0.0      1.0  1.0  1.0  1.0  1.0  1.0  1.0\n ⋮                             ⋮     ⋱            ⋮                   \n 1.0   1.0   1.0   1.0   1.0   1.0      0.0  0.0  0.0  0.0  0.0  0.0  0.0\n 1.0   1.0   1.0   1.0   1.0   1.0      0.0  0.0  0.0  0.0  0.0  0.0  0.0\n 1.0   1.0   1.0   1.0   1.0   1.0   …  0.0  0.0  0.0  0.0  0.0  0.0  0.0\n 1.0   1.0   1.0   1.0   1.0   1.0      0.0  0.0  0.0  0.0  0.0  0.0  0.0\n 1.0   1.0   1.0   1.0   1.0   1.0      0.0  0.0  0.0  0.0  0.0  0.0  0.0\n 1.0   1.0   1.0   1.0   1.0   1.0      0.0  0.0  0.0  0.0  0.0  0.0  0.0\n 1.0   1.0   1.0   1.0   0.99  0.99     0.0  0.0  0.0  0.0  0.0  0.0  0.0\n 1.0   1.0   1.0   0.99  0.99  0.99  …  0.0  0.0  0.0  0.0  0.0  0.0  0.0\n 1.0   0.99  0.99  0.99  0.99  0.99     0.0  0.0  0.0  0.0  0.0  0.0  0.0\n 0.99  0.99  0.99  0.99  0.99  0.98     0.0  0.0  0.0  0.0  0.0  0.0  0.0\n 0.99  0.99  0.99  0.98  0.98  0.97     0.0  0.0  0.0  0.0  0.0  0.0  0.0\n 0.99  0.99  0.98  0.98  0.97  0.96     0.0  0.0  0.0  0.0  0.0  0.0  0.0",
     "crumbs": [
-      "2-IRIS KernelPCA-Kmeans clustering"
+      "3-iris-logistics-classification"
     ]
   },
   {
-    "objectID": "learn/Clustering/2-iris-kernelpca-kmeans.html#plot-results",
-    "href": "learn/Clustering/2-iris-kernelpca-kmeans.html#plot-results",
-    "title": "2 IRIS KernnelPCA-Kmeans clustering",
-    "section": "5 plot results",
-    "text": "5 plot results\n\n5.1 two pcs\n\nfig=Figure()\nfor i in length_scales\n   ls,df,label=yhat_arr[i]\n   row,col=fldmod1(i,3)\n   ax=Axis(fig[row,col],subtitle=\"len_scale=$(ls)\")\n   table=(pc1=df.x1,pc2=df.x2,label=label)\n   datalayer=data(table)\n   maplayer=mapping(:pc1,:pc2,color=:label)\n   vislayer=visual(Scatter,markersize=8,strokewidth=1,strokecolor=:black)\n   plt=datalayer*maplayer*vislayer\n   hidedecorations!(ax)\n   draw!(ax, plt)\nend\nfig\n\n\n\n\n\n\n\n\n\nfig=Figure()\nfor i in length_scales\n   ls,df,label=yhat_arr[i]\n   row,col=fldmod1(i,3)\n   ax=Axis3(fig[row,col],title=\"len_scale=$(ls)\")\n   table=(pc1=df.x1,pc2=df.x2,pc3=df.x3,label=label)\n   datalayer=data(table)\n   maplayer=mapping(:pc1,:pc2,:pc3,color=:label)\n   vislayer=visual(Scatter,markersize=8,strokewidth=1,strokecolor=:black)\n   plt=datalayer*maplayer*vislayer\n   hidedecorations!(ax)\n   draw!(ax, plt)\n   \nend\nfig",
+    "objectID": "learn/Classfication/3-iris-logistics-classification.html#plot-results",
+    "href": "learn/Classfication/3-iris-logistics-classification.html#plot-results",
+    "title": "3-IRIS logistics Classification",
+    "section": "5. plot results",
+    "text": "5. plot results\n\nfig=Figure(resolution=(1600,800))\n\nfunction plot_res_contour()\n\n    ax = Axis(fig[1, 1], xlabel=\"petal-length\", ylabel=\"petal-width\", title=\"2d3class-contour\")\n    contour!(ax, tx, ty, probs_res; labels=true)\n    \n    for (idx,cat) in enumerate(cats)\n        indc = findall(x -&gt; x == cat, byCat)\n        scatter!(ax,iris[:,3][indc],iris[:,4][indc];color=(colors[idx], 0.8), marker=markers[idx], markersize=10, strokewidth=1, strokecolor=:black, label=\"$cat\")\n        \n    end\n    axislegend(ax, position=:lt)\n    #save(\"./imgs/iris-logreg-2d-3class-contour.png\",fig)\n    fig\nend\n\nfunction trans(i)\n     if i==\"setosa\"\n       res=1\n    elseif  i==\"versicolor\"\n       res=2\n       \n    else\n       res=3\n    end\nend\nypred=[trans(yhat[i,j]) for i in 1:nums, j in 1:nums]\nfunction plot_res_contourf()\n    \n    ax = Axis(fig[1, 2], xlabel=\"petal-length\", ylabel=\"petal-width\", title=\"2d3class-contourf\")\n    contourf!(ax, tx, ty, ypred; levels=length(cats),colormap=(:heat,0.2))\n    \n    for (idx,cat) in enumerate(cats)\n        indc = findall(x -&gt; x == cat, byCat)\n        scatter!(ax,iris[:,3][indc],iris[:,4][indc];color=(colors[idx], 0.8), marker=markers[idx], markersize=10, strokewidth=1, strokecolor=:black, label=\"$cat\")\n        \n    end\n    axislegend(ax, position=:lt)\n    #ave(\"./imgs/iris-logreg-2d-3class.png\",fig)\n    fig\nend\nplot_res_contour()\nplot_res_contourf()",
     "crumbs": [
-      "2-IRIS KernelPCA-Kmeans clustering"
+      "3-iris-logistics-classification"
+    ]
+  },
+  {
+    "objectID": "learn/Clustering/1-iris-pca-kmeans.html",
+    "href": "learn/Clustering/1-iris-pca-kmeans.html",
+    "title": "1 IRIS PCA-Kmeans clustering",
+    "section": "",
+    "text": "using CSV,DataFrames,Tidier,Pipe\n using CairoMakie,AlgebraOfGraphics,MakieThemes\n using MLJ,MLJModelInterface,Random\n import MLJ:transform,predict\n #Makie.set_theme!(ggthemr(:flat))",
+    "crumbs": [
+      "1-IRIS PCA-Kmeans clustering"
+    ]
+  },
+  {
+    "objectID": "learn/Clustering/1-iris-pca-kmeans.html#load-package",
+    "href": "learn/Clustering/1-iris-pca-kmeans.html#load-package",
+    "title": "1 IRIS PCA-Kmeans clustering",
+    "section": "",
+    "text": "using CSV,DataFrames,Tidier,Pipe\n using CairoMakie,AlgebraOfGraphics,MakieThemes\n using MLJ,MLJModelInterface,Random\n import MLJ:transform,predict\n #Makie.set_theme!(ggthemr(:flat))",
+    "crumbs": [
+      "1-IRIS PCA-Kmeans clustering"
+    ]
+  },
+  {
+    "objectID": "learn/Clustering/1-iris-pca-kmeans.html#load-csv",
+    "href": "learn/Clustering/1-iris-pca-kmeans.html#load-csv",
+    "title": "1 IRIS PCA-Kmeans clustering",
+    "section": "2. load csv",
+    "text": "2. load csv\n\ndf=CSV.File(\"../../data/iris.csv\")|&gt;DataFrame\ndf=@chain  df  begin\n    @clean_names\nend\nfirst(df,5)\n\n5×5 DataFrame\n\n\n\nRow\nsepal_length\nsepal_width\npetal_length\npetal_width\nspecies\n\n\n\nFloat64\nFloat64\nFloat64\nFloat64\nString15\n\n\n\n\n1\n5.1\n3.5\n1.4\n0.2\nsetosa\n\n\n2\n4.9\n3.0\n1.4\n0.2\nsetosa\n\n\n3\n4.7\n3.2\n1.3\n0.2\nsetosa\n\n\n4\n4.6\n3.1\n1.5\n0.2\nsetosa\n\n\n5\n5.0\n3.6\n1.4\n0.2\nsetosa",
+    "crumbs": [
+      "1-IRIS PCA-Kmeans clustering"
+    ]
+  },
+  {
+    "objectID": "learn/Clustering/1-iris-pca-kmeans.html#describe-df",
+    "href": "learn/Clustering/1-iris-pca-kmeans.html#describe-df",
+    "title": "1 IRIS PCA-Kmeans clustering",
+    "section": "3. describe df",
+    "text": "3. describe df\n\ndescribe(df)\n\n5×7 DataFrame\n\n\n\nRow\nvariable\nmean\nmin\nmedian\nmax\nnmissing\neltype\n\n\n\nSymbol\nUnion…\nAny\nUnion…\nAny\nInt64\nDataType\n\n\n\n\n1\nsepal_length\n5.84333\n4.3\n5.8\n7.9\n0\nFloat64\n\n\n2\nsepal_width\n3.054\n2.0\n3.0\n4.4\n0\nFloat64\n\n\n3\npetal_length\n3.75867\n1.0\n4.35\n6.9\n0\nFloat64\n\n\n4\npetal_width\n1.19867\n0.1\n1.3\n2.5\n0\nFloat64\n\n\n5\nspecies\n\nsetosa\n\nvirginica\n0\nString15",
+    "crumbs": [
+      "1-IRIS PCA-Kmeans clustering"
+    ]
+  },
+  {
+    "objectID": "learn/Clustering/1-iris-pca-kmeans.html#data-processing",
+    "href": "learn/Clustering/1-iris-pca-kmeans.html#data-processing",
+    "title": "1 IRIS PCA-Kmeans clustering",
+    "section": "4. data processing",
+    "text": "4. data processing\n\n    coerce!(df,:labels=&gt;Multiclass)\n    ytrain, Xtrain=  unpack(df, ==(:species), rng=123)\n    cat=levels(ytrain)\n    rows,cols=size(Xtrain)\n\n(150, 4)",
+    "crumbs": [
+      "1-IRIS PCA-Kmeans clustering"
+    ]
+  },
+  {
+    "objectID": "learn/Clustering/1-iris-pca-kmeans.html#mlj-workflow",
+    "href": "learn/Clustering/1-iris-pca-kmeans.html#mlj-workflow",
+    "title": "1 IRIS PCA-Kmeans clustering",
+    "section": "5. MLJ workflow",
+    "text": "5. MLJ workflow\n\n5.1 load model\n\nPCA doc \n\n\n\n\nPCA\n\n\n\n\n\n\n@doc(PCA)\n\nPCA\nA model type for constructing a pca, based on unknown.jl, and implementing the MLJ model interface.\nFrom MLJ, the type can be imported using\nPCA = @load PCA pkg=unknown\nDo model = PCA() to construct an instance with default hyper-parameters. Provide keyword arguments to override hyper-parameter defaults, as in PCA(maxoutdim=...).\nPrincipal component analysis learns a linear projection onto a lower dimensional space while preserving most of the initial variance seen in the training data.\n\nTraining data\nIn MLJ or MLJBase, bind an instance model to data with\nmach = machine(model, X)\nHere:\n\nX is any table of input features (eg, a DataFrame) whose columns are of scitype Continuous; check column scitypes with schema(X).\n\nTrain the machine using fit!(mach, rows=...).\n\n\nHyper-parameters\n\nmaxoutdim=0: Together with variance_ratio, controls the output dimension outdim chosen by the model. Specifically, suppose that k is the smallest integer such that retaining the k most significant principal components accounts for variance_ratio of the total variance in the training data. Then outdim = min(outdim, maxoutdim). If maxoutdim=0 (default) then the effective maxoutdim is min(n, indim - 1) where n is the number of observations and indim the number of features in the training data.\nvariance_ratio::Float64=0.99: The ratio of variance preserved after the transformation\nmethod=:auto: The method to use to solve the problem. Choices are\n\n:svd: Support Vector Decomposition of the matrix.\n:cov: Covariance matrix decomposition.\n:auto: Use :cov if the matrices first dimension is smaller than its second dimension and otherwise use :svd\n\nmean=nothing: if nothing, centering will be computed and applied, if set to 0 no centering (data is assumed pre-centered); if a vector is passed, the centering is done with that vector.\n\n\n\nOperations\n\ntransform(mach, Xnew): Return a lower dimensional projection of the input Xnew, which should have the same scitype as X above.\ninverse_transform(mach, Xsmall): For a dimension-reduced table Xsmall, such as returned by transform, reconstruct a table, having same the number of columns as the original training data X, that transforms to Xsmall. Mathematically, inverse_transform is a right-inverse for the PCA projection map, whose image is orthogonal to the kernel of that map. In particular, if Xsmall = transform(mach, Xnew), then inverse_transform(Xsmall) is only an approximation to Xnew.\n\n\n\nFitted parameters\nThe fields of fitted_params(mach) are:\n\nprojection: Returns the projection matrix, which has size (indim, outdim), where indim and outdim are the number of features of the input and output respectively.\n\n\n\nReport\nThe fields of report(mach) are:\n\nindim: Dimension (number of columns) of the training data and new data to be transformed.\noutdim = min(n, indim, maxoutdim) is the output dimension; here n is the number of observations.\ntprincipalvar: Total variance of the principal components.\ntresidualvar: Total residual variance.\ntvar: Total observation variance (principal + residual variance).\nmean: The mean of the untransformed training data, of length indim.\nprincipalvars: The variance of the principal components.\n\n\n\nExamples\nusing MLJ\n\nPCA = @load PCA pkg=MultivariateStats\n\nX, y = @load_iris # a table and a vector\n\nmodel = PCA(maxoutdim=2)\nmach = machine(model, X) |&gt; fit!\n\nXproj = transform(mach, X)\nSee also KernelPCA, ICA, FactorAnalysis, PPCA\n\n\n\n\n\n\nPCA = @load PCA pkg=MultivariateStats\nKMeans = @load KMeans pkg=Clustering\n\nimport MLJMultivariateStatsInterface ✔\nimport MLJClusteringInterface ✔\n\n\n[ Info: For silent loading, specify `verbosity=0`. \n[ Info: For silent loading, specify `verbosity=0`. \n\n\nMLJClusteringInterface.KMeans\n\n\n\n\n5.2 fitting model\n\nmodel1 : pca model\nmodle2 : kmeans model\n\n\nmodel1 = PCA(maxoutdim=2)\nmach1 = machine(model1, Xtrain) |&gt; fit!\nmodel2 = KMeans(k=3)\nXproj = MLJ.transform(mach1, Xtrain)\nmach2 = machine(model2, Xproj) |&gt; fit!\nyhat = MLJ.predict(mach2, Xproj)\nshow(yhat)\n\nCategoricalArrays.CategoricalValue{Int64, UInt32}[3, 2, 3, 1, 2, 3, 1, 2, 1, 2, 2, 1, 1, 3, 3, 3, 3, 1, 2, 2, 3, 2, 2, 2, 1, 1, 2, 1, 1, 1, 2, 2, 1, 1, 1, 2, 3, 1, 1, 1, 2, 2, 3, 3, 2, 2, 2, 1, 1, 1, 3, 2, 3, 2, 3, 2, 1, 3, 2, 3, 3, 2, 1, 1, 3, 2, 1, 2, 2, 3, 3, 2, 2, 2, 1, 1, 3, 2, 1, 1, 3, 2, 1, 1, 3, 2, 2, 3, 2, 3, 2, 2, 3, 1, 1, 2, 2, 2, 2, 1, 2, 2, 1, 2, 1, 2, 3, 1, 3, 3, 1, 2, 2, 3, 2, 2, 2, 2, 2, 3, 1, 1, 1, 3, 2, 1, 2, 3, 2, 1, 1, 2, 1, 1, 2, 1, 3, 2, 2, 1, 3, 3, 3, 2, 3, 1, 3, 2, 1, 1]\n\n\n[ Info: Training machine(PCA(maxoutdim = 2, …), …).\n[ Info: Training machine(KMeans(k = 3, …), …).",
+    "crumbs": [
+      "1-IRIS PCA-Kmeans clustering"
+    ]
+  },
+  {
+    "objectID": "learn/Clustering/1-iris-pca-kmeans.html#plot-resutls",
+    "href": "learn/Clustering/1-iris-pca-kmeans.html#plot-resutls",
+    "title": "1 IRIS PCA-Kmeans clustering",
+    "section": "6. plot resutls",
+    "text": "6. plot resutls\n\n  ax=(width=400, height=300,title=\"IRIS PCA-Kmeans plot\",subtitle=\"(2pcs)\")\n  table=(pc1=Xproj.x1,pc2=Xproj.x2,cat=yhat)\n  datalayer=data(table)\n  maplayer=mapping(:pc1,:pc2,color=:cat)\n  vislayer=visual(Scatter,markersize=10,strokewidth=1,strokecolor=:black)\n  plt=datalayer*maplayer*vislayer\n  draw(plt,axis=ax)\n\n\n\n\n\n\n\nFigure 1: iris-pca-kmeans-2pcs",
+    "crumbs": [
+      "1-IRIS PCA-Kmeans clustering"
+    ]
+  },
+  {
+    "objectID": "learn/Clustering/3-kmeans-on-digits.html",
+    "href": "learn/Clustering/3-kmeans-on-digits.html",
+    "title": "3 Kmeans clustering on Digits",
+    "section": "",
+    "text": "info\n\n\n\n\nref : ref\ndata: load-scikit-digits.jl -&gt;csv",
+    "crumbs": [
+      "3-Kmeans clustering on Digits"
+    ]
+  },
+  {
+    "objectID": "learn/Clustering/3-kmeans-on-digits.html#load-package",
+    "href": "learn/Clustering/3-kmeans-on-digits.html#load-package",
+    "title": "3 Kmeans clustering on Digits",
+    "section": "1. load package",
+    "text": "1. load package\n\nimport MLJ: fit!, predict, transform,fitted_params\nusing CSV, DataFrames, GLMakie, Random,Tidier\nusing MLJ\nRandom.seed!(34343)\n #Makie.set_theme!(ggthemr(:flat))\n\nTaskLocalRNG()",
+    "crumbs": [
+      "3-Kmeans clustering on Digits"
+    ]
+  },
+  {
+    "objectID": "learn/Clustering/3-kmeans-on-digits.html#load-csv",
+    "href": "learn/Clustering/3-kmeans-on-digits.html#load-csv",
+    "title": "3 Kmeans clustering on Digits",
+    "section": "2. load csv",
+    "text": "2. load csv\n\ndf=CSV.File(\"../../data/scikit_digits.csv\")|&gt;DataFrame\ndf=@chain  df  begin\n    @clean_names\n    coerce(_, :target =&gt; Multiclass)\nend;\nfirst(df,5)\n\n5×65 DataFrame\n\n\n\nRow\nx1\nx2\nx3\nx4\nx5\nx6\nx7\nx8\nx9\nx10\nx11\nx12\nx13\nx14\nx15\nx16\nx17\nx18\nx19\nx20\nx21\nx22\nx23\nx24\nx25\nx26\nx27\nx28\nx29\nx30\nx31\nx32\nx33\nx34\nx35\nx36\nx37\nx38\nx39\nx40\nx41\nx42\nx43\nx44\nx45\nx46\nx47\nx48\nx49\nx50\nx51\nx52\nx53\nx54\nx55\nx56\nx57\nx58\nx59\nx60\nx61\nx62\nx63\nx64\ntarget\n\n\n\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nCat…\n\n\n\n\n1\n0.0\n0.0\n5.0\n13.0\n9.0\n1.0\n0.0\n0.0\n0.0\n0.0\n13.0\n15.0\n10.0\n15.0\n5.0\n0.0\n0.0\n3.0\n15.0\n2.0\n0.0\n11.0\n8.0\n0.0\n0.0\n4.0\n12.0\n0.0\n0.0\n8.0\n8.0\n0.0\n0.0\n5.0\n8.0\n0.0\n0.0\n9.0\n8.0\n0.0\n0.0\n4.0\n11.0\n0.0\n1.0\n12.0\n7.0\n0.0\n0.0\n2.0\n14.0\n5.0\n10.0\n12.0\n0.0\n0.0\n0.0\n0.0\n6.0\n13.0\n10.0\n0.0\n0.0\n0.0\n0\n\n\n2\n0.0\n0.0\n0.0\n12.0\n13.0\n5.0\n0.0\n0.0\n0.0\n0.0\n0.0\n11.0\n16.0\n9.0\n0.0\n0.0\n0.0\n0.0\n3.0\n15.0\n16.0\n6.0\n0.0\n0.0\n0.0\n7.0\n15.0\n16.0\n16.0\n2.0\n0.0\n0.0\n0.0\n0.0\n1.0\n16.0\n16.0\n3.0\n0.0\n0.0\n0.0\n0.0\n1.0\n16.0\n16.0\n6.0\n0.0\n0.0\n0.0\n0.0\n1.0\n16.0\n16.0\n6.0\n0.0\n0.0\n0.0\n0.0\n0.0\n11.0\n16.0\n10.0\n0.0\n0.0\n1\n\n\n3\n0.0\n0.0\n0.0\n4.0\n15.0\n12.0\n0.0\n0.0\n0.0\n0.0\n3.0\n16.0\n15.0\n14.0\n0.0\n0.0\n0.0\n0.0\n8.0\n13.0\n8.0\n16.0\n0.0\n0.0\n0.0\n0.0\n1.0\n6.0\n15.0\n11.0\n0.0\n0.0\n0.0\n1.0\n8.0\n13.0\n15.0\n1.0\n0.0\n0.0\n0.0\n9.0\n16.0\n16.0\n5.0\n0.0\n0.0\n0.0\n0.0\n3.0\n13.0\n16.0\n16.0\n11.0\n5.0\n0.0\n0.0\n0.0\n0.0\n3.0\n11.0\n16.0\n9.0\n0.0\n2\n\n\n4\n0.0\n0.0\n7.0\n15.0\n13.0\n1.0\n0.0\n0.0\n0.0\n8.0\n13.0\n6.0\n15.0\n4.0\n0.0\n0.0\n0.0\n2.0\n1.0\n13.0\n13.0\n0.0\n0.0\n0.0\n0.0\n0.0\n2.0\n15.0\n11.0\n1.0\n0.0\n0.0\n0.0\n0.0\n0.0\n1.0\n12.0\n12.0\n1.0\n0.0\n0.0\n0.0\n0.0\n0.0\n1.0\n10.0\n8.0\n0.0\n0.0\n0.0\n8.0\n4.0\n5.0\n14.0\n9.0\n0.0\n0.0\n0.0\n7.0\n13.0\n13.0\n9.0\n0.0\n0.0\n3\n\n\n5\n0.0\n0.0\n0.0\n1.0\n11.0\n0.0\n0.0\n0.0\n0.0\n0.0\n0.0\n7.0\n8.0\n0.0\n0.0\n0.0\n0.0\n0.0\n1.0\n13.0\n6.0\n2.0\n2.0\n0.0\n0.0\n0.0\n7.0\n15.0\n0.0\n9.0\n8.0\n0.0\n0.0\n5.0\n16.0\n10.0\n0.0\n16.0\n6.0\n0.0\n0.0\n4.0\n15.0\n16.0\n13.0\n16.0\n1.0\n0.0\n0.0\n0.0\n0.0\n3.0\n15.0\n10.0\n0.0\n0.0\n0.0\n0.0\n0.0\n2.0\n16.0\n4.0\n0.0\n0.0\n4",
+    "crumbs": [
+      "3-Kmeans clustering on Digits"
+    ]
+  },
+  {
+    "objectID": "learn/Clustering/3-kmeans-on-digits.html#describe-df",
+    "href": "learn/Clustering/3-kmeans-on-digits.html#describe-df",
+    "title": "3 Kmeans clustering on Digits",
+    "section": "3. describe df",
+    "text": "3. describe df\n\nschema(df)\n\n\n┌───────┬────────────┬─────────┐\n│ names │ scitypes   │ types   │\n├───────┼────────────┼─────────┤\n│ x1    │ Continuous │ Float64 │\n│ x2    │ Continuous │ Float64 │\n│ x3    │ Continuous │ Float64 │\n│ x4    │ Continuous │ Float64 │\n│ x5    │ Continuous │ Float64 │\n│ x6    │ Continuous │ Float64 │\n│ x7    │ Continuous │ Float64 │\n│ x8    │ Continuous │ Float64 │\n│ x9    │ Continuous │ Float64 │\n│ x10   │ Continuous │ Float64 │\n│ x11   │ Continuous │ Float64 │\n│ x12   │ Continuous │ Float64 │\n│ x13   │ Continuous │ Float64 │\n│ x14   │ Continuous │ Float64 │\n│ x15   │ Continuous │ Float64 │\n│ x16   │ Continuous │ Float64 │\n│ x17   │ Continuous │ Float64 │\n│ x18   │ Continuous │ Float64 │\n│ x19   │ Continuous │ Float64 │\n│ x20   │ Continuous │ Float64 │\n│ x21   │ Continuous │ Float64 │\n│ x22   │ Continuous │ Float64 │\n│   ⋮   │     ⋮      │    ⋮    │\n└───────┴────────────┴─────────┘\n                 43 rows omitted",
+    "crumbs": [
+      "3-Kmeans clustering on Digits"
+    ]
+  },
+  {
+    "objectID": "learn/Clustering/3-kmeans-on-digits.html#split-data",
+    "href": "learn/Clustering/3-kmeans-on-digits.html#split-data",
+    "title": "3 Kmeans clustering on Digits",
+    "section": "4. split data",
+    "text": "4. split data\n\nytrain, Xtrain = unpack(df, ==(:target); rng = 123);",
+    "crumbs": [
+      "3-Kmeans clustering on Digits"
+    ]
+  },
+  {
+    "objectID": "learn/Clustering/3-kmeans-on-digits.html#mlj-workflow",
+    "href": "learn/Clustering/3-kmeans-on-digits.html#mlj-workflow",
+    "title": "3 Kmeans clustering on Digits",
+    "section": "5. MLJ workflow",
+    "text": "5. MLJ workflow\n\n5.1 load model\n\nPCA = @load PCA pkg = MultivariateStats\nKMeans = @load KMeans pkg = Clustering\n\npca_model = PCA(; maxoutdim = 2)\nkmeans_model = KMeans(; k =9)\n\nimport MLJMultivariateStatsInterface ✔\nimport MLJClusteringInterface ✔\n\n\n[ Info: For silent loading, specify `verbosity=0`. \n[ Info: For silent loading, specify `verbosity=0`. \n\n\nKMeans(\n  k = 9, \n  metric = Distances.SqEuclidean(0.0), \n  init = :kmpp)\n\n\n\n\n5.2 fitting and transform data in pca\ntraning data then project data to pca space\n\npca_mach = machine(pca_model, Xtrain) |&gt; fit!\nXproj = transform(pca_mach, Xtrain)\n\n[ Info: Training machine(PCA(maxoutdim = 2, …), …).\n\n\n1797×2 DataFrame1772 rows omitted\n\n\n\nRow\nx1\nx2\n\n\n\nFloat64\nFloat64\n\n\n\n\n1\n2.53068\n7.10818\n\n\n2\n-7.06737\n2.69455\n\n\n3\n9.71838\n16.8406\n\n\n4\n2.73069\n10.0099\n\n\n5\n-13.1702\n-13.6058\n\n\n6\n-13.2824\n8.86115\n\n\n7\n15.9065\n-16.5451\n\n\n8\n-17.972\n-7.82244\n\n\n9\n-5.2641\n9.30009\n\n\n10\n-11.3988\n-5.1612\n\n\n11\n-0.171222\n-5.94507\n\n\n12\n6.49767\n-25.2878\n\n\n13\n-27.8753\n-5.61827\n\n\n⋮\n⋮\n⋮\n\n\n1786\n18.7481\n-2.69052\n\n\n1787\n18.0899\n2.95523\n\n\n1788\n-16.321\n7.03648\n\n\n1789\n-19.6796\n0.109262\n\n\n1790\n19.5261\n5.59811\n\n\n1791\n1.32969\n-4.05499\n\n\n1792\n1.38873\n2.25902\n\n\n1793\n2.15727\n-4.79302\n\n\n1794\n-10.5746\n2.93352\n\n\n1795\n-11.7413\n-11.0562\n\n\n1796\n5.0894\n-6.87343\n\n\n1797\n20.9178\n1.59327\n\n\n\n\n\n\n\n\n5.3 make test data\nwe project real data to 2-d space , so we get :x1,:x2, extreme to make test data\n\nfunction boundary_data(df,;n=200)\n    n1=n2=n\n    xlow,xhigh=extrema(df[:,:x1])\n    ylow,yhigh=extrema(df[:,:x2])\n    tx = range(xlow,xhigh; length=n1)\n    ty = range(ylow,yhigh; length=n2)\n    x_test = mapreduce(collect, hcat, Iterators.product(tx, ty));\n    xtest=MLJ.table(x_test')\n    return tx,ty, xtest\nend\ntx,ty, Xtest=boundary_data(Xproj)\n\n(-31.16990412454417:0.3159297962408993:31.70012532739479, -30.0922050904867:0.2893801640107357:27.494447547649695, Tables.MatrixTable{LinearAlgebra.Adjoint{Float64, Matrix{Float64}}} with 40000 rows, 2 columns, and schema:\n :x1  Float64\n :x2  Float64)\n\n\n\n\n5.4 kmeans model fitting and predict\n\nkmeans_mach= machine(kmeans_model, Xproj) |&gt; fit!\n ypred= predict(kmeans_mach, Xtest)|&gt;Array|&gt;d-&gt;reshape(d,200,200)\n cat=ypred|&gt;Array|&gt;levels\n\n cen=fitted_params(kmeans_mach)\n\n[ Info: Training machine(KMeans(k = 9, …), …).\n\n\n(centers = [-14.940039081327807 -4.21080988089939 … 3.623938350681804 16.636412339611788; 6.0940188803548185 -1.9858645156958448 … 7.9454732936643895 -12.507323610991511],)",
+    "crumbs": [
+      "3-Kmeans clustering on Digits"
+    ]
+  },
+  {
+    "objectID": "learn/Clustering/3-kmeans-on-digits.html#plot-results",
+    "href": "learn/Clustering/3-kmeans-on-digits.html#plot-results",
+    "title": "3 Kmeans clustering on Digits",
+    "section": "6. plot results",
+    "text": "6. plot results\n\nfunction plot_model()\n    fig = Figure(resolution=(400,400))\n    ax = Axis(fig[1, 1],title=\"digits pca kmeans\",subtitle=\"pca-&gt;clustering\")\n    contourf!(ax, tx,ty,ypred)\n    scatter!(ax,eachcol(Xproj)...;markersize =6,color=(:lightgreen,0.1),strokecolor = :black, strokewidth =1)\n    scatter!(ax,eachrow(cen.centers)...;marker=:xcross,markersize = 24,color=(:red,0.8))\n    fig\n    \nend\nplot_model()",
+    "crumbs": [
+      "3-Kmeans clustering on Digits"
     ]
   },
   {
@@ -1351,7 +1551,7 @@
     "href": "learn/Dimension/1-nir-spectra-milk.html#load-package",
     "title": "1 NIR Spectra of Milk",
     "section": "1. load package",
-    "text": "1. load package\n\n import MLJ:transform,predict\n using CSV,DataFrames,Tidier,Pipe\n using CairoMakie,AlgebraOfGraphics,MakieThemes\n using MLJ,MLJModelInterface,Random\n #Makie.set_theme!(ggthemr(:flat))",
+    "text": "1. load package\n\n import MLJ:transform,predict\n using CSV,DataFrames,Tidier,Pipe\n using CairoMakie,AlgebraOfGraphics,MakieThemes\n using MLJ,MLJModelInterface,Random\n #Makie.set_theme!(ggthemr(:flat))\n\nWARNING: using DataFrames.transform in module Main conflicts with an existing identifier.",
     "crumbs": [
       "1.NIR Spectra of Milk"
     ]
@@ -1361,7 +1561,7 @@
     "href": "learn/Dimension/1-nir-spectra-milk.html#load-csv",
     "title": "1 NIR Spectra of Milk",
     "section": "2. load csv",
-    "text": "2. load csv\n\ndf=CSV.File(\"../../data/nir-spectra-milk.csv\")|&gt;DataFrame\ndf=@chain  df  begin\n    @clean_names\nend\nfirst(df,5)\n\n5×603 DataFrame503 columns omitted\n\n\n\nRow\ncolumn1\nlabels\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n20\n21\n22\n23\n24\n25\n26\n27\n28\n29\n30\n31\n32\n33\n34\n35\n36\n37\n38\n39\n40\n41\n42\n43\n44\n45\n46\n47\n48\n49\n50\n51\n52\n53\n54\n55\n56\n57\n58\n59\n60\n61\n62\n63\n64\n65\n66\n67\n68\n69\n70\n71\n72\n73\n74\n75\n76\n77\n78\n79\n80\n81\n82\n83\n84\n85\n86\n87\n88\n89\n90\n91\n92\n93\n94\n95\n96\n97\n98\n99\n⋯\n\n\n\nString15\nInt64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\n⋯\n\n\n\n\n1\n1/02/2018\n1\n2.39753\n2.3942\n2.38895\n2.38128\n2.37191\n2.36094\n2.34909\n2.33675\n2.32383\n2.30971\n2.29375\n2.27532\n2.25373\n2.22825\n2.19869\n2.16501\n2.12755\n2.08735\n2.0453\n2.00258\n1.95983\n1.91818\n1.87829\n1.84078\n1.80598\n1.77438\n1.74615\n1.72117\n1.69931\n1.68041\n1.66405\n1.65001\n1.6378\n1.6275\n1.61876\n1.61132\n1.60516\n1.59983\n1.5951\n1.59059\n1.58612\n1.5818\n1.57757\n1.57357\n1.56972\n1.56607\n1.56265\n1.55942\n1.55642\n1.55372\n1.55133\n1.54911\n1.54703\n1.54519\n1.54358\n1.54237\n1.54159\n1.54116\n1.54116\n1.54145\n1.54202\n1.54291\n1.54406\n1.5453\n1.54653\n1.54758\n1.54866\n1.54986\n1.55122\n1.55296\n1.55495\n1.55694\n1.55884\n1.56038\n1.56144\n1.56212\n1.56237\n1.56225\n1.5615\n1.56006\n1.55796\n1.5552\n1.552\n1.54864\n1.54536\n1.54231\n1.53927\n1.53626\n1.53293\n1.52915\n1.52472\n1.51945\n1.51336\n1.50644\n1.49855\n1.48957\n1.47928\n1.46769\n⋯\n\n\n2\n1/02/2018.1\n1\n2.39953\n2.39672\n2.39168\n2.38328\n2.37282\n2.36116\n2.34854\n2.33635\n2.32436\n2.31153\n2.29693\n2.27919\n2.25795\n2.23234\n2.20204\n2.16763\n2.12913\n2.08767\n2.04446\n2.00054\n1.957\n1.91494\n1.87484\n1.83739\n1.80299\n1.77194\n1.74441\n1.72002\n1.69886\n1.68052\n1.66447\n1.65057\n1.63856\n1.62809\n1.61911\n1.61122\n1.6043\n1.59809\n1.59243\n1.58731\n1.58272\n1.57838\n1.57426\n1.57032\n1.56641\n1.56272\n1.5593\n1.5564\n1.55416\n1.5522\n1.55054\n1.54904\n1.54754\n1.54596\n1.54428\n1.54276\n1.54154\n1.5405\n1.54005\n1.54011\n1.54063\n1.54154\n1.54263\n1.54386\n1.54516\n1.54637\n1.54776\n1.54926\n1.55094\n1.55289\n1.55495\n1.55709\n1.55911\n1.56082\n1.56214\n1.56297\n1.56332\n1.56318\n1.56242\n1.56104\n1.55903\n1.55636\n1.55316\n1.54962\n1.54597\n1.54234\n1.53891\n1.53554\n1.53214\n1.52839\n1.52415\n1.51917\n1.51333\n1.50651\n1.49868\n1.48974\n1.47952\n1.46797\n⋯\n\n\n3\n1/02/2018.2\n1\n2.39647\n2.3936\n2.38845\n2.38099\n2.37132\n2.35993\n2.34811\n2.33635\n2.32446\n2.3115\n2.29619\n2.27764\n2.25522\n2.22877\n2.19835\n2.16399\n2.12632\n2.08603\n2.04386\n2.00081\n1.95794\n1.91628\n1.87625\n1.83868\n1.80421\n1.77314\n1.74554\n1.72122\n1.69974\n1.68103\n1.66475\n1.65072\n1.63884\n1.62889\n1.62055\n1.61334\n1.60698\n1.60136\n1.5961\n1.5911\n1.5863\n1.58153\n1.57689\n1.57237\n1.5682\n1.56448\n1.56114\n1.55825\n1.55571\n1.55338\n1.55137\n1.5495\n1.54781\n1.54615\n1.54467\n1.54339\n1.5424\n1.54185\n1.54178\n1.54207\n1.54268\n1.54334\n1.54407\n1.54484\n1.54569\n1.54667\n1.54784\n1.54923\n1.55093\n1.55288\n1.555\n1.55721\n1.55931\n1.56103\n1.56229\n1.56291\n1.56305\n1.56267\n1.56183\n1.5605\n1.55858\n1.55614\n1.55327\n1.5501\n1.54687\n1.54363\n1.54043\n1.53708\n1.53339\n1.52924\n1.52439\n1.51887\n1.51259\n1.50551\n1.49762\n1.4887\n1.4786\n1.46721\n⋯\n\n\n4\n1/02/2018.3\n1\n2.40688\n2.40424\n2.3992\n2.39114\n2.38054\n2.36857\n2.35634\n2.34405\n2.33153\n2.31797\n2.30259\n2.28396\n2.26211\n2.23634\n2.20659\n2.17255\n2.1348\n2.09384\n2.05097\n2.00741\n1.96439\n1.9222\n1.88192\n1.8439\n1.80882\n1.77683\n1.74832\n1.72348\n1.70202\n1.68354\n1.66778\n1.65442\n1.64315\n1.63344\n1.62511\n1.61791\n1.61168\n1.6062\n1.60137\n1.59691\n1.59266\n1.58823\n1.58372\n1.57906\n1.57448\n1.57023\n1.56651\n1.5632\n1.56034\n1.5578\n1.55561\n1.55371\n1.55202\n1.55071\n1.54959\n1.54857\n1.54776\n1.54717\n1.54693\n1.54715\n1.54776\n1.54868\n1.54974\n1.55077\n1.55177\n1.55282\n1.5539\n1.55508\n1.55643\n1.55789\n1.55934\n1.56085\n1.56242\n1.5641\n1.56577\n1.56717\n1.56826\n1.56873\n1.56832\n1.56701\n1.56485\n1.56201\n1.55865\n1.55508\n1.55154\n1.54815\n1.54492\n1.54169\n1.53825\n1.53445\n1.53002\n1.52496\n1.51904\n1.51225\n1.50436\n1.49529\n1.48484\n1.4731\n⋯\n\n\n5\n1/02/2018.4\n1\n2.40988\n2.40702\n2.40131\n2.39267\n2.38137\n2.3686\n2.35552\n2.34279\n2.33123\n2.31932\n2.30561\n2.2889\n2.26787\n2.2421\n2.21174\n2.17669\n2.13787\n2.09599\n2.05236\n2.00855\n1.96539\n1.92386\n1.88469\n1.8481\n1.8141\n1.7832\n1.75517\n1.73034\n1.70849\n1.68946\n1.67313\n1.65908\n1.64709\n1.63696\n1.62814\n1.62052\n1.61401\n1.60831\n1.60316\n1.59844\n1.59383\n1.58932\n1.58481\n1.58043\n1.57648\n1.5729\n1.56975\n1.56697\n1.56438\n1.56207\n1.55983\n1.55779\n1.55587\n1.55403\n1.55245\n1.55101\n1.55001\n1.54934\n1.54917\n1.54943\n1.55003\n1.55074\n1.55161\n1.55259\n1.55369\n1.55489\n1.55635\n1.55799\n1.55985\n1.56166\n1.56343\n1.56506\n1.56649\n1.56767\n1.56875\n1.56963\n1.57023\n1.57043\n1.57005\n1.56886\n1.5668\n1.56399\n1.56073\n1.55728\n1.55384\n1.5506\n1.5475\n1.54435\n1.54093\n1.53714\n1.53273\n1.52766\n1.52176\n1.51488\n1.50685\n1.49765\n1.4871\n1.4754\n⋯",
+    "text": "2. load csv\n\ndf=CSV.File(\"../../data/nir-spectra-milk.csv\")|&gt;DataFrame\ndf=@chain  df  begin\n    @clean_names\n    \nend\nfirst(df,5)\n\n5×603 DataFrame503 columns omitted\n\n\n\nRow\ncolumn1\nlabels\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n20\n21\n22\n23\n24\n25\n26\n27\n28\n29\n30\n31\n32\n33\n34\n35\n36\n37\n38\n39\n40\n41\n42\n43\n44\n45\n46\n47\n48\n49\n50\n51\n52\n53\n54\n55\n56\n57\n58\n59\n60\n61\n62\n63\n64\n65\n66\n67\n68\n69\n70\n71\n72\n73\n74\n75\n76\n77\n78\n79\n80\n81\n82\n83\n84\n85\n86\n87\n88\n89\n90\n91\n92\n93\n94\n95\n96\n97\n98\n99\n⋯\n\n\n\nString15\nInt64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\n⋯\n\n\n\n\n1\n1/02/2018\n1\n2.39753\n2.3942\n2.38895\n2.38128\n2.37191\n2.36094\n2.34909\n2.33675\n2.32383\n2.30971\n2.29375\n2.27532\n2.25373\n2.22825\n2.19869\n2.16501\n2.12755\n2.08735\n2.0453\n2.00258\n1.95983\n1.91818\n1.87829\n1.84078\n1.80598\n1.77438\n1.74615\n1.72117\n1.69931\n1.68041\n1.66405\n1.65001\n1.6378\n1.6275\n1.61876\n1.61132\n1.60516\n1.59983\n1.5951\n1.59059\n1.58612\n1.5818\n1.57757\n1.57357\n1.56972\n1.56607\n1.56265\n1.55942\n1.55642\n1.55372\n1.55133\n1.54911\n1.54703\n1.54519\n1.54358\n1.54237\n1.54159\n1.54116\n1.54116\n1.54145\n1.54202\n1.54291\n1.54406\n1.5453\n1.54653\n1.54758\n1.54866\n1.54986\n1.55122\n1.55296\n1.55495\n1.55694\n1.55884\n1.56038\n1.56144\n1.56212\n1.56237\n1.56225\n1.5615\n1.56006\n1.55796\n1.5552\n1.552\n1.54864\n1.54536\n1.54231\n1.53927\n1.53626\n1.53293\n1.52915\n1.52472\n1.51945\n1.51336\n1.50644\n1.49855\n1.48957\n1.47928\n1.46769\n⋯\n\n\n2\n1/02/2018.1\n1\n2.39953\n2.39672\n2.39168\n2.38328\n2.37282\n2.36116\n2.34854\n2.33635\n2.32436\n2.31153\n2.29693\n2.27919\n2.25795\n2.23234\n2.20204\n2.16763\n2.12913\n2.08767\n2.04446\n2.00054\n1.957\n1.91494\n1.87484\n1.83739\n1.80299\n1.77194\n1.74441\n1.72002\n1.69886\n1.68052\n1.66447\n1.65057\n1.63856\n1.62809\n1.61911\n1.61122\n1.6043\n1.59809\n1.59243\n1.58731\n1.58272\n1.57838\n1.57426\n1.57032\n1.56641\n1.56272\n1.5593\n1.5564\n1.55416\n1.5522\n1.55054\n1.54904\n1.54754\n1.54596\n1.54428\n1.54276\n1.54154\n1.5405\n1.54005\n1.54011\n1.54063\n1.54154\n1.54263\n1.54386\n1.54516\n1.54637\n1.54776\n1.54926\n1.55094\n1.55289\n1.55495\n1.55709\n1.55911\n1.56082\n1.56214\n1.56297\n1.56332\n1.56318\n1.56242\n1.56104\n1.55903\n1.55636\n1.55316\n1.54962\n1.54597\n1.54234\n1.53891\n1.53554\n1.53214\n1.52839\n1.52415\n1.51917\n1.51333\n1.50651\n1.49868\n1.48974\n1.47952\n1.46797\n⋯\n\n\n3\n1/02/2018.2\n1\n2.39647\n2.3936\n2.38845\n2.38099\n2.37132\n2.35993\n2.34811\n2.33635\n2.32446\n2.3115\n2.29619\n2.27764\n2.25522\n2.22877\n2.19835\n2.16399\n2.12632\n2.08603\n2.04386\n2.00081\n1.95794\n1.91628\n1.87625\n1.83868\n1.80421\n1.77314\n1.74554\n1.72122\n1.69974\n1.68103\n1.66475\n1.65072\n1.63884\n1.62889\n1.62055\n1.61334\n1.60698\n1.60136\n1.5961\n1.5911\n1.5863\n1.58153\n1.57689\n1.57237\n1.5682\n1.56448\n1.56114\n1.55825\n1.55571\n1.55338\n1.55137\n1.5495\n1.54781\n1.54615\n1.54467\n1.54339\n1.5424\n1.54185\n1.54178\n1.54207\n1.54268\n1.54334\n1.54407\n1.54484\n1.54569\n1.54667\n1.54784\n1.54923\n1.55093\n1.55288\n1.555\n1.55721\n1.55931\n1.56103\n1.56229\n1.56291\n1.56305\n1.56267\n1.56183\n1.5605\n1.55858\n1.55614\n1.55327\n1.5501\n1.54687\n1.54363\n1.54043\n1.53708\n1.53339\n1.52924\n1.52439\n1.51887\n1.51259\n1.50551\n1.49762\n1.4887\n1.4786\n1.46721\n⋯\n\n\n4\n1/02/2018.3\n1\n2.40688\n2.40424\n2.3992\n2.39114\n2.38054\n2.36857\n2.35634\n2.34405\n2.33153\n2.31797\n2.30259\n2.28396\n2.26211\n2.23634\n2.20659\n2.17255\n2.1348\n2.09384\n2.05097\n2.00741\n1.96439\n1.9222\n1.88192\n1.8439\n1.80882\n1.77683\n1.74832\n1.72348\n1.70202\n1.68354\n1.66778\n1.65442\n1.64315\n1.63344\n1.62511\n1.61791\n1.61168\n1.6062\n1.60137\n1.59691\n1.59266\n1.58823\n1.58372\n1.57906\n1.57448\n1.57023\n1.56651\n1.5632\n1.56034\n1.5578\n1.55561\n1.55371\n1.55202\n1.55071\n1.54959\n1.54857\n1.54776\n1.54717\n1.54693\n1.54715\n1.54776\n1.54868\n1.54974\n1.55077\n1.55177\n1.55282\n1.5539\n1.55508\n1.55643\n1.55789\n1.55934\n1.56085\n1.56242\n1.5641\n1.56577\n1.56717\n1.56826\n1.56873\n1.56832\n1.56701\n1.56485\n1.56201\n1.55865\n1.55508\n1.55154\n1.54815\n1.54492\n1.54169\n1.53825\n1.53445\n1.53002\n1.52496\n1.51904\n1.51225\n1.50436\n1.49529\n1.48484\n1.4731\n⋯\n\n\n5\n1/02/2018.4\n1\n2.40988\n2.40702\n2.40131\n2.39267\n2.38137\n2.3686\n2.35552\n2.34279\n2.33123\n2.31932\n2.30561\n2.2889\n2.26787\n2.2421\n2.21174\n2.17669\n2.13787\n2.09599\n2.05236\n2.00855\n1.96539\n1.92386\n1.88469\n1.8481\n1.8141\n1.7832\n1.75517\n1.73034\n1.70849\n1.68946\n1.67313\n1.65908\n1.64709\n1.63696\n1.62814\n1.62052\n1.61401\n1.60831\n1.60316\n1.59844\n1.59383\n1.58932\n1.58481\n1.58043\n1.57648\n1.5729\n1.56975\n1.56697\n1.56438\n1.56207\n1.55983\n1.55779\n1.55587\n1.55403\n1.55245\n1.55101\n1.55001\n1.54934\n1.54917\n1.54943\n1.55003\n1.55074\n1.55161\n1.55259\n1.55369\n1.55489\n1.55635\n1.55799\n1.55985\n1.56166\n1.56343\n1.56506\n1.56649\n1.56767\n1.56875\n1.56963\n1.57023\n1.57043\n1.57005\n1.56886\n1.5668\n1.56399\n1.56073\n1.55728\n1.55384\n1.5506\n1.5475\n1.54435\n1.54093\n1.53714\n1.53273\n1.52766\n1.52176\n1.51488\n1.50685\n1.49765\n1.4871\n1.4754\n⋯",
     "crumbs": [
       "1.NIR Spectra of Milk"
     ]
@@ -1391,7 +1591,7 @@
     "href": "learn/Dimension/1-nir-spectra-milk.html#pca-workflow",
     "title": "1 NIR Spectra of Milk",
     "section": "5. pca workflow",
-    "text": "5. pca workflow\n\nPCA = @load PCA pkg=MultivariateStats\nmaxdim=6\nmodel=PCA(maxoutdim=maxdim)\nmach = machine(model, Xtrain) |&gt; fit!\nYtr =transform(mach, Xtrain)\n\nimport MLJMultivariateStatsInterface ✔\n\n\n[ Info: For silent loading, specify `verbosity=0`. \n[ Info: Training machine(PCA(maxoutdim = 6, …), …).\n\n\n450×3 DataFrame425 rows omitted\n\n\n\nRow\nx1\nx2\nx3\n\n\n\nFloat64\nFloat64\nFloat64\n\n\n\n\n1\n-0.11799\n0.124592\n-0.0436853\n\n\n2\n-0.202372\n0.121133\n-0.0536663\n\n\n3\n0.0229564\n-0.023132\n-0.00146871\n\n\n4\n0.15374\n0.0578446\n-0.0032877\n\n\n5\n-0.146434\n-0.0390585\n-0.015652\n\n\n6\n-0.182492\n0.221615\n0.0234858\n\n\n7\n0.0357099\n-0.0664287\n0.00560643\n\n\n8\n-0.449471\n-0.227503\n0.0231776\n\n\n9\n0.18417\n0.0521712\n0.00049485\n\n\n10\n0.43951\n-0.111014\n0.0372552\n\n\n11\n0.179981\n-0.0794656\n-0.0206554\n\n\n12\n0.1185\n-0.0962695\n-0.00643676\n\n\n13\n-0.0548056\n0.00447843\n0.00556863\n\n\n⋮\n⋮\n⋮\n⋮\n\n\n439\n-0.173193\n0.219183\n0.0277421\n\n\n440\n-0.194956\n0.152946\n-0.0407209\n\n\n441\n-0.0691982\n0.0651594\n-0.0220876\n\n\n442\n0.0574283\n-0.0991685\n-0.0182021\n\n\n443\n0.040947\n0.01118\n0.00350249\n\n\n444\n0.128935\n0.0565545\n-0.00341345\n\n\n445\n-0.0507774\n-0.0914194\n-0.0112601\n\n\n446\n0.287571\n-0.0619512\n-0.0149125\n\n\n447\n0.0562878\n-0.0871696\n-0.00901997\n\n\n448\n0.100222\n0.0684576\n-0.0227443\n\n\n449\n-0.36232\n0.260408\n0.0649335\n\n\n450\n0.233495\n0.0890649\n0.0104651",
+    "text": "5. pca workflow\n\nPCA = @load PCA pkg=MultivariateStats\nmaxdim=6\nmodel=PCA(maxoutdim=maxdim)\nmach = machine(model, Xtrain) |&gt; fit!\nYtr =transform(mach, Xtrain)\n\n[ Info: For silent loading, specify `verbosity=0`. \n[ Info: Precompiling MLJMultivariateStatsInterface [1b6a4a23-ba22-4f51-9698-8599985d3728]\n[ Info: Training machine(PCA(maxoutdim = 6, …), …).\n\n\nimport MLJMultivariateStatsInterface ✔\n\n\n450×3 DataFrame425 rows omitted\n\n\n\nRow\nx1\nx2\nx3\n\n\n\nFloat64\nFloat64\nFloat64\n\n\n\n\n1\n-0.11799\n0.124592\n-0.0436853\n\n\n2\n-0.202372\n0.121133\n-0.0536663\n\n\n3\n0.0229564\n-0.023132\n-0.00146871\n\n\n4\n0.15374\n0.0578446\n-0.0032877\n\n\n5\n-0.146434\n-0.0390585\n-0.015652\n\n\n6\n-0.182492\n0.221615\n0.0234858\n\n\n7\n0.0357099\n-0.0664287\n0.00560643\n\n\n8\n-0.449471\n-0.227503\n0.0231776\n\n\n9\n0.18417\n0.0521712\n0.00049485\n\n\n10\n0.43951\n-0.111014\n0.0372552\n\n\n11\n0.179981\n-0.0794656\n-0.0206554\n\n\n12\n0.1185\n-0.0962695\n-0.00643676\n\n\n13\n-0.0548056\n0.00447843\n0.00556863\n\n\n⋮\n⋮\n⋮\n⋮\n\n\n439\n-0.173193\n0.219183\n0.0277421\n\n\n440\n-0.194956\n0.152946\n-0.0407209\n\n\n441\n-0.0691982\n0.0651594\n-0.0220876\n\n\n442\n0.0574283\n-0.0991685\n-0.0182021\n\n\n443\n0.040947\n0.01118\n0.00350249\n\n\n444\n0.128935\n0.0565545\n-0.00341345\n\n\n445\n-0.0507774\n-0.0914194\n-0.0112601\n\n\n446\n0.287571\n-0.0619512\n-0.0149125\n\n\n447\n0.0562878\n-0.0871696\n-0.00901997\n\n\n448\n0.100222\n0.0684576\n-0.0227443\n\n\n449\n-0.36232\n0.260408\n0.0649335\n\n\n450\n0.233495\n0.0890649\n0.0104651",
     "crumbs": [
       "1.NIR Spectra of Milk"
     ]
@@ -1414,6 +1614,56 @@
     "text": "7. plot results\n\n7.1 2 pcs\n\n  ax=(width=400, height=300)\n  table=(pc1=Ytr.x1,pc2=Ytr.x2,cat=ytrain)\n  datalayer=data(table)\n  maplayer=mapping(:pc1,:pc2,color=:cat)\n  vislayer=visual(Scatter,markersize=10,strokewidth=1,strokecolor=:black)\n  plt=datalayer*maplayer*vislayer\n  draw(plt,axis=ax)\n\n\n\n\n\n\n\nFigure 1: nir-spec-milk-2pcs\n\n\n\n\n\n\n\n7.2 3 pcs\n\nlet  \nax = (type = Axis3, width = 400, height = 300,azimuth =-0.1pi,elevation=0.1pi)\ntable=(pc1=Ytr.x1,pc2=Ytr.x2,pc3=Ytr.x3,cat=ytrain)\ndatalayer=data(table)\nmaplayer=mapping(:pc1,:pc2,:pc3,color=:cat)\nvislayer=visual(Scatter,markersize=10,strokewidth=1,strokecolor=:black)\nplt=datalayer*maplayer*vislayer\ndraw(plt,axis=ax)\nend\n\n\n\n\n\n\n\nFigure 2: nir-spec-milk-3pcs",
     "crumbs": [
       "1.NIR Spectra of Milk"
+    ]
+  },
+  {
+    "objectID": "learn/Dimension/4-mnist-pca.html",
+    "href": "learn/Dimension/4-mnist-pca.html",
+    "title": "4 mnist data pca",
+    "section": "",
+    "text": "import MLJ:transform,predict\n using CSV,DataFrames,Tidier,Pipe\n using CairoMakie,AlgebraOfGraphics,MakieThemes\n using MLJ,MLJModelInterface,Random\n #Makie.set_theme!(ggthemr(:flat))",
+    "crumbs": [
+      "4.Mnist  PCA "
+    ]
+  },
+  {
+    "objectID": "learn/Dimension/4-mnist-pca.html#load-package",
+    "href": "learn/Dimension/4-mnist-pca.html#load-package",
+    "title": "4 mnist data pca",
+    "section": "",
+    "text": "import MLJ:transform,predict\n using CSV,DataFrames,Tidier,Pipe\n using CairoMakie,AlgebraOfGraphics,MakieThemes\n using MLJ,MLJModelInterface,Random\n #Makie.set_theme!(ggthemr(:flat))",
+    "crumbs": [
+      "4.Mnist  PCA "
+    ]
+  },
+  {
+    "objectID": "learn/Dimension/4-mnist-pca.html#load-data",
+    "href": "learn/Dimension/4-mnist-pca.html#load-data",
+    "title": "4 mnist data pca",
+    "section": "2. load data",
+    "text": "2. load data\n\ndf=CSV.File(\"../../data/mnist_train.csv\")|&gt;DataFrame\ndf=@chain df begin\n   @clean_names\n   coerce(_,:label=&gt;Multiclass)\nend\nfirst(df,5)\n\n5×785 DataFrame685 columns omitted\n\n\n\nRow\nlabel\n1x1\n1x2\n1x3\n1x4\n1x5\n1x6\n1x7\n1x8\n1x9\n1x10\n1x11\n1x12\n1x13\n1x14\n1x15\n1x16\n1x17\n1x18\n1x19\n1x20\n1x21\n1x22\n1x23\n1x24\n1x25\n1x26\n1x27\n1x28\n2x1\n2x2\n2x3\n2x4\n2x5\n2x6\n2x7\n2x8\n2x9\n2x10\n2x11\n2x12\n2x13\n2x14\n2x15\n2x16\n2x17\n2x18\n2x19\n2x20\n2x21\n2x22\n2x23\n2x24\n2x25\n2x26\n2x27\n2x28\n3x1\n3x2\n3x3\n3x4\n3x5\n3x6\n3x7\n3x8\n3x9\n3x10\n3x11\n3x12\n3x13\n3x14\n3x15\n3x16\n3x17\n3x18\n3x19\n3x20\n3x21\n3x22\n3x23\n3x24\n3x25\n3x26\n3x27\n3x28\n4x1\n4x2\n4x3\n4x4\n4x5\n4x6\n4x7\n4x8\n4x9\n4x10\n4x11\n4x12\n4x13\n4x14\n4x15\n⋯\n\n\n\nCat…\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\nInt64\n⋯\n\n\n\n\n1\n5\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n⋯\n\n\n2\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n⋯\n\n\n3\n4\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n⋯\n\n\n4\n1\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n⋯\n\n\n5\n9\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n⋯",
+    "crumbs": [
+      "4.Mnist  PCA "
+    ]
+  },
+  {
+    "objectID": "learn/Dimension/4-mnist-pca.html#split-data",
+    "href": "learn/Dimension/4-mnist-pca.html#split-data",
+    "title": "4 mnist data pca",
+    "section": "3. split data",
+    "text": "3. split data\n\nytrain, Xtrain=  unpack(df, ==(:label), rng=123);",
+    "crumbs": [
+      "4.Mnist  PCA "
+    ]
+  },
+  {
+    "objectID": "learn/Dimension/4-mnist-pca.html#pca-workflow",
+    "href": "learn/Dimension/4-mnist-pca.html#pca-workflow",
+    "title": "4 mnist data pca",
+    "section": "4. pca workflow",
+    "text": "4. pca workflow\n\n4.1 load data, fitting model\n\nPCA = @load PCA pkg=MultivariateStats\n\nmaxdim=50\nmodel=PCA(maxoutdim=maxdim)\nmach = machine(model, Xtrain) |&gt; fit!\nYtr =transform(mach, Xtrain)\n\nimport MLJMultivariateStatsInterface ✔\n\n\n[ Info: For silent loading, specify `verbosity=0`. \n┌ Warning: The number and/or types of data arguments do not match what the specified model\n│ supports. Suppress this type check by specifying `scitype_check_level=0`.\n│ \n│ Run `@doc MultivariateStats.PCA` to learn more about your model's requirements.\n│ \n│ Commonly, but non exclusively, supervised models are constructed using the syntax\n│ `machine(model, X, y)` or `machine(model, X, y, w)` while most other models are\n│ constructed with `machine(model, X)`.  Here `X` are features, `y` a target, and `w`\n│ sample or class weights.\n│ \n│ In general, data in `machine(model, data...)` is expected to satisfy\n│ \n│     scitype(data) &lt;: MLJ.fit_data_scitype(model)\n│ \n│ In the present case:\n│ \n│ scitype(data) = Tuple{Table{AbstractVector{Count}}}\n│ \n│ fit_data_scitype(model) = Tuple{Table{&lt;:AbstractVector{&lt;:Continuous}}}\n└ @ MLJBase ~/.julia/packages/MLJBase/fEiP2/src/machines.jl:230\n[ Info: Training machine(PCA(maxoutdim = 50, …), …).\n\n\n60000×50 DataFrame59975 rows omitted\n\n\n\nRow\nx1\nx2\nx3\nx4\nx5\nx6\nx7\nx8\nx9\nx10\nx11\nx12\nx13\nx14\nx15\nx16\nx17\nx18\nx19\nx20\nx21\nx22\nx23\nx24\nx25\nx26\nx27\nx28\nx29\nx30\nx31\nx32\nx33\nx34\nx35\nx36\nx37\nx38\nx39\nx40\nx41\nx42\nx43\nx44\nx45\nx46\nx47\nx48\nx49\nx50\n\n\n\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\nFloat64\n\n\n\n\n1\n-415.98\n380.826\n-729.134\n-401.411\n-323.464\n229.325\n50.2891\n15.2407\n-667.496\n722.479\n-180.386\n-114.911\n8.84004\n188.97\n-147.805\n177.926\n-251.198\n107.208\n-48.8031\n-315.554\n-15.1971\n-34.1585\n171.823\n268.987\n94.5367\n-46.4502\n196.6\n159.386\n-154.425\n-253.243\n40.981\n-2.1304\n-228.5\n114.963\n1.86955\n6.39456\n-198.712\n165.736\n-172.771\n98.8403\n-186.953\n136.113\n21.0132\n96.8723\n-45.9564\n196.929\n63.1311\n-57.1832\n-74.8246\n143.248\n\n\n2\n450.873\n-214.015\n706.785\n87.8355\n-596.826\n127.467\n275.13\n-303.553\n-31.5708\n230.38\n407.468\n102.118\n214.084\n122.489\n-52.8519\n8.59779\n83.0348\n-82.719\n-51.4842\n-181.478\n-197.401\n-543.707\n163.737\n-319.223\n201.65\n27.2366\n-42.8234\n-55.5686\n39.6883\n384.721\n169.509\n-84.2783\n150.221\n47.488\n-213.132\n58.5699\n34.9321\n-41.199\n50.6426\n-54.045\n121.58\n-70.8062\n220.628\n-64.831\n-35.6372\n73.7026\n272.316\n-240.475\n-252.128\n145.882\n\n\n3\n-966.895\n-335.349\n34.5384\n102.375\n461.378\n-187.897\n-326.122\n-201.862\n43.9984\n-42.4485\n-224.632\n-255.153\n180.809\n-57.1864\n-261.637\n-205.259\n-171.69\n147.594\n30.0141\n-90.7809\n-17.8526\n-116.094\n-131.553\n52.9841\n169.391\n-67.5007\n-98.9588\n-79.918\n98.4539\n118.33\n128.644\n-67.7202\n-46.3686\n-60.6756\n87.1458\n96.3174\n-43.776\n90.8926\n24.4617\n107.816\n158.838\n-56.6355\n2.54498\n-59.1183\n213.178\n32.5705\n-46.7131\n85.088\n4.58793\n20.0738\n\n\n4\n-253.334\n-313.825\n-85.5189\n515.836\n-319.894\n206.256\n579.316\n61.5487\n-358.695\n-398.939\n64.1718\n-152.83\n536.475\n153.697\n-33.0659\n-430.938\n-95.5665\n-227.52\n68.2124\n-84.1281\n314.029\n-137.856\n345.251\n-374.596\n27.2697\n69.4276\n-53.4584\n79.8256\n-24.5259\n-63.7047\n108.432\n27.6737\n-134.823\n165.459\n94.4906\n157.117\n-48.7786\n0.467434\n156.116\n-123.768\n85.0498\n-37.8166\n-67.8361\n-193.871\n-74.2194\n296.873\n124.72\n-115.001\n24.6387\n-89.9248\n\n\n5\n-931.078\n-377.131\n6.70124\n-17.6992\n389.063\n-337.154\n-466.08\n-244.717\n61.6655\n-176.285\n-392.968\n-354.135\n142.728\n36.2475\n-300.413\n-191.654\n-205.695\n222.398\n76.5629\n-74.431\n-9.53837\n-73.3838\n-204.632\n36.1183\n156.692\n-45.7012\n49.1362\n-11.1604\n92.3432\n212.26\n114.937\n-70.6147\n0.243441\n-14.4962\n95.3824\n77.7903\n-65.2726\n30.7581\n2.24229\n4.5479\n109.993\n-13.9385\n30.3674\n-102.606\n206.992\n64.5043\n-55.5249\n101.036\n-65.8167\n87.0034\n\n\n6\n-157.177\n422.905\n101.151\n695.224\n0.381166\n317.765\n484.736\n465.301\n-201.268\n83.1908\n-171.798\n195.385\n553.645\n226.11\n-202.421\n-341.501\n9.46475\n47.3599\n-350.667\n57.5887\n166.225\n102.193\n83.1734\n-376.966\n-365.707\n255.515\n6.44168\n-16.0134\n-79.1996\n-5.38862\n-34.2996\n30.8278\n309.208\n47.8327\n40.6315\n149.263\n-332.378\n46.8921\n-71.919\n-293.178\n-28.5045\n102.942\n102.144\n-278.088\n-101.609\n-138.595\n52.6996\n93.3305\n67.3511\n273.618\n\n\n7\n357.556\n807.151\n-576.365\n549.569\n101.455\n-150.269\n194.401\n-184.563\n309.026\n96.4666\n-231.526\n-36.5049\n73.0302\n134.199\n164.961\n-199.331\n-574.809\n-167.173\n100.845\n35.3943\n85.8533\n-133.268\n173.148\n-38.5034\n-48.3029\n144.198\n103.294\n-265.811\n-199.594\n-168.326\n32.4147\n154.05\n126.187\n-14.1034\n189.856\n337.519\n-151.069\n145.655\n-19.9256\n-99.569\n-103.33\n-4.35706\n188.144\n-7.68692\n239.241\n143.792\n98.1029\n-66.2202\n-62.0035\n-190.415\n\n\n8\n-825.956\n-386.226\n208.094\n108.999\n144.435\n67.0356\n-223.591\n-276.049\n29.2156\n-209.321\n84.0765\n-146.972\n145.065\n42.7085\n-325.926\n-177.231\n-148.177\n-268.332\n33.1837\n-24.1445\n85.3501\n164.801\n-204.085\n-185.609\n94.3069\n255.225\n-144.411\n-304.507\n-189.869\n137.678\n84.4919\n-98.3363\n-116.12\n-222.498\n64.5582\n-68.8459\n-37.2507\n-53.4223\n46.7275\n-60.0964\n136.977\n115.086\n3.89717\n190.809\n53.8342\n80.7781\n-38.369\n-252.241\n-60.3524\n-86.9251\n\n\n9\n444.491\n84.935\n-680.39\n530.291\n-291.265\n340.299\n600.5\n-115.639\n-287.952\n-299.344\n-774.067\n-196.493\n287.305\n114.643\n322.995\n-5.02074\n-100.021\n2.27572\n294.007\n-55.7214\n-142.502\n247.407\n-8.52115\n-162.75\n399.403\n333.174\n-343.798\n133.946\n-213.404\n-344.94\n94.9804\n-118.69\n193.929\n-312.944\n290.679\n45.1779\n66.7193\n190.842\n-51.5239\n24.7201\n-148.889\n48.1838\n-170.41\n-328.479\n-167.845\n174.863\n-22.6373\n181.894\n-291.795\n-99.4985\n\n\n10\n426.605\n-762.022\n-114.002\n-529.848\n-371.658\n254.119\n-82.0722\n855.94\n586.985\n-40.2179\n185.492\n-324.387\n180.832\n-443.336\n31.5574\n-407.311\n-58.6358\n158.579\n47.6008\n-361.954\n45.7096\n45.5148\n-24.8732\n49.1635\n121.69\n163.712\n136.945\n-61.3124\n77.015\n121.736\n89.6544\n-71.9159\n-177.681\n170.751\n85.6495\n107.464\n-86.0992\n-49.6885\n-10.1235\n24.8729\n24.1412\n186.192\n92.8325\n51.2751\n-103.711\n37.3053\n72.9512\n-91.3744\n-19.0511\n24.3624\n\n\n11\n-751.307\n-268.276\n158.3\n2.00049\n146.076\n-524.236\n-428.643\n-177.306\n63.3497\n-529.396\n-367.819\n-286.954\n-158.468\n63.7359\n-23.5014\n-32.7803\n-321.053\n281.194\n58.6999\n-293.002\n-84.5011\n90.4489\n-194.392\n138.385\n-59.1539\n-20.1296\n302.027\n146.785\n100.887\n-13.9008\n31.6531\n-130.998\n89.9558\n-1.90912\n-33.6123\n11.4834\n21.7356\n109.837\n93.8024\n-10.5682\n-91.5149\n-65.9981\n26.0915\n-70.9476\n93.981\n100.871\n63.0079\n-58.3652\n-138.748\n8.84564\n\n\n12\n-745.955\n-803.26\n-345.322\n143.318\n-169.084\n579.226\n208.946\n41.2581\n-500.602\n-89.6563\n446.621\n241.31\n-14.6275\n-96.7078\n-347.545\n-41.6326\n58.2982\n-32.9846\n114.612\n124.588\n-121.014\n6.79295\n10.7264\n-14.1778\n-131.174\n78.9355\n65.5673\n31.2501\n-14.0187\n-34.5502\n4.74456\n40.5539\n5.99204\n40.6099\n13.9119\n11.5811\n-7.12833\n-123.439\n-99.3499\n-46.0648\n-38.4148\n86.2357\n108.525\n45.2379\n45.8182\n27.8796\n-28.7883\n79.1084\n29.8954\n84.0819\n\n\n13\n366.89\n575.102\n-494.276\n68.7545\n-47.1799\n-896.61\n316.172\n-41.6579\n-208.179\n-264.528\n-721.134\n-305.662\n37.8298\n272.454\n-178.193\n-36.5204\n-138.927\n-168.148\n-57.2298\n-178.737\n-175.947\n139.883\n253.807\n-356.614\n-187.536\n-197.272\n-218.462\n-98.4626\n-194.694\n-6.75176\n-33.5073\n-149.461\n-98.2278\n-81.5427\n185.1\n-1.14502\n190.269\n-203.755\n14.6608\n-115.557\n-67.213\n-7.43611\n-273.805\n-151.693\n-22.5845\n155.626\n-117.866\n23.0255\n-237.069\n14.005\n\n\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n⋮\n\n\n59989\n821.282\n-299.773\n884.515\n-192.603\n167.95\n-231.68\n-451.172\n-364.154\n41.7826\n473.426\n323.478\n-11.5609\n-163.5\n-335.384\n-226.374\n-46.6977\n-6.90494\n-38.5275\n53.9202\n270.94\n-53.1034\n355.502\n244.251\n169.532\n77.0724\n320.217\n68.9453\n238.51\n-143.954\n224.77\n-253.296\n-29.4591\n214.285\n152.644\n-0.644937\n7.96598\n-199.204\n342.89\n-104.915\n9.38702\n6.0926\n215.662\n-174.309\n68.797\n-145.616\n124.862\n-9.71883\n73.4435\n31.7202\n35.1847\n\n\n59990\n747.038\n212.089\n640.4\n-693.347\n-539.609\n644.843\n472.586\n-153.576\n-151.696\n180.579\n-1000.5\n206.975\n-8.85984\n-241.276\n150.268\n-220.811\n-13.1344\n-258.693\n-197.322\n-175.129\n-201.185\n97.6175\n-356.524\n91.6904\n98.0076\n-163.508\n-120.744\n187.362\n-10.6217\n-253.389\n414.765\n-68.4463\n-149.531\n22.7458\n-22.2785\n-168.383\n8.41461\n-267.543\n-88.7541\n26.8191\n53.5814\n300.888\n18.5094\n-153.43\n72.2437\n84.9939\n-103.977\n18.6762\n15.2449\n15.6106\n\n\n59991\n660.855\n151.777\n-102.874\n1161.1\n317.432\n528.703\n-555.437\n-219.718\n-16.5193\n162.034\n62.747\n-580.891\n-308.885\n-412.477\n83.1485\n20.7922\n171.696\n-29.0142\n2.07331\n-9.13586\n-157.18\n441.62\n362.069\n-123.301\n306.957\n-290.841\n-27.1267\n245.61\n-15.5071\n265.511\n-449.036\n119.177\n-96.6688\n-17.5796\n0.667606\n-172.439\n-97.4673\n-156.918\n-109.288\n42.5863\n163.914\n-36.0785\n95.6809\n55.1069\n-129.286\n-133.527\n-146.133\n-204.018\n111.107\n-143.841\n\n\n59992\n515.056\n-390.655\n435.844\n-275.948\n-137.503\n10.6351\n280.513\n-617.731\n482.189\n-317.169\n-141.969\n-55.9355\n91.4136\n47.3705\n111.892\n719.356\n-119.965\n-91.417\n175.169\n295.715\n-86.99\n-242.309\n-159.02\n244.928\n-135.296\n-245.468\n-170.73\n76.7572\n137.09\n235.372\n-542.071\n-59.0188\n172.616\n-330.141\n-253.245\n140.908\n-25.8261\n206.416\n114.163\n-25.6519\n-37.0013\n-166.152\n7.77427\n10.2052\n69.9778\n127.169\n-98.5238\n-103.844\n-102.344\n-104.018\n\n\n59993\n800.557\n-50.0283\n255.297\n-514.222\n1085.6\n719.361\n-70.1062\n-234.32\n-331.483\n-529.635\n41.7023\n-60.4589\n37.7264\n20.2388\n242.373\n-102.215\n86.1463\n207.74\n-218.638\n-264.213\n85.9672\n-150.541\n40.4898\n23.6717\n-7.09628\n570.746\n79.2957\n247.247\n-259.45\n86.6825\n151.652\n137.605\n10.2735\n2.98342\n232.96\n76.4377\n-65.2374\n-132.47\n12.6918\n142.504\n207.666\n-277.45\n-121.796\n63.1905\n-17.1951\n48.2736\n206.303\n185.713\n53.8844\n-115.274\n\n\n59994\n132.483\n445.351\n-327.09\n-680.708\n-499.234\n473.873\n278.109\n-669.151\n-74.7863\n-377.61\n-30.0226\n-307.008\n-265.363\n217.557\n-57.2345\n-288.38\n111.081\n-151.693\n-171.77\n102.903\n-243.766\n8.52213\n-186.329\n231.678\n422.207\n209.769\n-50.7131\n-39.179\n194.038\n217.106\n207.289\n-129.185\n-30.5793\n-52.6299\n-149.171\n173.673\n8.62401\n123.949\n20.2024\n-49.6609\n-87.5854\n-141.801\n-87.0634\n-268.238\n-191.238\n-59.7257\n117.235\n-31.0556\n206.416\n27.5875\n\n\n59995\n-283.556\n598.858\n521.37\n184.236\n555.248\n-52.7434\n199.899\n395.998\n-112.09\n-176.385\n293.422\n541.887\n-154.608\n-125.004\n223.661\n-64.6258\n138.149\n379.02\n-27.5152\n-205.807\n-84.7543\n-202.114\n145.096\n125.533\n34.7431\n205.531\n-130.466\n-36.3694\n163.564\n28.5867\n-93.8237\n-150.076\n-23.7305\n-111.668\n-174.469\n-58.6803\n101.104\n31.7216\n94.487\n49.3085\n181.847\n-141.801\n219.409\n11.463\n52.8827\n-82.8716\n-94.75\n-4.26418\n42.3517\n-148.339\n\n\n59996\n419.543\n-610.48\n227.083\n-649.966\n-632.433\n-128.683\n447.316\n-106.538\n52.9733\n-48.9984\n133.136\n376.939\n-213.277\n17.0047\n12.7639\n-519.016\n32.9912\n-180.983\n-236.539\n100.667\n203.685\n-59.5262\n285.174\n-113.002\n225.828\n95.7914\n61.31\n82.859\n58.8619\n50.6079\n117.307\n-91.1453\n77.5026\n-83.9279\n-19.7177\n49.2601\n-151.732\n-119.837\n171.689\n32.4231\n-83.5963\n-297.061\n43.3501\n102.099\n182.746\n-79.3838\n67.1781\n-63.4726\n130.608\n82.9923\n\n\n59997\n-818.828\n-209.612\n204.372\n25.0457\n368.836\n-430.163\n-382.218\n-151.88\n219.734\n-281.289\n-278.091\n-416.146\n-90.4097\n147.841\n-40.073\n-142.925\n-272.43\n166.117\n-1.00626\n-156.931\n-129.945\n25.2203\n-189.908\n15.3256\n50.5985\n-140.213\n310.392\n3.33738\n46.0663\n38.2107\n98.4118\n-151.418\n59.2977\n49.6231\n-46.2181\n-10.4035\n-31.0725\n-5.40843\n-11.3977\n58.9463\n120.867\n-117.512\n41.6238\n-76.6959\n-44.8812\n196.043\n61.5\n16.6216\n-129.576\n76.4132\n\n\n59998\n-92.6935\n-667.938\n-186.935\n856.901\n-664.474\n-163.123\n-272.545\n-77.3617\n-385.472\n-296.373\n-396.303\n25.98\n75.28\n101.565\n289.388\n50.1387\n-183.313\n-398.137\n109.607\n-320.023\n-38.3842\n-446.464\n147.739\n-66.3297\n120.302\n38.1514\n295.704\n-119.138\n281.863\n-13.1313\n191.894\n265.695\n309.232\n-55.0758\n-142.288\n230.639\n-49.1555\n23.4574\n-211.092\n243.751\n301.389\n66.0926\n-126.465\n0.904371\n-283.403\n-47.4323\n-38.6713\n-12.6669\n11.2727\n30.1184\n\n\n59999\n321.673\n713.394\n587.945\n-477.081\n-403.217\n-214.38\n177.851\n-306.441\n-139.505\n-249.288\n-267.275\n325.623\n-168.408\n-27.9573\n34.0693\n156.028\n230.252\n257.071\n210.539\n-268.281\n108.364\n187.23\n-255.647\n-199.508\n305.241\n-28.6733\n-49.7203\n342.964\n90.676\n200.665\n-118.212\n48.0598\n-28.8553\n-79.8782\n249.746\n22.1633\n-49.8353\n-84.0193\n68.1291\n143.27\n104.605\n254.505\n-234.131\n136.529\n-61.1136\n56.9859\n-20.1807\n-20.9975\n115.19\n-111.186\n\n\n60000\n-484.727\n-430.279\n33.0601\n-569.989\n230.751\n-177.108\n-121.137\n420.935\n181.038\n-96.606\n-38.3474\n-204.724\n295.301\n-182.92\n-181.696\n104.036\n-11.1774\n-125.723\n164.287\n299.003\n40.3412\n-1.527\n394.292\n46.5946\n-87.3074\n220.815\n238.204\n125.914\n115.567\n-134.646\n217.167\n-51.4252\n46.8942\n104.929\n143.761\n-213.449\n-147.329\n114.095\n-5.65435\n4.49229\n-125.058\n118.786\n100.504\n-7.47771\n-20.6538\n-19.0315\n8.78134\n-97.5996\n-150.604\n18.3647\n\n\n\n\n\n\n\n\n4.2 plot results\n\nplot_data=hcat(Ytr,DataFrames.select(df,:label))\nfig=Figure(resolution=(600,300))\nax1=Axis(fig[1,1])\nax2=Axis3(fig[1,2])\ndatalayer=data(plot_data)\nmaplayer2d=mapping(:x1,:x2,color=:label)\nmaplayer3d=mapping(:x1,:x2,:x3,color=:label)\nvislayer=visual(Scatter, strokewidth=0.5,strokecolor=:black,markersize=6)\nplt1=datalayer*maplayer2d*vislayer*visual(alpha = 0.5)\nplt2=datalayer*maplayer3d*vislayer*visual(alpha = 0.5)\ndraw!(ax1,plt1)\ndraw!(ax2,plt2)\nfig",
+    "crumbs": [
+      "4.Mnist  PCA "
     ]
   },
   {

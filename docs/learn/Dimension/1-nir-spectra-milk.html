@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.533">
+<meta name="generator" content="quarto-1.4.540">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -208,6 +208,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text">3.IRIS PCA</span></a>
   </div>
 </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../learn/Dimension/4-mnist-pca.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4.Mnist PCA</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../learn/Dimension/5-texture-pca.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5. texture PCA</span></a>
+  </div>
+</li>
     </ul>
     </div>
 </nav>
@@ -270,23 +282,27 @@ info
 </div>
 <section id="load-package" class="level2">
 <h2 class="anchored" data-anchor-id="load-package">1. load package</h2>
-<div id="5b7eb656" class="cell" data-execution_count="1">
+<div id="4f8d8221" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a> <span class="im">import</span> <span class="bu">MLJ</span>:transform,predict</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a> <span class="im">using</span> <span class="bu">CSV</span>,<span class="bu">DataFrames</span>,<span class="bu">Tidier</span>,<span class="bu">Pipe</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a> <span class="im">using</span> <span class="bu">CairoMakie</span>,<span class="bu">AlgebraOfGraphics</span>,<span class="bu">MakieThemes</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a> <span class="im">using</span> <span class="bu">MLJ</span>,<span class="bu">MLJModelInterface</span>,<span class="bu">Random</span></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a> <span class="co">#Makie.set_theme!(ggthemr(:flat))</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>WARNING: using DataFrames.transform in module Main conflicts with an existing identifier.</code></pre>
+</div>
 </div>
 </section>
 <section id="load-csv" class="level2">
 <h2 class="anchored" data-anchor-id="load-csv">2. load csv</h2>
-<div id="1ff3d363" class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>df<span class="op">=</span>CSV.<span class="fu">File</span>(<span class="st">"../../data/nir-spectra-milk.csv"</span>)<span class="op">|&gt;</span>DataFrame</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>df<span class="op">=</span><span class="pp">@chain</span>  df  <span class="cf">begin</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="pp">@clean_names</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">first</span>(df,<span class="fl">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="438">
+<div id="d72b8912" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>df<span class="op">=</span>CSV.<span class="fu">File</span>(<span class="st">"../../data/nir-spectra-milk.csv"</span>)<span class="op">|&gt;</span>DataFrame</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>df<span class="op">=</span><span class="pp">@chain</span>  df  <span class="cf">begin</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="pp">@clean_names</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="fu">first</span>(df,<span class="fl">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="3">
 <div><div style="float: left;"><span>5×603 DataFrame</span></div><div style="float: right;"><span style="font-style: italic;">503 columns omitted</span></div><div style="clear: both;"></div></div><div class="data-frame" style="overflow-x: scroll;">
 <table class="data-frame table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
@@ -1028,9 +1044,9 @@ info
 </section>
 <section id="describe-df" class="level2">
 <h2 class="anchored" data-anchor-id="describe-df">3. describe df</h2>
-<div id="01c88614" class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">describe</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="439">
+<div id="4bded2d3" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">describe</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="4">
 <div><div style="float: left;"><span>603×7 DataFrame</span></div><div style="float: right;"><span style="font-style: italic;">578 rows omitted</span></div><div style="clear: both;"></div></div><div class="data-frame" style="overflow-x: scroll;">
 <table class="data-frame table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
@@ -1324,32 +1340,33 @@ info
 </section>
 <section id="data-processing" class="level2">
 <h2 class="anchored" data-anchor-id="data-processing">4. data processing</h2>
-<div id="4ea65ffb" class="cell" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>    <span class="fu">coerce!</span>(df,<span class="op">:</span>labels<span class="op">=&gt;</span>Multiclass)</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    ytrain, Xtrain<span class="op">=</span>  <span class="fu">unpack</span>(df, <span class="op">==</span>(<span class="op">:</span>labels),<span class="op">!=</span>(<span class="op">:</span>column1), rng<span class="op">=</span><span class="fl">123</span>)</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    cat<span class="op">=</span><span class="fu">levels</span>(ytrain)</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    rows,cols<span class="op">=</span><span class="fu">size</span>(Xtrain)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="440">
+<div id="134ebbc2" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>    <span class="fu">coerce!</span>(df,<span class="op">:</span>labels<span class="op">=&gt;</span>Multiclass)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    ytrain, Xtrain<span class="op">=</span>  <span class="fu">unpack</span>(df, <span class="op">==</span>(<span class="op">:</span>labels),<span class="op">!=</span>(<span class="op">:</span>column1), rng<span class="op">=</span><span class="fl">123</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    cat<span class="op">=</span><span class="fu">levels</span>(ytrain)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    rows,cols<span class="op">=</span><span class="fu">size</span>(Xtrain)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="5">
 <pre><code>(450, 601)</code></pre>
 </div>
 </div>
 </section>
 <section id="pca-workflow" class="level2">
 <h2 class="anchored" data-anchor-id="pca-workflow">5. pca workflow</h2>
-<div id="8737f62a" class="cell" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>PCA <span class="op">=</span> <span class="pp">@load</span> PCA pkg<span class="op">=</span>MultivariateStats</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>maxdim<span class="op">=</span><span class="fl">6</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>model<span class="op">=</span><span class="fu">PCA</span>(maxoutdim<span class="op">=</span>maxdim)</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>mach <span class="op">=</span> <span class="fu">machine</span>(model, Xtrain) <span class="op">|&gt;</span> fit!</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>Ytr <span class="op">=</span><span class="fu">transform</span>(mach, Xtrain)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="65af013a" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>PCA <span class="op">=</span> <span class="pp">@load</span> PCA pkg<span class="op">=</span>MultivariateStats</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>maxdim<span class="op">=</span><span class="fl">6</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>model<span class="op">=</span><span class="fu">PCA</span>(maxoutdim<span class="op">=</span>maxdim)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>mach <span class="op">=</span> <span class="fu">machine</span>(model, Xtrain) <span class="op">|&gt;</span> fit!</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>Ytr <span class="op">=</span><span class="fu">transform</span>(mach, Xtrain)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>[ Info: For silent loading, specify `verbosity=0`. 
+[ Info: Precompiling MLJMultivariateStatsInterface [1b6a4a23-ba22-4f51-9698-8599985d3728]
+[ Info: Training machine(PCA(maxoutdim = 6, …), …).</code></pre>
+</div>
 <div class="cell-output cell-output-stdout">
 <pre><code>import MLJMultivariateStatsInterface ✔</code></pre>
 </div>
-<div class="cell-output cell-output-stderr">
-<pre><code>[ Info: For silent loading, specify `verbosity=0`. 
-[ Info: Training machine(PCA(maxoutdim = 6, …), …).</code></pre>
-</div>
-<div class="cell-output cell-output-display" data-execution_count="441">
+<div class="cell-output cell-output-display" data-execution_count="6">
 <div><div style="float: left;"><span>450×3 DataFrame</span></div><div style="float: right;"><span style="font-style: italic;">425 rows omitted</span></div><div style="clear: both;"></div></div><div class="data-frame" style="overflow-x: scroll;">
 <table class="data-frame table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
@@ -1531,9 +1548,9 @@ info
 </section>
 <section id="report-mach" class="level2">
 <h2 class="anchored" data-anchor-id="report-mach">6. report mach</h2>
-<div id="4d72946c" class="cell" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">report</span>(mach)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="442">
+<div id="eb296304" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">report</span>(mach)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="7">
 <pre><code>(indim = 601,
  outdim = 3,
  tprincipalvar = 0.10106321733774248,
@@ -1549,14 +1566,14 @@ info
 <section id="pcs" class="level3 page-columns page-full">
 <h3 class="anchored" data-anchor-id="pcs">7.1 2 pcs</h3>
 <div id="cell-fig-nir-spec-milk-2pcs" class="cell page-columns page-full" data-execution_count="7">
-<div class="sourceCode cell-code" id="cb11" data-cap-location="margin"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>  ax<span class="op">=</span>(width<span class="op">=</span><span class="fl">400</span>, height<span class="op">=</span><span class="fl">300</span>)</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  table<span class="op">=</span>(pc1<span class="op">=</span>Ytr.x1,pc2<span class="op">=</span>Ytr.x2,cat<span class="op">=</span>ytrain)</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  datalayer<span class="op">=</span><span class="fu">data</span>(table)</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  maplayer<span class="op">=</span><span class="fu">mapping</span>(<span class="op">:</span>pc1,<span class="op">:</span>pc2,color<span class="op">=:</span>cat)</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  vislayer<span class="op">=</span><span class="fu">visual</span>(Scatter,markersize<span class="op">=</span><span class="fl">10</span>,strokewidth<span class="op">=</span><span class="fl">1</span>,strokecolor<span class="op">=:</span>black)</span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  plt<span class="op">=</span>datalayer<span class="op">*</span>maplayer<span class="op">*</span>vislayer</span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">draw</span>(plt,axis<span class="op">=</span>ax)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display page-columns page-full" data-execution_count="443">
+<div class="sourceCode cell-code" id="cb12" data-cap-location="margin"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>  ax<span class="op">=</span>(width<span class="op">=</span><span class="fl">400</span>, height<span class="op">=</span><span class="fl">300</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  table<span class="op">=</span>(pc1<span class="op">=</span>Ytr.x1,pc2<span class="op">=</span>Ytr.x2,cat<span class="op">=</span>ytrain)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  datalayer<span class="op">=</span><span class="fu">data</span>(table)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  maplayer<span class="op">=</span><span class="fu">mapping</span>(<span class="op">:</span>pc1,<span class="op">:</span>pc2,color<span class="op">=:</span>cat)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  vislayer<span class="op">=</span><span class="fu">visual</span>(Scatter,markersize<span class="op">=</span><span class="fl">10</span>,strokewidth<span class="op">=</span><span class="fl">1</span>,strokecolor<span class="op">=:</span>black)</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  plt<span class="op">=</span>datalayer<span class="op">*</span>maplayer<span class="op">*</span>vislayer</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">draw</span>(plt,axis<span class="op">=</span>ax)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display page-columns page-full" data-execution_count="8">
 <div id="fig-nir-spec-milk-2pcs" class="quarto-figure quarto-figure-center quarto-float anchored page-columns page-full" data-fig-align="center" data-cap-location="margin">
 <figure class="quarto-float quarto-float-fig figure page-columns page-full">
 <div aria-describedby="fig-nir-spec-milk-2pcs-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -1573,16 +1590,16 @@ Figure&nbsp;1: nir-spec-milk-2pcs
 <section id="pcs-1" class="level3 page-columns page-full">
 <h3 class="anchored" data-anchor-id="pcs-1">7.2 3 pcs</h3>
 <div id="cell-fig-nir-spec-milk-3pcs" class="cell page-columns page-full" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb12" data-cap-location="margin"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span>  </span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> (<span class="kw">type</span> <span class="op">=</span> Axis3, width <span class="op">=</span> <span class="fl">400</span>, height <span class="op">=</span> <span class="fl">300</span>,azimuth <span class="op">=-</span><span class="fl">0.1</span>pi,elevation<span class="op">=</span><span class="fl">0.1</span>pi)</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>table<span class="op">=</span>(pc1<span class="op">=</span>Ytr.x1,pc2<span class="op">=</span>Ytr.x2,pc3<span class="op">=</span>Ytr.x3,cat<span class="op">=</span>ytrain)</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>datalayer<span class="op">=</span><span class="fu">data</span>(table)</span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>maplayer<span class="op">=</span><span class="fu">mapping</span>(<span class="op">:</span>pc1,<span class="op">:</span>pc2,<span class="op">:</span>pc3,color<span class="op">=:</span>cat)</span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>vislayer<span class="op">=</span><span class="fu">visual</span>(Scatter,markersize<span class="op">=</span><span class="fl">10</span>,strokewidth<span class="op">=</span><span class="fl">1</span>,strokecolor<span class="op">=:</span>black)</span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>plt<span class="op">=</span>datalayer<span class="op">*</span>maplayer<span class="op">*</span>vislayer</span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="fu">draw</span>(plt,axis<span class="op">=</span>ax)</span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display page-columns page-full" data-execution_count="444">
+<div class="sourceCode cell-code" id="cb13" data-cap-location="margin"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span>  </span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> (<span class="kw">type</span> <span class="op">=</span> Axis3, width <span class="op">=</span> <span class="fl">400</span>, height <span class="op">=</span> <span class="fl">300</span>,azimuth <span class="op">=-</span><span class="fl">0.1</span>pi,elevation<span class="op">=</span><span class="fl">0.1</span>pi)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>table<span class="op">=</span>(pc1<span class="op">=</span>Ytr.x1,pc2<span class="op">=</span>Ytr.x2,pc3<span class="op">=</span>Ytr.x3,cat<span class="op">=</span>ytrain)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>datalayer<span class="op">=</span><span class="fu">data</span>(table)</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>maplayer<span class="op">=</span><span class="fu">mapping</span>(<span class="op">:</span>pc1,<span class="op">:</span>pc2,<span class="op">:</span>pc3,color<span class="op">=:</span>cat)</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>vislayer<span class="op">=</span><span class="fu">visual</span>(Scatter,markersize<span class="op">=</span><span class="fl">10</span>,strokewidth<span class="op">=</span><span class="fl">1</span>,strokecolor<span class="op">=:</span>black)</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>plt<span class="op">=</span>datalayer<span class="op">*</span>maplayer<span class="op">*</span>vislayer</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="fu">draw</span>(plt,axis<span class="op">=</span>ax)</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display page-columns page-full" data-execution_count="9">
 <div id="fig-nir-spec-milk-3pcs" class="quarto-figure quarto-figure-center quarto-float anchored page-columns page-full" data-fig-align="center" data-cap-location="margin">
 <figure class="quarto-float quarto-float-fig figure page-columns page-full">
 <div aria-describedby="fig-nir-spec-milk-3pcs-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">

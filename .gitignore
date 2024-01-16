@@ -9,3 +9,6 @@
 Icon?
 mnist_train.csv
 /data/clustering-datasets/
+/lwface-csv/
+data/lwface-csv
+data/lwface-csv.zip

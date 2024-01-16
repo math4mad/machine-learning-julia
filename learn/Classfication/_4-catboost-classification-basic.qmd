@@ -1,0 +1,68 @@
+---
+title: "4- Catboots  Classification in clustering-dataset"
+---
+
+## 1. load package
+```{julia}
+import MLJ:predict,predict_mode,measures
+using   MLJ, CSV, DataFrames,Tidier
+using  CairoMakie,AlgebraOfGraphics,MakieThemes
+using CatBoost.MLJCatBoostInterface
+```
+
+## 2. load csv
+```{julia}
+
+df=CSV.File("../../data/clustering-datasets/basic2.csv")|>DataFrame
+df=@chain  df  begin
+    @clean_names
+    #coerce(_,:color=> Multiclass)
+end
+first(df,5)
+```
+
+## 3. describe df
+```{julia}
+describe(df)
+```
+
+## 4. tidy data
+```{julia}
+cat=levels(df.color)
+ytrain, Xtrain =  unpack(df, ==(:color), rng=123);
+size(ytrain)
+```
+
+## 5. import test data 
+```{julia}
+include("../utils.jl")  # import boundary_data
+tx,ty,xtest=boundary_data(df)
+```
+
+## 6. MLJ CatBoost classification workflow
+### 6.1 load model 
+```{julia}
+catboost = CatBoostClassifier(iterations=2,learning_rate=0.20)
+mach = machine(catboost, Xtrain, ytrain)|>fit!
+```
+
+### 6.2 predict test data 
+```{julia}
+ytest = predict_mode(mach, xtest)[:,1]|>Array
+show(ytest)
+```
+
+### 6.3 plot results
+```{julia}
+fig=Figure(resolution=(600,600))
+ax=Axis(fig[1,1])
+contourf!(ax, tx,ty,ytest)
+train_data= data(df)
+maplayer=mapping(:x,:y, color=:color)
+vislayer=visual(Scatter,strokewidth=1,strokecolor=:black)
+plt=train_data*maplayer*vislayer
+draw!(fig[1,1],plt)
+fig
+```
+
+

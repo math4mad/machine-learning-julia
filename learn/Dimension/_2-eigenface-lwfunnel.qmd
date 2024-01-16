@@ -1,0 +1,16 @@
+---
+title: "2 Eigen Face of lfw_funneled dataset"
+---
+
+:::{.callout-note title="info"}
+ref: [Faces recognition example using eigenfaces and SVMs¶](https://scikit-learn.org/stable/auto_examples/applications/plot_face_recognition.html#sphx-glr-auto-examples-applications-plot-face-recognition-py)
+:::
+
+## 1. load package 
+```{julia}
+import Images:load
+import GLMakie:Axis
+using GLMakie,MLJ,Images,ImageView,LinearAlgebra
+using CSV,DataFrames
+```
+

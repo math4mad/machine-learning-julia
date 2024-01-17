@@ -1,0 +1,86 @@
+---
+title: "5-mnist-pca-svm"
+---
+
+:::{.callout-note title="info"}
+ref [Classification and analysis of the MNIST dataset using PCA and SVM algorithms](https://scindeks-clanci.ceon.rs/data/ipdf/0042-8469/2023/0042-84692302221A.pdf#:~:text=The%20PCA%2C%20an%20unsupervised%20machine%20learning%20technique%2C%20was,classify%20the%20MNIST%20dataset%20into%20classes%20%28Suthaharan%2C%202016%29.)
+:::
+
+## 1. load package
+```{julia}
+ using CSV,DataFrames,Tidier,Pipe
+ using CairoMakie,AlgebraOfGraphics,MakieThemes
+ using MLJ,MLJModelInterface,Random
+ import MLJ:transform,predict
+ #Makie.set_theme!(ggthemr(:flat))
+
+```
+
+## 2. load csv
+```{julia}
+
+df=CSV.File("../../data/mnist_train.csv")|>DataFrame
+df=@chain  df  begin
+    @clean_names
+    coerce(_,:label=>Multiclass)
+end
+first(df,5)
+```
+
+## 3. data split
+```{julia}
+ytrain, Xtrain=  unpack(df, ==(:label), rng=123);
+(Xtrain, Xtest), (ytrain, ytest)  = partition((Xtrain, ytrain), 0.7, multi=true,shuffle=true)
+```
+
+## 4. machine learning workflow
+### 4.1 load pca and svm model
+```{julia}
+PCA = @load PCA pkg=MultivariateStats
+SVC = @load SVC pkg=LIBSVM   
+```
+
+### 4.2 trainning process 
+
+```{julia}
+    dims=[3,10,15,30,50,100,150]
+    acc_arr=[]
+        for dim in dims
+            model1=PCA(maxoutdim=dim)
+            model2 = SVC()
+            mach1 = machine(model1, Xtrain) |> fit!
+            Ytr =transform(mach1, Xtrain)
+            mach2 = machine(model2, Ytr, ytrain)|>fit!
+            Yte=transform(mach1, Xtest)
+            yhat = predict(mach2, Yte)
+            res=accuracy(yhat,ytest)
+            push!(acc_arr,res)
+        end
+  acc_arr     
+
+```
+
+### 4.3 plot results
+```{julia}
+dim_labels=["3","10","15","30","50","100","150"]
+
+function plot_accuracy(acc_arr,dims_labels)
+    
+    fig=Figure()
+    ax=Axis(fig[1,1],xlabel="pcs",ylabel="accuracy",title="SVM accruacy with n primary components",
+      xticks=(1:7, dim_labels)
+    )
+    
+    acc_arr=round.(acc_arr,digits=3)
+    scatterlines!(ax,acc_arr,markercolor = (:red,0.5))
+    fig
+    #save("19-mnist-PCA-SVM-accuracy.png",fig)
+end
+plot_accuracy(acc_arr,dim_labels)
+
+```
+
+
+
+
+

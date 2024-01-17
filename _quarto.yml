@@ -107,6 +107,8 @@ website:
           href:  learn/Classfication/3-iris-logistics-classification.qmd 
         - text: "4-basic1-classification(catboost)"
           href:  learn/Classfication/4-catboost-classification-basic.qmd
+        - text: "5-mnist-pca-svm"
+          href:  learn/Classfication/5-mnist-pca-svm.qmd
         
     - id: clustering
       collapse-level: 1

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Machine-Learning Julia - 2-Mnist Classification</title>
+<title>Machine-Learning Julia - 5-mnist-pca-svm</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -178,7 +178,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../learn/Classfication/2-mnist-classification.html">2-mnist-classification</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../learn/Classfication/5-mnist-pca-svm.html">5-mnist-pca-svm</a></li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -204,7 +204,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../learn/Classfication/2-mnist-classification.html" class="sidebar-item-text sidebar-link active">
+  <a href="../../learn/Classfication/2-mnist-classification.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">2-mnist-classification</span></a>
   </div>
 </li>
@@ -222,7 +222,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../learn/Classfication/5-mnist-pca-svm.html" class="sidebar-item-text sidebar-link">
+  <a href="../../learn/Classfication/5-mnist-pca-svm.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">5-mnist-pca-svm</span></a>
   </div>
 </li>
@@ -238,14 +238,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul>
   <li><a href="#load-package" id="toc-load-package" class="nav-link active" data-scroll-target="#load-package">1. load package</a></li>
   <li><a href="#load-csv" id="toc-load-csv" class="nav-link" data-scroll-target="#load-csv">2. load csv</a></li>
-  <li><a href="#describe-df" id="toc-describe-df" class="nav-link" data-scroll-target="#describe-df">3. describe df</a></li>
-  <li><a href="#split-data" id="toc-split-data" class="nav-link" data-scroll-target="#split-data">4. split data</a></li>
-  <li><a href="#pca-workflow" id="toc-pca-workflow" class="nav-link" data-scroll-target="#pca-workflow">5. pca workflow</a>
+  <li><a href="#data-split" id="toc-data-split" class="nav-link" data-scroll-target="#data-split">3. data split</a></li>
+  <li><a href="#machine-learning-workflow" id="toc-machine-learning-workflow" class="nav-link" data-scroll-target="#machine-learning-workflow">4. machine learning workflow</a>
   <ul class="collapse">
-  <li><a href="#load-model" id="toc-load-model" class="nav-link" data-scroll-target="#load-model">5.1 load model</a></li>
-  <li><a href="#fitting-model" id="toc-fitting-model" class="nav-link" data-scroll-target="#fitting-model">5.2 fitting model</a></li>
+  <li><a href="#load-pca-and-svm-model" id="toc-load-pca-and-svm-model" class="nav-link" data-scroll-target="#load-pca-and-svm-model">4.1 load pca and svm model</a></li>
+  <li><a href="#trainning-process" id="toc-trainning-process" class="nav-link" data-scroll-target="#trainning-process">4.2 trainning process</a></li>
+  <li><a href="#plot-results" id="toc-plot-results" class="nav-link" data-scroll-target="#plot-results">4.3 plot results</a></li>
   </ul></li>
-  <li><a href="#plot-pca-results" id="toc-plot-pca-results" class="nav-link" data-scroll-target="#plot-pca-results">6. plot pca results</a></li>
   </ul>
 </nav>
     </div>
@@ -254,7 +253,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">2-Mnist Classification</h1>
+<h1 class="title">5-mnist-pca-svm</h1>
 </div>
 
 
@@ -271,9 +270,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
+<div class="callout callout-style-default callout-note callout-titled" title="info">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+info
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>ref <a href="https://scindeks-clanci.ceon.rs/data/ipdf/0042-8469/2023/0042-84692302221A.pdf#:~:text=The%20PCA%2C%20an%20unsupervised%20machine%20learning%20technique%2C%20was,classify%20the%20MNIST%20dataset%20into%20classes%20%28Suthaharan%2C%202016%29.">Classification and analysis of the MNIST dataset using PCA and SVM algorithms</a></p>
+</div>
+</div>
 <section id="load-package" class="level2">
 <h2 class="anchored" data-anchor-id="load-package">1. load package</h2>
-<div id="ab47cc6d" class="cell" data-execution_count="1">
+<div id="b6acfd56" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a> <span class="im">using</span> <span class="bu">CSV</span>,<span class="bu">DataFrames</span>,<span class="bu">Tidier</span>,<span class="bu">Pipe</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a> <span class="im">using</span> <span class="bu">CairoMakie</span>,<span class="bu">AlgebraOfGraphics</span>,<span class="bu">MakieThemes</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a> <span class="im">using</span> <span class="bu">MLJ</span>,<span class="bu">MLJModelInterface</span>,<span class="bu">Random</span></span>
@@ -283,11 +295,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="load-csv" class="level2">
 <h2 class="anchored" data-anchor-id="load-csv">2. load csv</h2>
-<div id="a494ef52" class="cell" data-execution_count="2">
+<div id="ed7cdffb" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>df<span class="op">=</span>CSV.<span class="fu">File</span>(<span class="st">"../../data/mnist_train.csv"</span>)<span class="op">|&gt;</span>DataFrame</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>df<span class="op">=</span><span class="fu">coerce</span>(df,<span class="op">:</span>label<span class="op">=&gt;</span>Multiclass)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">first</span>(df,<span class="fl">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="18">
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>df<span class="op">=</span><span class="pp">@chain</span>  df  <span class="cf">begin</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="pp">@clean_names</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">coerce</span>(_,<span class="op">:</span>label<span class="op">=&gt;</span>Multiclass)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">first</span>(df,<span class="fl">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="3">
 <div><div style="float: left;"><span>5×785 DataFrame</span></div><div style="float: right;"><span style="font-style: italic;">685 columns omitted</span></div><div style="clear: both;"></div></div><div class="data-frame" style="overflow-x: scroll;">
 <table class="data-frame table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
@@ -1027,311 +1042,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </section>
-<section id="describe-df" class="level2">
-<h2 class="anchored" data-anchor-id="describe-df">3. describe df</h2>
-<div id="8815c449" class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">describe</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="19">
-<div><div style="float: left;"><span>785×7 DataFrame</span></div><div style="float: right;"><span style="font-style: italic;">760 rows omitted</span></div><div style="clear: both;"></div></div><div class="data-frame" style="overflow-x: scroll;">
-<table class="data-frame table table-sm table-striped small" data-quarto-postprocess="true">
-<thead>
-<tr class="header">
-<th class="rowNumber" data-quarto-table-cell-role="th" style="text-align: right; font-weight: bold;">Row</th>
-<th style="text-align: left;" data-quarto-table-cell-role="th">variable</th>
-<th style="text-align: left;" data-quarto-table-cell-role="th">mean</th>
-<th style="text-align: left;" data-quarto-table-cell-role="th">min</th>
-<th style="text-align: left;" data-quarto-table-cell-role="th">median</th>
-<th style="text-align: left;" data-quarto-table-cell-role="th">max</th>
-<th style="text-align: left;" data-quarto-table-cell-role="th">nmissing</th>
-<th style="text-align: left;" data-quarto-table-cell-role="th">eltype</th>
-</tr>
-<tr class="odd subheader headerLastRow">
-<th class="rowNumber" data-quarto-table-cell-role="th" style="text-align: right; font-weight: bold;"></th>
-<th style="text-align: left;" data-quarto-table-cell-role="th" title="Symbol">Symbol</th>
-<th style="text-align: left;" data-quarto-table-cell-role="th" title="Union{Nothing, Float64}">Union…</th>
-<th style="text-align: left;" data-quarto-table-cell-role="th" title="Any">Any</th>
-<th style="text-align: left;" data-quarto-table-cell-role="th" title="Union{Nothing, Float64}">Union…</th>
-<th style="text-align: left;" data-quarto-table-cell-role="th" title="Any">Any</th>
-<th style="text-align: left;" data-quarto-table-cell-role="th" title="Int64">Int64</th>
-<th style="text-align: left;" data-quarto-table-cell-role="th" title="DataType">DataType</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td class="rowNumber" style="text-align: right; font-weight: bold;">1</td>
-<td style="text-align: left;">label</td>
-<td style="text-align: left; font-style: italic;"></td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left; font-style: italic;"></td>
-<td style="text-align: left;">9</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: left;">CategoricalValue{Int64, UInt32}</td>
-</tr>
-<tr class="even">
-<td class="rowNumber" style="text-align: right; font-weight: bold;">2</td>
-<td style="text-align: left;">1x1</td>
-<td style="text-align: left;">0.0</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">0.0</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: left;">Int64</td>
-</tr>
-<tr class="odd">
-<td class="rowNumber" style="text-align: right; font-weight: bold;">3</td>
-<td style="text-align: left;">1x2</td>
-<td style="text-align: left;">0.0</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">0.0</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: left;">Int64</td>
-</tr>
-<tr class="even">
-<td class="rowNumber" style="text-align: right; font-weight: bold;">4</td>
-<td style="text-align: left;">1x3</td>
-<td style="text-align: left;">0.0</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">0.0</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: left;">Int64</td>
-</tr>
-<tr class="odd">
-<td class="rowNumber" style="text-align: right; font-weight: bold;">5</td>
-<td style="text-align: left;">1x4</td>
-<td style="text-align: left;">0.0</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">0.0</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: left;">Int64</td>
-</tr>
-<tr class="even">
-<td class="rowNumber" style="text-align: right; font-weight: bold;">6</td>
-<td style="text-align: left;">1x5</td>
-<td style="text-align: left;">0.0</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">0.0</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: left;">Int64</td>
-</tr>
-<tr class="odd">
-<td class="rowNumber" style="text-align: right; font-weight: bold;">7</td>
-<td style="text-align: left;">1x6</td>
-<td style="text-align: left;">0.0</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">0.0</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: left;">Int64</td>
-</tr>
-<tr class="even">
-<td class="rowNumber" style="text-align: right; font-weight: bold;">8</td>
-<td style="text-align: left;">1x7</td>
-<td style="text-align: left;">0.0</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">0.0</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: left;">Int64</td>
-</tr>
-<tr class="odd">
-<td class="rowNumber" style="text-align: right; font-weight: bold;">9</td>
-<td style="text-align: left;">1x8</td>
-<td style="text-align: left;">0.0</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">0.0</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: left;">Int64</td>
-</tr>
-<tr class="even">
-<td class="rowNumber" style="text-align: right; font-weight: bold;">10</td>
-<td style="text-align: left;">1x9</td>
-<td style="text-align: left;">0.0</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">0.0</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: left;">Int64</td>
-</tr>
-<tr class="odd">
-<td class="rowNumber" style="text-align: right; font-weight: bold;">11</td>
-<td style="text-align: left;">1x10</td>
-<td style="text-align: left;">0.0</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">0.0</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: left;">Int64</td>
-</tr>
-<tr class="even">
-<td class="rowNumber" style="text-align: right; font-weight: bold;">12</td>
-<td style="text-align: left;">1x11</td>
-<td style="text-align: left;">0.0</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">0.0</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: left;">Int64</td>
-</tr>
-<tr class="odd">
-<td class="rowNumber" style="text-align: right; font-weight: bold;">13</td>
-<td style="text-align: left;">1x12</td>
-<td style="text-align: left;">0.0</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">0.0</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: left;">Int64</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">⋮</td>
-<td style="text-align: right;">⋮</td>
-<td style="text-align: right;">⋮</td>
-<td style="text-align: right;">⋮</td>
-<td style="text-align: right;">⋮</td>
-<td style="text-align: right;">⋮</td>
-<td style="text-align: right;">⋮</td>
-<td style="text-align: right;">⋮</td>
-</tr>
-<tr class="odd">
-<td class="rowNumber" style="text-align: right; font-weight: bold;">774</td>
-<td style="text-align: left;">28x17</td>
-<td style="text-align: left;">0.482733</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">0.0</td>
-<td style="text-align: left;">255</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: left;">Int64</td>
-</tr>
-<tr class="even">
-<td class="rowNumber" style="text-align: right; font-weight: bold;">775</td>
-<td style="text-align: left;">28x18</td>
-<td style="text-align: left;">0.343517</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">0.0</td>
-<td style="text-align: left;">255</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: left;">Int64</td>
-</tr>
-<tr class="odd">
-<td class="rowNumber" style="text-align: right; font-weight: bold;">776</td>
-<td style="text-align: left;">28x19</td>
-<td style="text-align: left;">0.200433</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">0.0</td>
-<td style="text-align: left;">254</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: left;">Int64</td>
-</tr>
-<tr class="even">
-<td class="rowNumber" style="text-align: right; font-weight: bold;">777</td>
-<td style="text-align: left;">28x20</td>
-<td style="text-align: left;">0.0888667</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">0.0</td>
-<td style="text-align: left;">254</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: left;">Int64</td>
-</tr>
-<tr class="odd">
-<td class="rowNumber" style="text-align: right; font-weight: bold;">778</td>
-<td style="text-align: left;">28x21</td>
-<td style="text-align: left;">0.0456333</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">0.0</td>
-<td style="text-align: left;">253</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: left;">Int64</td>
-</tr>
-<tr class="even">
-<td class="rowNumber" style="text-align: right; font-weight: bold;">779</td>
-<td style="text-align: left;">28x22</td>
-<td style="text-align: left;">0.0192833</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">0.0</td>
-<td style="text-align: left;">253</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: left;">Int64</td>
-</tr>
-<tr class="odd">
-<td class="rowNumber" style="text-align: right; font-weight: bold;">780</td>
-<td style="text-align: left;">28x23</td>
-<td style="text-align: left;">0.0151167</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">0.0</td>
-<td style="text-align: left;">254</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: left;">Int64</td>
-</tr>
-<tr class="even">
-<td class="rowNumber" style="text-align: right; font-weight: bold;">781</td>
-<td style="text-align: left;">28x24</td>
-<td style="text-align: left;">0.002</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">0.0</td>
-<td style="text-align: left;">62</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: left;">Int64</td>
-</tr>
-<tr class="odd">
-<td class="rowNumber" style="text-align: right; font-weight: bold;">782</td>
-<td style="text-align: left;">28x25</td>
-<td style="text-align: left;">0.0</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">0.0</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: left;">Int64</td>
-</tr>
-<tr class="even">
-<td class="rowNumber" style="text-align: right; font-weight: bold;">783</td>
-<td style="text-align: left;">28x26</td>
-<td style="text-align: left;">0.0</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">0.0</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: left;">Int64</td>
-</tr>
-<tr class="odd">
-<td class="rowNumber" style="text-align: right; font-weight: bold;">784</td>
-<td style="text-align: left;">28x27</td>
-<td style="text-align: left;">0.0</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">0.0</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: left;">Int64</td>
-</tr>
-<tr class="even">
-<td class="rowNumber" style="text-align: right; font-weight: bold;">785</td>
-<td style="text-align: left;">28x28</td>
-<td style="text-align: left;">0.0</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">0.0</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: left;">Int64</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-</section>
-<section id="split-data" class="level2">
-<h2 class="anchored" data-anchor-id="split-data">4. split data</h2>
-<div id="639e6731" class="cell" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>y, X<span class="op">=</span> <span class="fu">unpack</span>(df, <span class="op">==</span>(<span class="op">:</span>label), rng<span class="op">=</span><span class="fl">123</span>);</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>cat<span class="op">=</span>y<span class="op">|&gt;</span>levels</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>(Xtrain, Xtest), (ytrain, ytest)  <span class="op">=</span> <span class="fu">partition</span>((X, y), <span class="fl">0.2</span>, multi<span class="op">=</span><span class="cn">true</span>,shuffle<span class="op">=</span><span class="cn">true</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="20">
+<section id="data-split" class="level2">
+<h2 class="anchored" data-anchor-id="data-split">3. data split</h2>
+<div id="e016e3f2" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>ytrain, Xtrain<span class="op">=</span>  <span class="fu">unpack</span>(df, <span class="op">==</span>(<span class="op">:</span>label), rng<span class="op">=</span><span class="fl">123</span>);</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>(Xtrain, Xtest), (ytrain, ytest)  <span class="op">=</span> <span class="fu">partition</span>((Xtrain, ytrain), <span class="fl">0.7</span>, multi<span class="op">=</span><span class="cn">true</span>,shuffle<span class="op">=</span><span class="cn">true</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="4">
 <div class="ansi-escaped-output">
-<pre>((<span class="ansi-bold">12000×784 DataFrame</span>
+<pre>((<span class="ansi-bold">42000×784 DataFrame</span>
 <span class="ansi-bold">   Row </span>│<span class="ansi-bold"> 1x1   </span><span class="ansi-bold"> 1x2   </span><span class="ansi-bold"> 1x3   </span><span class="ansi-bold"> 1x4   </span><span class="ansi-bold"> 1x5   </span><span class="ansi-bold"> 1x6   </span><span class="ansi-bold"> 1x7   </span><span class="ansi-bold"> 1x8   </span><span class="ansi-bold"> 1x9   </span><span class="ansi-bold"> 1x10  </span> ⋯
        │<span class="ansi-bright-black-fg"> Int64 </span><span class="ansi-bright-black-fg"> Int64 </span><span class="ansi-bright-black-fg"> Int64 </span><span class="ansi-bright-black-fg"> Int64 </span><span class="ansi-bright-black-fg"> Int64 </span><span class="ansi-bright-black-fg"> Int64 </span><span class="ansi-bright-black-fg"> Int64 </span><span class="ansi-bright-black-fg"> Int64 </span><span class="ansi-bright-black-fg"> Int64 </span><span class="ansi-bright-black-fg"> Int64 </span> ⋯
 ───────┼────────────────────────────────────────────────────────────────────────
@@ -1347,17 +1065,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     10 │     0      0      0      0      0      0      0      0      0      0
     11 │     0      0      0      0      0      0      0      0      0      0
    ⋮   │   ⋮      ⋮      ⋮      ⋮      ⋮      ⋮      ⋮      ⋮      ⋮      ⋮    ⋱
- 11991 │     0      0      0      0      0      0      0      0      0      0
- 11992 │     0      0      0      0      0      0      0      0      0      0  ⋯
- 11993 │     0      0      0      0      0      0      0      0      0      0
- 11994 │     0      0      0      0      0      0      0      0      0      0
- 11995 │     0      0      0      0      0      0      0      0      0      0
- 11996 │     0      0      0      0      0      0      0      0      0      0  ⋯
- 11997 │     0      0      0      0      0      0      0      0      0      0
- 11998 │     0      0      0      0      0      0      0      0      0      0
- 11999 │     0      0      0      0      0      0      0      0      0      0
- 12000 │     0      0      0      0      0      0      0      0      0      0  ⋯
-<span class="ansi-cyan-fg">                                              774 columns and 11979 rows omitted</span>, <span class="ansi-bold">48000×784 DataFrame</span>
+ 41991 │     0      0      0      0      0      0      0      0      0      0
+ 41992 │     0      0      0      0      0      0      0      0      0      0  ⋯
+ 41993 │     0      0      0      0      0      0      0      0      0      0
+ 41994 │     0      0      0      0      0      0      0      0      0      0
+ 41995 │     0      0      0      0      0      0      0      0      0      0
+ 41996 │     0      0      0      0      0      0      0      0      0      0  ⋯
+ 41997 │     0      0      0      0      0      0      0      0      0      0
+ 41998 │     0      0      0      0      0      0      0      0      0      0
+ 41999 │     0      0      0      0      0      0      0      0      0      0
+ 42000 │     0      0      0      0      0      0      0      0      0      0  ⋯
+<span class="ansi-cyan-fg">                                              774 columns and 41979 rows omitted</span>, <span class="ansi-bold">18000×784 DataFrame</span>
 <span class="ansi-bold">   Row </span>│<span class="ansi-bold"> 1x1   </span><span class="ansi-bold"> 1x2   </span><span class="ansi-bold"> 1x3   </span><span class="ansi-bold"> 1x4   </span><span class="ansi-bold"> 1x5   </span><span class="ansi-bold"> 1x6   </span><span class="ansi-bold"> 1x7   </span><span class="ansi-bold"> 1x8   </span><span class="ansi-bold"> 1x9   </span><span class="ansi-bold"> 1x10  </span> ⋯
        │<span class="ansi-bright-black-fg"> Int64 </span><span class="ansi-bright-black-fg"> Int64 </span><span class="ansi-bright-black-fg"> Int64 </span><span class="ansi-bright-black-fg"> Int64 </span><span class="ansi-bright-black-fg"> Int64 </span><span class="ansi-bright-black-fg"> Int64 </span><span class="ansi-bright-black-fg"> Int64 </span><span class="ansi-bright-black-fg"> Int64 </span><span class="ansi-bright-black-fg"> Int64 </span><span class="ansi-bright-black-fg"> Int64 </span> ⋯
 ───────┼────────────────────────────────────────────────────────────────────────
@@ -1373,138 +1091,58 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     10 │     0      0      0      0      0      0      0      0      0      0
     11 │     0      0      0      0      0      0      0      0      0      0
    ⋮   │   ⋮      ⋮      ⋮      ⋮      ⋮      ⋮      ⋮      ⋮      ⋮      ⋮    ⋱
- 47991 │     0      0      0      0      0      0      0      0      0      0
- 47992 │     0      0      0      0      0      0      0      0      0      0  ⋯
- 47993 │     0      0      0      0      0      0      0      0      0      0
- 47994 │     0      0      0      0      0      0      0      0      0      0
- 47995 │     0      0      0      0      0      0      0      0      0      0
- 47996 │     0      0      0      0      0      0      0      0      0      0  ⋯
- 47997 │     0      0      0      0      0      0      0      0      0      0
- 47998 │     0      0      0      0      0      0      0      0      0      0
- 47999 │     0      0      0      0      0      0      0      0      0      0
- 48000 │     0      0      0      0      0      0      0      0      0      0  ⋯
-<span class="ansi-cyan-fg">                                              774 columns and 47979 rows omitted</span>), (CategoricalArrays.CategoricalValue{Int64, UInt32}[1, 3, 9, 0, 8, 1, 6, 7, 1, 3  …  5, 2, 5, 4, 4, 2, 3, 3, 3, 1], CategoricalArrays.CategoricalValue{Int64, UInt32}[7, 4, 1, 0, 3, 8, 2, 2, 3, 8  …  4, 0, 3, 8, 8, 1, 5, 2, 7, 1]))</pre>
+ 17991 │     0      0      0      0      0      0      0      0      0      0
+ 17992 │     0      0      0      0      0      0      0      0      0      0  ⋯
+ 17993 │     0      0      0      0      0      0      0      0      0      0
+ 17994 │     0      0      0      0      0      0      0      0      0      0
+ 17995 │     0      0      0      0      0      0      0      0      0      0
+ 17996 │     0      0      0      0      0      0      0      0      0      0  ⋯
+ 17997 │     0      0      0      0      0      0      0      0      0      0
+ 17998 │     0      0      0      0      0      0      0      0      0      0
+ 17999 │     0      0      0      0      0      0      0      0      0      0
+ 18000 │     0      0      0      0      0      0      0      0      0      0  ⋯
+<span class="ansi-cyan-fg">                                              774 columns and 17979 rows omitted</span>), (CategoricalArrays.CategoricalValue{Int64, UInt32}[9, 2, 3, 2, 9, 1, 0, 8, 3, 6  …  2, 8, 8, 5, 2, 0, 9, 7, 1, 2], CategoricalArrays.CategoricalValue{Int64, UInt32}[8, 9, 2, 8, 5, 5, 0, 8, 4, 9  …  2, 0, 7, 0, 5, 0, 1, 4, 0, 0]))</pre>
 </div>
 </div>
 </div>
 </section>
-<section id="pca-workflow" class="level2">
-<h2 class="anchored" data-anchor-id="pca-workflow">5. pca workflow</h2>
-<section id="load-model" class="level3">
-<h3 class="anchored" data-anchor-id="load-model">5.1 load model</h3>
-<div id="f7ec363a" class="cell" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>PCA <span class="op">=</span> <span class="pp">@load</span> PCA pkg<span class="op">=</span>MultivariateStats;</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>model<span class="op">=</span><span class="fu">PCA</span>(maxoutdim<span class="op">=</span><span class="fl">3</span>);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>import MLJMultivariateStatsInterface ✔</code></pre>
-</div>
+<section id="machine-learning-workflow" class="level2">
+<h2 class="anchored" data-anchor-id="machine-learning-workflow">4. machine learning workflow</h2>
+<section id="load-pca-and-svm-model" class="level3">
+<h3 class="anchored" data-anchor-id="load-pca-and-svm-model">4.1 load pca and svm model</h3>
+<div id="87850917" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>PCA <span class="op">=</span> <span class="pp">@load</span> PCA pkg<span class="op">=</span>MultivariateStats</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>SVC <span class="op">=</span> <span class="pp">@load</span> SVC pkg<span class="op">=</span>LIBSVM   </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>[ Info: For silent loading, specify `verbosity=0`. </code></pre>
+<pre><code>[ Info: For silent loading, specify `verbosity=0`. 
+[ Info: For silent loading, specify `verbosity=0`. </code></pre>
 </div>
+<div class="cell-output cell-output-stdout">
+<pre><code>import MLJMultivariateStatsInterface ✔
+import MLJLIBSVMInterface ✔</code></pre>
 </div>
-<div id="ed8f3fd3" class="cell" data-execution_count="6">
-<div class="cell-output cell-output-display" data-execution_count="22">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">  
-     <button class="btn btn-info rounded-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">PCA doc 
-     <span class="my-auto"><i class="bi bi-arrow-right" style="font-size: 1.5rem;"></i></span>
-     </button>
- <div class="offcanvas offcanvas-end " tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
- <div class="offcanvas-header">
- <h5 id="offcanvasRightLabel" class="anchored">doc</h5>
- <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
- </div>
- <div class="offcanvas-body">
- <div class="markdown"><pre><code>PCA</code></pre>
-<p>A model type for constructing a pca, based on <a href="unknown">unknown.jl</a>, and implementing the MLJ model interface.</p>
-<p>From MLJ, the type can be imported using</p>
-<pre><code>PCA = @load PCA pkg=unknown</code></pre>
-<p>Do <code>model = PCA()</code> to construct an instance with default hyper-parameters. Provide keyword arguments to override hyper-parameter defaults, as in <code>PCA(maxoutdim=...)</code>.</p>
-<p>Principal component analysis learns a linear projection onto a lower dimensional space while preserving most of the initial variance seen in the training data.</p>
-<h1>Training data</h1>
-<p>In MLJ or MLJBase, bind an instance <code>model</code> to data with</p>
-<pre><code>mach = machine(model, X)</code></pre>
-<p>Here:</p>
-<ul>
-<li><p><code>X</code> is any table of input features (eg, a <code>DataFrame</code>) whose columns are of scitype <code>Continuous</code>; check column scitypes with <code>schema(X)</code>.</p>
-</li>
-</ul>
-<p>Train the machine using <code>fit!(mach, rows=...)</code>.</p>
-<h1>Hyper-parameters</h1>
-<ul>
-<li><p><code>maxoutdim=0</code>: Together with <code>variance_ratio</code>, controls the output dimension <code>outdim</code>  chosen by the model. Specifically, suppose that <code>k</code> is the smallest integer such that  retaining the <code>k</code> most significant principal components accounts for <code>variance_ratio</code> of  the total variance in the training data. Then <code>outdim = min(outdim, maxoutdim)</code>. If  <code>maxoutdim=0</code> (default) then the effective <code>maxoutdim</code> is <code>min(n, indim - 1)</code> where <code>n</code>  is the number of observations and <code>indim</code> the number of features in the training data.</p>
-</li>
-<li><p><code>variance_ratio::Float64=0.99</code>: The ratio of variance preserved after the transformation</p>
-</li>
-<li><p><code>method=:auto</code>: The method to use to solve the problem. Choices are</p>
-<ul>
-<li><p><code>:svd</code>: Support Vector Decomposition of the matrix.</p>
-</li>
-<li><p><code>:cov</code>: Covariance matrix decomposition.</p>
-</li>
-<li><p><code>:auto</code>: Use <code>:cov</code> if the matrices first dimension is smaller than its second dimension and otherwise use <code>:svd</code></p>
-</li>
-</ul>
-</li>
-<li><p><code>mean=nothing</code>: if <code>nothing</code>, centering will be computed and applied, if set to <code>0</code> no centering (data is assumed pre-centered); if a vector is passed, the centering is done with that vector.</p>
-</li>
-</ul>
-<h1>Operations</h1>
-<ul>
-<li><p><code>transform(mach, Xnew)</code>: Return a lower dimensional projection of the input <code>Xnew</code>, which should have the same scitype as <code>X</code> above.</p>
-</li>
-<li><p><code>inverse_transform(mach, Xsmall)</code>: For a dimension-reduced table <code>Xsmall</code>, such as returned by <code>transform</code>, reconstruct a table, having same the number of columns as the original training data <code>X</code>, that transforms to <code>Xsmall</code>. Mathematically, <code>inverse_transform</code> is a right-inverse for the PCA projection map, whose image is orthogonal to the kernel of that map. In particular, if <code>Xsmall = transform(mach, Xnew)</code>, then <code>inverse_transform(Xsmall)</code> is only an approximation to <code>Xnew</code>.</p>
-</li>
-</ul>
-<h1>Fitted parameters</h1>
-<p>The fields of <code>fitted_params(mach)</code> are:</p>
-<ul>
-<li><p><code>projection</code>: Returns the projection matrix, which has size <code>(indim, outdim)</code>, where <code>indim</code> and <code>outdim</code> are the number of features of the input and output respectively.</p>
-</li>
-</ul>
-<h1>Report</h1>
-<p>The fields of <code>report(mach)</code> are:</p>
-<ul>
-<li><p><code>indim</code>: Dimension (number of columns) of the training data and new data to be transformed.</p>
-</li>
-<li><p><code>outdim = min(n, indim, maxoutdim)</code> is the output dimension; here <code>n</code> is the number of observations.</p>
-</li>
-<li><p><code>tprincipalvar</code>: Total variance of the principal components.</p>
-</li>
-<li><p><code>tresidualvar</code>: Total residual variance.</p>
-</li>
-<li><p><code>tvar</code>: Total observation variance (principal + residual variance).</p>
-</li>
-<li><p><code>mean</code>: The mean of the untransformed training data, of length <code>indim</code>.</p>
-</li>
-<li><p><code>principalvars</code>: The variance of the principal components.</p>
-</li>
-</ul>
-<h1>Examples</h1>
-<pre><code>using MLJ
-
-PCA = @load PCA pkg=MultivariateStats
-
-X, y = @load_iris # a table and a vector
-
-model = PCA(maxoutdim=2)
-mach = machine(model, X) |&gt; fit!
-
-Xproj = transform(mach, X)</code></pre>
-<p>See also <a href="@ref"><code>KernelPCA</code></a>, <a href="@ref"><code>ICA</code></a>, <a href="@ref"><code>FactorAnalysis</code></a>, <a href="@ref"><code>PPCA</code></a></p>
-
-
-</div>
- </div>
- </div>
- 
+<div class="cell-output cell-output-display" data-execution_count="5">
+<pre><code>MLJLIBSVMInterface.SVC</code></pre>
 </div>
 </div>
 </section>
-<section id="fitting-model" class="level3">
-<h3 class="anchored" data-anchor-id="fitting-model">5.2 fitting model</h3>
-<div id="14a5d1a6" class="cell" data-execution_count="7">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>mach <span class="op">=</span> <span class="fu">machine</span>(model, Xtrain) <span class="op">|&gt;</span> fit!</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>Xtr <span class="op">=</span><span class="fu">transform</span>(mach, Xtrain)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="trainning-process" class="level3">
+<h3 class="anchored" data-anchor-id="trainning-process">4.2 trainning process</h3>
+<div id="07b91b02" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>    dims<span class="op">=</span>[<span class="fl">3</span>,<span class="fl">10</span>,<span class="fl">15</span>,<span class="fl">30</span>,<span class="fl">50</span>,<span class="fl">100</span>,<span class="fl">150</span>]</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    acc_arr<span class="op">=</span>[]</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> dim <span class="kw">in</span> dims</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>            model1<span class="op">=</span><span class="fu">PCA</span>(maxoutdim<span class="op">=</span>dim)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>            model2 <span class="op">=</span> <span class="fu">SVC</span>()</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>            mach1 <span class="op">=</span> <span class="fu">machine</span>(model1, Xtrain) <span class="op">|&gt;</span> fit!</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>            Ytr <span class="op">=</span><span class="fu">transform</span>(mach1, Xtrain)</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>            mach2 <span class="op">=</span> <span class="fu">machine</span>(model2, Ytr, ytrain)<span class="op">|&gt;</span>fit!</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>            Yte<span class="op">=</span><span class="fu">transform</span>(mach1, Xtest)</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>            yhat <span class="op">=</span> <span class="fu">predict</span>(mach2, Yte)</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>            res<span class="op">=</span><span class="fu">accuracy</span>(yhat,ytest)</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>            <span class="fu">push!</span>(acc_arr,res)</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">end</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  acc_arr     </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>┌ Warning: The number and/or types of data arguments do not match what the specified model
 │ supports. Suppress this type check by specifying `scitype_check_level=0`.
@@ -1526,208 +1164,182 @@ Xproj = transform(mach, X)</code></pre>
 │ 
 │ fit_data_scitype(model) = Tuple{Table{&lt;:AbstractVector{&lt;:Continuous}}}
 └ @ MLJBase ~/.julia/packages/MLJBase/fEiP2/src/machines.jl:230
-[ Info: Training machine(PCA(maxoutdim = 3, …), …).</code></pre>
+[ Info: Training machine(PCA(maxoutdim = 3, …), …).
+[ Info: Training machine(SVC(kernel = RadialBasis, …), …).
+┌ Warning: The number and/or types of data arguments do not match what the specified model
+│ supports. Suppress this type check by specifying `scitype_check_level=0`.
+│ 
+│ Run `@doc MultivariateStats.PCA` to learn more about your model's requirements.
+│ 
+│ Commonly, but non exclusively, supervised models are constructed using the syntax
+│ `machine(model, X, y)` or `machine(model, X, y, w)` while most other models are
+│ constructed with `machine(model, X)`.  Here `X` are features, `y` a target, and `w`
+│ sample or class weights.
+│ 
+│ In general, data in `machine(model, data...)` is expected to satisfy
+│ 
+│     scitype(data) &lt;: MLJ.fit_data_scitype(model)
+│ 
+│ In the present case:
+│ 
+│ scitype(data) = Tuple{Table{AbstractVector{Count}}}
+│ 
+│ fit_data_scitype(model) = Tuple{Table{&lt;:AbstractVector{&lt;:Continuous}}}
+└ @ MLJBase ~/.julia/packages/MLJBase/fEiP2/src/machines.jl:230
+[ Info: Training machine(PCA(maxoutdim = 10, …), …).
+[ Info: Training machine(SVC(kernel = RadialBasis, …), …).
+┌ Warning: The number and/or types of data arguments do not match what the specified model
+│ supports. Suppress this type check by specifying `scitype_check_level=0`.
+│ 
+│ Run `@doc MultivariateStats.PCA` to learn more about your model's requirements.
+│ 
+│ Commonly, but non exclusively, supervised models are constructed using the syntax
+│ `machine(model, X, y)` or `machine(model, X, y, w)` while most other models are
+│ constructed with `machine(model, X)`.  Here `X` are features, `y` a target, and `w`
+│ sample or class weights.
+│ 
+│ In general, data in `machine(model, data...)` is expected to satisfy
+│ 
+│     scitype(data) &lt;: MLJ.fit_data_scitype(model)
+│ 
+│ In the present case:
+│ 
+│ scitype(data) = Tuple{Table{AbstractVector{Count}}}
+│ 
+│ fit_data_scitype(model) = Tuple{Table{&lt;:AbstractVector{&lt;:Continuous}}}
+└ @ MLJBase ~/.julia/packages/MLJBase/fEiP2/src/machines.jl:230
+[ Info: Training machine(PCA(maxoutdim = 15, …), …).
+[ Info: Training machine(SVC(kernel = RadialBasis, …), …).
+┌ Warning: The number and/or types of data arguments do not match what the specified model
+│ supports. Suppress this type check by specifying `scitype_check_level=0`.
+│ 
+│ Run `@doc MultivariateStats.PCA` to learn more about your model's requirements.
+│ 
+│ Commonly, but non exclusively, supervised models are constructed using the syntax
+│ `machine(model, X, y)` or `machine(model, X, y, w)` while most other models are
+│ constructed with `machine(model, X)`.  Here `X` are features, `y` a target, and `w`
+│ sample or class weights.
+│ 
+│ In general, data in `machine(model, data...)` is expected to satisfy
+│ 
+│     scitype(data) &lt;: MLJ.fit_data_scitype(model)
+│ 
+│ In the present case:
+│ 
+│ scitype(data) = Tuple{Table{AbstractVector{Count}}}
+│ 
+│ fit_data_scitype(model) = Tuple{Table{&lt;:AbstractVector{&lt;:Continuous}}}
+└ @ MLJBase ~/.julia/packages/MLJBase/fEiP2/src/machines.jl:230
+[ Info: Training machine(PCA(maxoutdim = 30, …), …).
+[ Info: Training machine(SVC(kernel = RadialBasis, …), …).
+┌ Warning: The number and/or types of data arguments do not match what the specified model
+│ supports. Suppress this type check by specifying `scitype_check_level=0`.
+│ 
+│ Run `@doc MultivariateStats.PCA` to learn more about your model's requirements.
+│ 
+│ Commonly, but non exclusively, supervised models are constructed using the syntax
+│ `machine(model, X, y)` or `machine(model, X, y, w)` while most other models are
+│ constructed with `machine(model, X)`.  Here `X` are features, `y` a target, and `w`
+│ sample or class weights.
+│ 
+│ In general, data in `machine(model, data...)` is expected to satisfy
+│ 
+│     scitype(data) &lt;: MLJ.fit_data_scitype(model)
+│ 
+│ In the present case:
+│ 
+│ scitype(data) = Tuple{Table{AbstractVector{Count}}}
+│ 
+│ fit_data_scitype(model) = Tuple{Table{&lt;:AbstractVector{&lt;:Continuous}}}
+└ @ MLJBase ~/.julia/packages/MLJBase/fEiP2/src/machines.jl:230
+[ Info: Training machine(PCA(maxoutdim = 50, …), …).
+[ Info: Training machine(SVC(kernel = RadialBasis, …), …).
+┌ Warning: The number and/or types of data arguments do not match what the specified model
+│ supports. Suppress this type check by specifying `scitype_check_level=0`.
+│ 
+│ Run `@doc MultivariateStats.PCA` to learn more about your model's requirements.
+│ 
+│ Commonly, but non exclusively, supervised models are constructed using the syntax
+│ `machine(model, X, y)` or `machine(model, X, y, w)` while most other models are
+│ constructed with `machine(model, X)`.  Here `X` are features, `y` a target, and `w`
+│ sample or class weights.
+│ 
+│ In general, data in `machine(model, data...)` is expected to satisfy
+│ 
+│     scitype(data) &lt;: MLJ.fit_data_scitype(model)
+│ 
+│ In the present case:
+│ 
+│ scitype(data) = Tuple{Table{AbstractVector{Count}}}
+│ 
+│ fit_data_scitype(model) = Tuple{Table{&lt;:AbstractVector{&lt;:Continuous}}}
+└ @ MLJBase ~/.julia/packages/MLJBase/fEiP2/src/machines.jl:230
+[ Info: Training machine(PCA(maxoutdim = 100, …), …).
+[ Info: Training machine(SVC(kernel = RadialBasis, …), …).
+┌ Warning: The number and/or types of data arguments do not match what the specified model
+│ supports. Suppress this type check by specifying `scitype_check_level=0`.
+│ 
+│ Run `@doc MultivariateStats.PCA` to learn more about your model's requirements.
+│ 
+│ Commonly, but non exclusively, supervised models are constructed using the syntax
+│ `machine(model, X, y)` or `machine(model, X, y, w)` while most other models are
+│ constructed with `machine(model, X)`.  Here `X` are features, `y` a target, and `w`
+│ sample or class weights.
+│ 
+│ In general, data in `machine(model, data...)` is expected to satisfy
+│ 
+│     scitype(data) &lt;: MLJ.fit_data_scitype(model)
+│ 
+│ In the present case:
+│ 
+│ scitype(data) = Tuple{Table{AbstractVector{Count}}}
+│ 
+│ fit_data_scitype(model) = Tuple{Table{&lt;:AbstractVector{&lt;:Continuous}}}
+└ @ MLJBase ~/.julia/packages/MLJBase/fEiP2/src/machines.jl:230
+[ Info: Training machine(PCA(maxoutdim = 150, …), …).
+[ Info: Training machine(SVC(kernel = RadialBasis, …), …).</code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="23">
-<div><div style="float: left;"><span>12000×3 DataFrame</span></div><div style="float: right;"><span style="font-style: italic;">11975 rows omitted</span></div><div style="clear: both;"></div></div><div class="data-frame" style="overflow-x: scroll;">
-<table class="data-frame table table-sm table-striped small" data-quarto-postprocess="true">
-<thead>
-<tr class="header">
-<th class="rowNumber" data-quarto-table-cell-role="th" style="text-align: right; font-weight: bold;">Row</th>
-<th style="text-align: left;" data-quarto-table-cell-role="th">x1</th>
-<th style="text-align: left;" data-quarto-table-cell-role="th">x2</th>
-<th style="text-align: left;" data-quarto-table-cell-role="th">x3</th>
-</tr>
-<tr class="odd subheader headerLastRow">
-<th class="rowNumber" data-quarto-table-cell-role="th" style="text-align: right; font-weight: bold;"></th>
-<th style="text-align: left;" data-quarto-table-cell-role="th" title="Float64">Float64</th>
-<th style="text-align: left;" data-quarto-table-cell-role="th" title="Float64">Float64</th>
-<th style="text-align: left;" data-quarto-table-cell-role="th" title="Float64">Float64</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td class="rowNumber" style="text-align: right; font-weight: bold;">1</td>
-<td style="text-align: right;">-856.852</td>
-<td style="text-align: right;">-332.575</td>
-<td style="text-align: right;">-34.3783</td>
-</tr>
-<tr class="even">
-<td class="rowNumber" style="text-align: right; font-weight: bold;">2</td>
-<td style="text-align: right;">-245.793</td>
-<td style="text-align: right;">-112.833</td>
-<td style="text-align: right;">1046.94</td>
-</tr>
-<tr class="odd">
-<td class="rowNumber" style="text-align: right; font-weight: bold;">3</td>
-<td style="text-align: right;">-390.243</td>
-<td style="text-align: right;">401.559</td>
-<td style="text-align: right;">30.4265</td>
-</tr>
-<tr class="even">
-<td class="rowNumber" style="text-align: right; font-weight: bold;">4</td>
-<td style="text-align: right;">966.51</td>
-<td style="text-align: right;">-359.698</td>
-<td style="text-align: right;">650.63</td>
-</tr>
-<tr class="odd">
-<td class="rowNumber" style="text-align: right; font-weight: bold;">5</td>
-<td style="text-align: right;">354.756</td>
-<td style="text-align: right;">-115.593</td>
-<td style="text-align: right;">527.175</td>
-</tr>
-<tr class="even">
-<td class="rowNumber" style="text-align: right; font-weight: bold;">6</td>
-<td style="text-align: right;">-508.043</td>
-<td style="text-align: right;">-813.775</td>
-<td style="text-align: right;">-417.797</td>
-</tr>
-<tr class="odd">
-<td class="rowNumber" style="text-align: right; font-weight: bold;">7</td>
-<td style="text-align: right;">720.101</td>
-<td style="text-align: right;">-149.118</td>
-<td style="text-align: right;">-734.982</td>
-</tr>
-<tr class="even">
-<td class="rowNumber" style="text-align: right; font-weight: bold;">8</td>
-<td style="text-align: right;">-461.916</td>
-<td style="text-align: right;">568.386</td>
-<td style="text-align: right;">447.195</td>
-</tr>
-<tr class="odd">
-<td class="rowNumber" style="text-align: right; font-weight: bold;">9</td>
-<td style="text-align: right;">-861.752</td>
-<td style="text-align: right;">-190.173</td>
-<td style="text-align: right;">75.7481</td>
-</tr>
-<tr class="even">
-<td class="rowNumber" style="text-align: right; font-weight: bold;">10</td>
-<td style="text-align: right;">636.84</td>
-<td style="text-align: right;">428.198</td>
-<td style="text-align: right;">563.142</td>
-</tr>
-<tr class="odd">
-<td class="rowNumber" style="text-align: right; font-weight: bold;">11</td>
-<td style="text-align: right;">-475.992</td>
-<td style="text-align: right;">-179.361</td>
-<td style="text-align: right;">-396.116</td>
-</tr>
-<tr class="even">
-<td class="rowNumber" style="text-align: right; font-weight: bold;">12</td>
-<td style="text-align: right;">545.461</td>
-<td style="text-align: right;">-188.282</td>
-<td style="text-align: right;">697.017</td>
-</tr>
-<tr class="odd">
-<td class="rowNumber" style="text-align: right; font-weight: bold;">13</td>
-<td style="text-align: right;">-269.984</td>
-<td style="text-align: right;">-381.653</td>
-<td style="text-align: right;">705.561</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">⋮</td>
-<td style="text-align: right;">⋮</td>
-<td style="text-align: right;">⋮</td>
-<td style="text-align: right;">⋮</td>
-</tr>
-<tr class="odd">
-<td class="rowNumber" style="text-align: right; font-weight: bold;">11989</td>
-<td style="text-align: right;">-181.447</td>
-<td style="text-align: right;">-310.647</td>
-<td style="text-align: right;">-2.19181</td>
-</tr>
-<tr class="even">
-<td class="rowNumber" style="text-align: right; font-weight: bold;">11990</td>
-<td style="text-align: right;">-956.569</td>
-<td style="text-align: right;">-595.445</td>
-<td style="text-align: right;">-138.727</td>
-</tr>
-<tr class="odd">
-<td class="rowNumber" style="text-align: right; font-weight: bold;">11991</td>
-<td style="text-align: right;">-44.6248</td>
-<td style="text-align: right;">225.234</td>
-<td style="text-align: right;">466.205</td>
-</tr>
-<tr class="even">
-<td class="rowNumber" style="text-align: right; font-weight: bold;">11992</td>
-<td style="text-align: right;">386.423</td>
-<td style="text-align: right;">-17.1393</td>
-<td style="text-align: right;">-552.14</td>
-</tr>
-<tr class="odd">
-<td class="rowNumber" style="text-align: right; font-weight: bold;">11993</td>
-<td style="text-align: right;">566.271</td>
-<td style="text-align: right;">-80.3966</td>
-<td style="text-align: right;">-103.541</td>
-</tr>
-<tr class="even">
-<td class="rowNumber" style="text-align: right; font-weight: bold;">11994</td>
-<td style="text-align: right;">-498.803</td>
-<td style="text-align: right;">-52.1383</td>
-<td style="text-align: right;">-26.2291</td>
-</tr>
-<tr class="odd">
-<td class="rowNumber" style="text-align: right; font-weight: bold;">11995</td>
-<td style="text-align: right;">3.47708</td>
-<td style="text-align: right;">500.304</td>
-<td style="text-align: right;">-260.501</td>
-</tr>
-<tr class="even">
-<td class="rowNumber" style="text-align: right; font-weight: bold;">11996</td>
-<td style="text-align: right;">875.924</td>
-<td style="text-align: right;">44.0938</td>
-<td style="text-align: right;">-1050.98</td>
-</tr>
-<tr class="odd">
-<td class="rowNumber" style="text-align: right; font-weight: bold;">11997</td>
-<td style="text-align: right;">154.431</td>
-<td style="text-align: right;">-141.981</td>
-<td style="text-align: right;">-450.883</td>
-</tr>
-<tr class="even">
-<td class="rowNumber" style="text-align: right; font-weight: bold;">11998</td>
-<td style="text-align: right;">-66.3014</td>
-<td style="text-align: right;">-687.415</td>
-<td style="text-align: right;">-39.575</td>
-</tr>
-<tr class="odd">
-<td class="rowNumber" style="text-align: right; font-weight: bold;">11999</td>
-<td style="text-align: right;">-420.884</td>
-<td style="text-align: right;">-151.585</td>
-<td style="text-align: right;">801.763</td>
-</tr>
-<tr class="even">
-<td class="rowNumber" style="text-align: right; font-weight: bold;">12000</td>
-<td style="text-align: right;">-763.315</td>
-<td style="text-align: right;">-403.198</td>
-<td style="text-align: right;">-129.845</td>
-</tr>
-</tbody>
-</table>
-</div>
+<div class="cell-output cell-output-display" data-execution_count="6">
+<pre><code>7-element Vector{Any}:
+ 0.5202777777777777
+ 0.9345
+ 0.9607222222222223
+ 0.9781666666666666
+ 0.9807777777777777
+ 0.9812222222222222
+ 0.9812222222222222</code></pre>
 </div>
 </div>
 </section>
-</section>
-<section id="plot-pca-results" class="level2">
-<h2 class="anchored" data-anchor-id="plot-pca-results">6. plot pca results</h2>
-<div id="67be3c22" class="cell" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>table<span class="op">=</span>(x1<span class="op">=</span>Xtr.x1,x2<span class="op">=</span>Xtr.x2,x3<span class="op">=</span>Xtr.x3,labels<span class="op">=</span>ytrain)</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>datalayer<span class="op">=</span><span class="fu">data</span>(table)</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>maplayer<span class="op">=</span><span class="fu">mapping</span>(<span class="op">:</span>x1,<span class="op">:</span>x2,color<span class="op">=:</span>labels)</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>vislayer<span class="op">=</span><span class="fu">visual</span>(Scatter,markersize<span class="op">=</span><span class="fl">10</span>,strokewidth<span class="op">=</span><span class="fl">1</span>,strokecolor<span class="op">=:</span>black)</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>plt<span class="op">=</span>datalayer<span class="op">*</span>maplayer<span class="op">*</span>vislayer</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="fu">draw</span>(plt)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="24">
+<section id="plot-results" class="level3">
+<h3 class="anchored" data-anchor-id="plot-results">4.3 plot results</h3>
+<div id="353c654a" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>dim_labels<span class="op">=</span>[<span class="st">"3"</span>,<span class="st">"10"</span>,<span class="st">"15"</span>,<span class="st">"30"</span>,<span class="st">"50"</span>,<span class="st">"100"</span>,<span class="st">"150"</span>]</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">plot_accuracy</span>(acc_arr,dims_labels)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    fig<span class="op">=</span><span class="fu">Figure</span>()</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    ax<span class="op">=</span><span class="fu">Axis</span>(fig[<span class="fl">1</span>,<span class="fl">1</span>],xlabel<span class="op">=</span><span class="st">"pcs"</span>,ylabel<span class="op">=</span><span class="st">"accuracy"</span>,title<span class="op">=</span><span class="st">"SVM accruacy with n primary components"</span>,</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>      xticks<span class="op">=</span>(<span class="fl">1</span><span class="op">:</span><span class="fl">7</span>, dim_labels)</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    acc_arr<span class="op">=</span><span class="fu">round</span>.(acc_arr,digits<span class="op">=</span><span class="fl">3</span>)</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scatterlines!</span>(ax,acc_arr,markercolor <span class="op">=</span> (<span class="op">:</span>red,<span class="fl">0.5</span>))</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>    fig</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>    <span class="co">#save("19-mnist-PCA-SVM-accuracy.png",fig)</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_accuracy</span>(acc_arr,dim_labels)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="7">
 <div>
 <figure class="figure">
-<p><img src="2-mnist-classification_files/figure-html/cell-9-output-1.svg" class="img-fluid figure-img"></p>
+<p><img src="5-mnist-pca-svm_files/figure-html/cell-7-output-1.svg" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->

@@ -1,0 +1,5 @@
+# MLJ  Composing  models
+
+:::{.callout-note title="info"}
+ 1. stacking ref: [Stacking models for improved predictions](https://burakhimmetoglu.com/2016/12/01/stacking-models-for-improved-predictions/)
+:::

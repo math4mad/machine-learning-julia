@@ -14,17 +14,17 @@ website:
     right:
       - href: index.qmd
         text: Home
-      - about.qmd
       - href: start/index.qmd
         text: "Start"
-      - href:  workflow/index.qmd
-        text: "Workflow"
-      - href: packages/index.qmd
-        text: "Packages"
       - href: learn/index.qmd
         text: "Learn"
       - href: dataset/index.qmd
         text: "Dataset"
+      - href:  workflow/index.qmd
+        text: "Workflow"
+      - href: packages/index.qmd
+        text: "Packages"
+      
       - text: "More"
         menu:
           - about.qmd
@@ -109,7 +109,8 @@ website:
           href:  learn/Classfication/4-catboost-classification-basic.qmd
         - text: "5-mnist-pca-svm"
           href:  learn/Classfication/5-mnist-pca-svm.qmd
-        
+        - text: "6-adaboost-classfication"
+          href:  learn/Classfication/6-adaboost-classification.qmd
     - id: clustering
       collapse-level: 1
       contents:  
@@ -135,16 +136,25 @@ website:
           href:  learn/Dimension/4-mnist-pca.qmd 
         - text: "5. texture  PCA "
           href:  learn/Dimension/5-texture-pca.qmd
-    - id: ensemble
+    - id: compose
       collapse-level: 1
       contents:  
-        - text: "Ensemble  Intro"
-          href:  learn/Ensemble/index.qmd 
-    - id: learning-network
-      collapse-level: 1
-      contents:  
-        - text: "Learning Network  Intro"
-          href:  learn/LearningNetwork/index.qmd
+        - text: "Compoing  Intro"
+          href:  learn/Composing/index.qmd 
+        - text: "1-ensemble-model"
+          href:  learn/Composing/1-ensemble-model.qmd
+        - text: "2-ensemble-model-with-botsonhouse"
+          href:  learn/Composing/2-ensemble-model-with-bostonhouse.qmd
+        - text: "3-learning-network-1"
+          href:  learn/Composing/3-learning-network-1.qmd
+        - text: "4-kaggle-houseprice-stack-model"
+          href:  learn/Composing/4-kaggle-houseprice-stack-model.qmd
+
+    # - id: learning-network
+    #   collapse-level: 1
+    #   contents:  
+    #     - text: "Learning Network  Intro"
+    #       href:  learn/LearningNetwork/index.qmd
     
     
     - id: dataset
@@ -179,7 +189,11 @@ website:
         - text: "13. German Credit Card dataset"
           href: dataset/german-credit-card.qmd
         - text: "14 clustering datset(kaggle)"
-          href: dataset/clustering-dataset.qmd
+          href: dataset/clustering-dataset.qmd 
+        - text: "15-kaggle-houseprice-competition-dataset"
+          href: dataset/kaggle-houseprice-competition-dataset.qmd 
+        - text: "16-kaggle-redwine-dataset"
+          href: dataset/16-kaggle-redwine-dataset.qmd 
       
         
     
@@ -193,7 +207,7 @@ format:
     mermaid:
       theme: forest
     code-block-bg: true
-    code-block-border-left: "#ff0000"
+    code-block-border-left: "#0080ff"
      
 theme:
   - cosmo

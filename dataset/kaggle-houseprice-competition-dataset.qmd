@@ -1,0 +1,146 @@
+---
+title: "15 kaggle-houseprice-competition-dataset"
+---
+
+:::{.callout-note title="intro"}
+data: [House Prices - Advanced Regression Techniques](https://www.kaggle.com/competitions/house-prices-advanced-regression-techniques/overview)
+note ref :[House prices: Lasso, XGBoost, and a detailed EDA](https://www.kaggle.com/code/erikbruin/house-prices-lasso-xgboost-and-a-detailed-eda)
+:::
+
+
+## 1. load package 
+## 1. loading package
+```{julia}
+using MLJ
+using CSV,DataFrames,Tidier,NamedArrays
+using StableRNGs,Pipe
+using CairoMakie,AlgebraOfGraphics,MakieThemes
+using StatsBase
+rng = StableRNG(512)
+```
+
+## 2. load data
+```{julia}
+train=CSV.File("../data/kaggle-houseprice-dataset/train.csv")|>DataFrame
+train=@clean_names train
+first(train,10)
+test=CSV.File("../data/kaggle-houseprice-dataset/test.csv")|>DataFrame;
+
+```
+
+## 3. describe data
+```{julia}
+desc=describe(train)
+```
+
+## 4. schema of data
+```{julia}
+sc=schema(train)
+show(sc.scitypes)
+```
+
+## 5. split data
+```{julia}
+y, X = unpack(train, ==(:sale_price); rng=123);
+```
+
+## 6. EDA  
+### 6.1 density of target variable
+```{julia}
+
+dtlayer=data(train)
+let
+  maplayer=mapping(:sale_price)
+  plt=dtlayer*maplayer*AlgebraOfGraphics.density()
+  draw(plt)
+end
+```
+
+### 6.2 corrlelations with sale_price
+```{julia}
+ type_df=@pipe describe(train)|>select(_,[:variable,:eltype])
+ int_df=@chain type_df begin
+    @filter(isa(eltype,Union{Type{Int64},Type{Float64}}))
+end
+
+
+@eval(Main, myvar =int_df.variable)
+numerical_df=@chain train begin
+    @select(!!myvar)
+    @select(-(id))
+    #@select(-(sale_price))
+end
+#first(numerical_df)
+#cors=map(x->cor(x,y),eachcol(numerical_df))
+#show(cors)
+
+function  plot_heatmap(df)
+  matrix=Matrix(df)
+  r,c=size(df)
+  cors=cor(matrix)
+  cats=names(df)
+
+  fig=Figure()
+  ax=Axis(fig[1,1],xticklabelrotation = pi/4)
+  ax.xticks=(1:c,cats)
+  ax.yticks=(1:c,cats)
+  heatmap!(ax,cors)
+
+  fig
+end
+
+plot_heatmap(numerical_df)
+```
+
+```{julia}
+res=NamedArray(cor(Matrix(numerical_df)), (names(numerical_df), names(numerical_df)))
+
+```
+
+### 6.3  correlation of over quality and saleprice
+over quality is a count variable
+
+```{julia}
+let
+maplayer=mapping(:overall_qual,:sale_price,color=:overall_qual)
+vislayer=visual(BoxPlot)
+plt=dtlayer*maplayer*vislayer
+draw(plt)
+end
+```
+### 6.4  correlation of gr_liv_area and sale_price
+```{julia}
+let
+maplayer=mapping(:gr_liv_area,:sale_price)
+plt1=dtlayer*maplayer*linear()
+plt2=dtlayer*maplayer
+plt=plt2+plt1
+draw(plt)
+end
+```
+
+## 7. treat missing 
+```{julia}
+show(desc.nmissing)
+```
+
+in training data set there are no missing
+
+test data
+```{julia}
+let
+desc=describe(test)
+show(desc.nmissing)
+end
+```
+in test data set there are no missing
+
+
+
+
+
+
+
+
+
+

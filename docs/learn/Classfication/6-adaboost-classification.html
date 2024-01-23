@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Machine-Learning Julia - Learning Network 1</title>
+<title>Machine-Learning Julia - 6-adaboost-classification</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -57,22 +57,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </style>
 
 
-<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../site_libs/quarto-nav/headroom.min.js"></script>
-<script src="../site_libs/clipboard/clipboard.min.js"></script>
-<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../site_libs/quarto-search/fuse.min.js"></script>
-<script src="../site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="../">
-<script src="../site_libs/quarto-html/quarto.js"></script>
-<script src="../site_libs/quarto-html/popper.min.js"></script>
-<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../site_libs/quarto-html/anchor.min.js"></script>
-<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -100,6 +100,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
 
 </head>
@@ -111,10 +114,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a href="../index.html" class="navbar-brand navbar-brand-logo">
-    <img src="../imgs/logo.png" alt="" class="navbar-logo">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../imgs/logo.png" alt="" class="navbar-logo">
     </a>
-    <a class="navbar-brand" href="../index.html">
+    <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">Machine-Learning Julia</span>
     </a>
   </div>
@@ -125,32 +128,28 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../index.html"> 
+    <a class="nav-link" href="../../index.html"> 
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../about.html"> 
-<span class="menu-text">About</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="../start/index.html"> 
+    <a class="nav-link" href="../../start/index.html"> 
 <span class="menu-text">Start</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../workflow/index.html"> 
-<span class="menu-text">Workflow</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="../packages/index.html"> 
-<span class="menu-text">Packages</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link active" href="../learn/index.html" aria-current="page"> 
+    <a class="nav-link" href="../../learn/index.html"> 
 <span class="menu-text">Learn</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../dataset/index.html"> 
+    <a class="nav-link" href="../../dataset/index.html"> 
 <span class="menu-text">Dataset</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../workflow/index.html"> 
+<span class="menu-text">Workflow</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../packages/index.html"> 
+<span class="menu-text">Packages</span></a>
   </li>  
   <li class="nav-item dropdown ">
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-more" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -158,7 +157,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     </a>
     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-more">    
         <li>
-    <a class="dropdown-item" href="../about.html">
+    <a class="dropdown-item" href="../../about.html">
  <span class="dropdown-text">About</span></a>
   </li>  
         <li class="dropdown-header">reference.qmd</li>
@@ -175,7 +174,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../learn/learning-network-1.html">learnig network 1</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../learn/Classfication/6-adaboost-classification.html">6-adaboost-classfication</a></li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -189,59 +188,44 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../learn/index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Learn</span></a>
+  <a href="../../learn/Classfication/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Classfication Intro</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../learn/ensemble-model.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">ensemble model</span></a>
+  <a href="../../learn/Classfication/1-diabetes-catboost-classification.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1-Diabetes Catboost Classification</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../learn/ensemblemodel-with-bostonhouse.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">ensemble model with boston housing dataset</span></a>
+  <a href="../../learn/Classfication/2-mnist-classification.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2-mnist-classification</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../learn/learning-network-1.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">learnig network 1</span></a>
+  <a href="../../learn/Classfication/3-iris-logistics-classification.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3-iris-logistics-classification</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../learn/tailwind-test.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">tailwind css test</span></a>
+  <a href="../../learn/Classfication/4-catboost-classification-basic.qmd" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4-basic1-classification(catboost)</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../learn/pca-explained.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">PCA explained</span></a>
+  <a href="../../learn/Classfication/5-mnist-pca-svm.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5-mnist-pca-svm</span></a>
   </div>
 </li>
         <li class="sidebar-item">
- <span class="menu-text">menu test</span>
-  </li>
-        <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../learn/menu-test.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Menu Test</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
- <span class="menu-text">Iris Pipeline</span>
-  </li>
-        <li class="sidebar-item">
- <span class="menu-text">Digits pca kmeans</span>
-  </li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../learn/digits-kmeans.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">mlj digits kmeans</span></a>
+  <a href="../../learn/Classfication/6-adaboost-classification.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">6-adaboost-classfication</span></a>
   </div>
 </li>
     </ul>
@@ -255,8 +239,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#load-package" id="toc-load-package" class="nav-link active" data-scroll-target="#load-package">1. load package</a></li>
-  <li><a href="#load-models" id="toc-load-models" class="nav-link" data-scroll-target="#load-models">2. load models</a></li>
-  <li><a href="#training-data-as-source" id="toc-training-data-as-source" class="nav-link" data-scroll-target="#training-data-as-source">3. training data as source</a></li>
+  <li><a href="#load-data" id="toc-load-data" class="nav-link" data-scroll-target="#load-data">2. load data</a></li>
+  <li><a href="#machine-learning-workflow" id="toc-machine-learning-workflow" class="nav-link" data-scroll-target="#machine-learning-workflow">3. machine learning workflow</a>
+  <ul class="collapse">
+  <li><a href="#load-model" id="toc-load-model" class="nav-link" data-scroll-target="#load-model">3.1 load model</a></li>
+  <li><a href="#fitting-model" id="toc-fitting-model" class="nav-link" data-scroll-target="#fitting-model">3.2 fitting model</a></li>
+  <li><a href="#evaulate-model" id="toc-evaulate-model" class="nav-link" data-scroll-target="#evaulate-model">3.3 evaulate model</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -265,7 +254,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Learning Network 1</h1>
+<h1 class="title">6-adaboost-classification</h1>
 </div>
 
 
@@ -282,103 +271,127 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
+<div class="callout callout-style-default callout-note callout-titled" title="info">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+info
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>ref: <a href="https://www.datacamp.com/tutorial/adaboost-classifier-python">adaboost-classifier-python</a></p>
+</div>
+</div>
 <section id="load-package" class="level2">
 <h2 class="anchored" data-anchor-id="load-package">1. load package</h2>
-<div id="b8443e1c" class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>    <span class="im">using</span> <span class="bu">MLJ</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="im">using</span> <span class="bu">MLJ</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    X, y <span class="op">=</span> <span class="fu">make_blobs</span>(cluster_std<span class="op">=</span><span class="fl">10.0</span>, rng<span class="op">=</span><span class="fl">123</span>) </span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    Xnew, _ <span class="op">=</span> <span class="fu">make_blobs</span>(<span class="fl">3</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="129">
-<pre><code>(Tables.MatrixTable{Matrix{Float64}} with 3 rows, 2 columns, and schema:
- :x1  Float64
- :x2  Float64, CategoricalArrays.CategoricalValue{Int64, UInt32}[3, 2, 1])</code></pre>
+<div id="d6e1ee31" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a> <span class="im">using</span> <span class="bu">Pipe</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a> <span class="im">using</span> <span class="bu">CairoMakie</span>,<span class="bu">AlgebraOfGraphics</span>,<span class="bu">MakieThemes</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a> <span class="im">using</span> <span class="bu">MLJ</span>,<span class="bu">MLJModelInterface</span>,<span class="bu">Random</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a> <span class="im">import</span> <span class="bu">MLJ</span>:transform,predict</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a> <span class="co">#Makie.set_theme!(ggthemr(:flat))</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="load-data" class="level2">
+<h2 class="anchored" data-anchor-id="load-data">2. load data</h2>
+<div id="0173326a" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>X,y<span class="op">=</span><span class="pp">@load_iris</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="75">
+<pre><code>((sepal_length = [5.1, 4.9, 4.7, 4.6, 5.0, 5.4, 4.6, 5.0, 4.4, 4.9  …  6.7, 6.9, 5.8, 6.8, 6.7, 6.7, 6.3, 6.5, 6.2, 5.9], sepal_width = [3.5, 3.0, 3.2, 3.1, 3.6, 3.9, 3.4, 3.4, 2.9, 3.1  …  3.1, 3.1, 2.7, 3.2, 3.3, 3.0, 2.5, 3.0, 3.4, 3.0], petal_length = [1.4, 1.4, 1.3, 1.5, 1.4, 1.7, 1.4, 1.5, 1.4, 1.5  …  5.6, 5.1, 5.1, 5.9, 5.7, 5.2, 5.0, 5.2, 5.4, 5.1], petal_width = [0.2, 0.2, 0.2, 0.2, 0.2, 0.4, 0.3, 0.2, 0.2, 0.1  …  2.4, 2.3, 1.9, 2.3, 2.5, 2.3, 1.9, 2.0, 2.3, 1.8]), CategoricalArrays.CategoricalValue{String, UInt32}["setosa", "setosa", "setosa", "setosa", "setosa", "setosa", "setosa", "setosa", "setosa", "setosa"  …  "virginica", "virginica", "virginica", "virginica", "virginica", "virginica", "virginica", "virginica", "virginica", "virginica"])</code></pre>
 </div>
 </div>
 </section>
-<section id="load-models" class="level2">
-<h2 class="anchored" data-anchor-id="load-models">2. load models</h2>
-<div id="2fd1395f" class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>    pca <span class="op">=</span> (<span class="pp">@load</span> PCA pkg<span class="op">=</span>MultivariateStats verbosity<span class="op">=</span><span class="fl">0</span>)()</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    tree <span class="op">=</span> (<span class="pp">@load</span> DecisionTreeClassifier pkg<span class="op">=</span>DecisionTree verbosity<span class="op">=</span><span class="fl">0</span>)()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="130">
-<pre><code>DecisionTreeClassifier(
-  max_depth = -1, 
-  min_samples_leaf = 1, 
-  min_samples_split = 2, 
-  min_purity_increase = 0.0, 
-  n_subfeatures = 0, 
-  post_prune = false, 
-  merge_purity_threshold = 1.0, 
-  display_depth = 5, 
-  feature_importance = :impurity, 
-  rng = Random._GLOBAL_RNG())</code></pre>
+<section id="machine-learning-workflow" class="level2">
+<h2 class="anchored" data-anchor-id="machine-learning-workflow">3. machine learning workflow</h2>
+<section id="load-model" class="level3">
+<h3 class="anchored" data-anchor-id="load-model">3.1 load model</h3>
+<div id="25d8a967" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>AdaBoostClassifier <span class="op">=</span> <span class="pp">@load</span> AdaBoostClassifier pkg<span class="op">=</span>MLJScikitLearnInterface</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>model<span class="op">=</span><span class="fu">AdaBoostClassifier</span>(;n_estimators<span class="op">=</span><span class="fl">100</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>import MLJScikitLearnInterface ✔</code></pre>
 </div>
-</div>
-</section>
-<section id="training-data-as-source" class="level2">
-<h2 class="anchored" data-anchor-id="training-data-as-source">3. training data as source</h2>
-<div id="70aedd71" class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>    Xs <span class="op">=</span> <span class="fu">source</span>(X)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    ys <span class="op">=</span> <span class="fu">source</span>(y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="131">
-<pre><code>Source @773 ⏎ `AbstractVector{Multiclass{3}}`</code></pre>
-</div>
-</div>
-<div id="7d1300b4" class="cell" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>mach1 <span class="op">=</span> <span class="fu">machine</span>(pca, Xs)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> <span class="fu">transform</span>(mach1, Xs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="132">
-<div class="ansi-escaped-output">
-<pre>Node @412 → PCA(…)
-  args:
-    1:  Source @532
-  formula:
-    transform(
-      <span class="ansi-bold">machine(PCA(maxoutdim = 0, …), …)</span>, 
-      Source @532)</pre>
-</div>
-</div>
-</div>
-<div id="649d3f1a" class="cell" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>mach2 <span class="op">=</span> <span class="fu">machine</span>(tree, x, ys)</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>yhat <span class="op">=</span> <span class="fu">predict</span>(mach2, x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="133">
-<div class="ansi-escaped-output">
-<pre>Node @878 → DecisionTreeClassifier(…)
-  args:
-    1:  Node @412 → PCA(…)
-  formula:
-    predict(
-      <span class="ansi-bold">machine(DecisionTreeClassifier(max_depth = -1, …), …)</span>, 
-      transform(
-        <span class="ansi-bold">machine(PCA(maxoutdim = 0, …), …)</span>, 
-        Source @532))</pre>
-</div>
-</div>
-</div>
-<div id="b2ce755d" class="cell" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fit!</span>(yhat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>[ Info: Training machine(PCA(maxoutdim = 0, …), …).
-[ Info: Training machine(DecisionTreeClassifier(max_depth = -1, …), …).</code></pre>
+<pre><code>[ Info: For silent loading, specify `verbosity=0`. </code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="134">
+<div class="cell-output cell-output-display" data-execution_count="76">
+<pre><code>AdaBoostClassifier(
+  estimator = nothing, 
+  n_estimators = 100, 
+  learning_rate = 1.0, 
+  algorithm = "SAMME.R", 
+  random_state = nothing)</code></pre>
+</div>
+</div>
+<div id="9f3fde03" class="cell" data-execution_count="4">
+<div class="cell-output cell-output-display" data-execution_count="77">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">  
+     <button class="btn btn-info rounded-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">AdaBoostClassifier 
+     <span class="my-auto"><i class="bi bi-arrow-right" style="font-size: 1.5rem;"></i></span>
+     </button>
+ <div class="offcanvas offcanvas-end " tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+ <div class="offcanvas-header">
+ <h5 id="offcanvasRightLabel" class="anchored">doc</h5>
+ <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+ </div>
+ <div class="offcanvas-body">
+ <div class="markdown"><pre><code>AdaBoostClassifier</code></pre>
+<p>A model type for constructing a ada boost classifier, based on <a href="https://github.com/JuliaAI/MLJScikitLearnInterface.jl">MLJScikitLearnInterface.jl</a>, and implementing the MLJ model interface.</p>
+<p>From MLJ, the type can be imported using</p>
+<pre><code>AdaBoostClassifier = @load AdaBoostClassifier pkg=MLJScikitLearnInterface</code></pre>
+<p>Do <code>model = AdaBoostClassifier()</code> to construct an instance with default hyper-parameters. Provide keyword arguments to override hyper-parameter defaults, as in <code>AdaBoostClassifier(estimator=...)</code>.</p>
+<p>An AdaBoost  classifier is a meta-estimator that begins by fitting a  classifier on the original dataset and then fits additional copies of  the classifier on the same dataset but where the weights of incorrectly  classified instances are adjusted such that subsequent classifiers  focus more on difficult cases.</p>
+<p>This class implements the algorithm known as AdaBoost-SAMME.</p>
+
+
+</div>
+ </div>
+ </div>
+ 
+</div>
+</div>
+</section>
+<section id="fitting-model" class="level3">
+<h3 class="anchored" data-anchor-id="fitting-model">3.2 fitting model</h3>
+<div id="661d95ab" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>mach<span class="op">=</span><span class="fu">machine</span>(model2,X,y)<span class="op">|&gt;</span> fit!</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>[ Info: Training machine(AdaBoostClassifier(estimator = nothing, …), …).</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="78">
+<pre><code>trained Machine; caches model-specific representations of data
+  model: AdaBoostClassifier(estimator = nothing, …)
+  args: 
+    1:  Source @019 ⏎ Table{AbstractVector{Continuous}}
+    2:  Source @429 ⏎ AbstractVector{Multiclass{3}}</code></pre>
+</div>
+</div>
+</section>
+<section id="evaulate-model" class="level3">
+<h3 class="anchored" data-anchor-id="evaulate-model">3.3 evaulate model</h3>
+<div id="f96237c7" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">evaluate!</span>(mach; resampling<span class="op">=</span><span class="fu">Holdout</span>(), measure<span class="op">=</span>accuracy)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="79">
 <div class="ansi-escaped-output">
-<pre>Node @878 → DecisionTreeClassifier(…)
-  args:
-    1:  Node @412 → PCA(…)
-  formula:
-    predict(
-      <span class="ansi-bold">machine(DecisionTreeClassifier(max_depth = -1, …), …)</span>, 
-      transform(
-        <span class="ansi-bold">machine(PCA(maxoutdim = 0, …), …)</span>, 
-        Source @532))</pre>
+<pre>PerformanceEvaluation object with these fields:
+  model, measure, operation, measurement, per_fold,
+  per_observation, fitted_params_per_fold,
+  report_per_fold, train_test_rows, resampling, repeats
+Extract:
+┌────────────┬──────────────┬─────────────┬──────────┐
+│ measure    │ operation    │ measurement │ per_fold │
+├────────────┼──────────────┼─────────────┼──────────┤
+│ Accuracy() │ predict_mode │ 0.822       │ [0.822]  │
+└────────────┴──────────────┴─────────────┴──────────┘
+</pre>
 </div>
 </div>
 </div>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->

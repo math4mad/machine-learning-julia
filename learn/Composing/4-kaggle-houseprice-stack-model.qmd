@@ -1,0 +1,36 @@
+---
+title: "4-kaggle-houseprice-stack-model"
+---
+
+:::{.callout-note title="intro"}
+ref :[Stacking models for improved predictions](https://burakhimmetoglu.com/2016/12/01/stacking-models-for-improved-predictions/)
+data: [House Prices - Advanced Regression Techniques](https://www.kaggle.com/competitions/house-prices-advanced-regression-techniques/overview)
+:::
+
+
+## 1. load package 
+## 1. loading package
+```{julia}
+using MLJ
+using CSV,DataFrames,Tidier
+using StableRNGs
+using CairoMakie,AlgebraOfGraphics,MakieThemes
+rng = StableRNG(512)
+```
+
+## 2. load data
+```{julia}
+train=CSV.File("../../data/kaggle-houseprice-dataset/train.csv")|>DataFrame
+test=CSV.File("../../data/kaggle-houseprice-dataset/test.csv")|>DataFrame;
+```
+
+## 3. describe data
+```{julia}
+describe(train)
+```
+
+## 4. schema of data
+```{julia}
+sc=schema(train)
+show(sc.scitypes)
+```

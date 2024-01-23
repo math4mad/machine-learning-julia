@@ -1,0 +1,84 @@
+
+---
+title: "🍇🍷🍷kaggle-redwine-dataset.qmd"
+---
+
+
+:::{.callout-note title="info"}
+ - dataset: [Red Wine Quality](https://www.kaggle.com/datasets/uciml/red-wine-quality-cortez-et-al-2009)
+
+ - eda : [Red Wine Quality ~ EDA & Classification](https://www.kaggle.com/code/eisgandar/red-wine-quality-eda-classification/input)
+ - feature intor : [feature intro](https://www.kaggle.com/code/eisgandar/red-wine-quality-eda-classification?scriptVersionId=112672864&cellId=6)
+::: 
+
+
+## 1. load 
+
+```{julia}
+ using CSV,DataFrames,Tidier,Pipe
+ using CairoMakie,AlgebraOfGraphics,MakieThemes
+ using ScientificTypes,HypothesisTests,Distributions
+ using RCall
+ #Makie.set_theme!(ggthemr(:flat))
+df=CSV.File("../data/red-wine-quality.csv")|>DataFrame
+df=@chain  df  begin  @clean_names end
+#df=coerce(df,:quality=>Multiclass)
+#df.total_charges=[length(idx)== 0 ? 0 : parse.(Float64,idx) for idx in  df.total_charges]
+nrow,ncol=size(df)
+cats=Symbol.((names(df))[1:end-1])
+first(df,3)
+```
+## 2. describe of data
+```{julia}
+describe(df)
+
+```
+
+
+---
+## 3. Exploratory data analysis 📉 & data visualization 📊
+
+### 3.1  density of feature
+```{julia}
+dtlayer=data(df)
+
+let
+  fig=Figure(resolution=(600,800))
+  function plot_single_feature(idx,feature) 
+    ax=Axis(fig[fldmod1(idx,3)...];title="$(feature)")
+    plt=dtlayer*mapping(feature)*AlgebraOfGraphics.density(bandwidth=0.5)
+    draw!(ax,plt)
+  end
+  [plot_single_feature(idx,feature) for (idx,feature) in enumerate(cats)]
+  fig
+end
+```
+
+
+### 3.2 relation of variable and quality
+```{julia}
+
+function plot_scatter_variable(variable)
+   paris1=@chain df begin
+   @select(!!variable,quality)
+   @arrange(quality)
+   @group_by(quality)
+   end 
+   cats=levels(df.quality)
+   len=length(cats)
+  fig=Figure(resolution=(350,250))
+  ax=Axis(fig[1,1],xlabel="$(variable)",ylabel="quality")
+  ax.yticks=(1:len)
+  for (idx,g) in enumerate(paris1)
+      
+      scatter!(g.residual_sugar,g.quality)
+  end
+  axislegend()
+  fig
+end
+
+
+
+```
+
+

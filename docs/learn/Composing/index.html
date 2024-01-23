@@ -20,44 +20,10 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
 </style>
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="../../site_libs/quarto-nav/headroom.min.js"></script>
 <script src="../../site_libs/clipboard/clipboard.min.js"></script>
 <script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
@@ -100,9 +66,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
-
-<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
 
 </head>
@@ -132,20 +95,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../about.html"> 
-<span class="menu-text">About</span></a>
-  </li>  
-  <li class="nav-item">
     <a class="nav-link" href="../../start/index.html"> 
 <span class="menu-text">Start</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="../../workflow/index.html"> 
-<span class="menu-text">Workflow</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="../../packages/index.html"> 
-<span class="menu-text">Packages</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../../learn/index.html"> 
@@ -154,6 +105,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li class="nav-item">
     <a class="nav-link" href="../../dataset/index.html"> 
 <span class="menu-text">Dataset</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../workflow/index.html"> 
+<span class="menu-text">Workflow</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../packages/index.html"> 
+<span class="menu-text">Packages</span></a>
   </li>  
   <li class="nav-item dropdown ">
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-more" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -178,7 +137,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../learn/Ensemble/index.html">Ensemble Intro</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../learn/Composing/index.html">Compoing Intro</a></li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -192,8 +151,32 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../learn/Ensemble/index.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Ensemble Intro</span></a>
+  <a href="../../learn/Composing/index.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Compoing Intro</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../learn/Composing/1-ensemble-model.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1-ensemble-model</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../learn/Composing/2-ensemble-model-with-bostonhouse.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2-ensemble-model-with-botsonhouse</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../learn/Composing/3-learning-network-1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3-learning-network-1</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../learn/Composing/4-kaggle-houseprice-stack-model.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4-kaggle-houseprice-stack-model</span></a>
   </div>
 </li>
     </ul>
@@ -206,116 +189,31 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#tailwind-and-daisyui" id="toc-tailwind-and-daisyui" class="nav-link active" data-scroll-target="#tailwind-and-daisyui">tailwind and daisyui</a></li>
+  <li><a href="#mlj-composing-models" id="toc-mlj-composing-models" class="nav-link active" data-scroll-target="#mlj-composing-models">MLJ Composing models</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title">Ensemble model</h1>
-</div>
 
 
 
-<div class="quarto-title-meta">
-
-    
-  
-    
-  </div>
-  
-
-
-</header>
-
-
-<div id="f0216278" class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">HypertextLiteral</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">MLJ</span> </span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>LinearRegressor <span class="op">=</span> <span class="pp">@load</span> LinearRegressor pkg<span class="op">=</span>MLJLinearModels</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>str<span class="op">=</span><span class="pp">@doc</span>(LinearRegressor);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>import MLJLinearModels ✔</code></pre>
+<section id="mlj-composing-models" class="level1">
+<h1>MLJ Composing models</h1>
+<div class="callout callout-style-default callout-note callout-titled" title="info">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
 </div>
-<div class="cell-output cell-output-stderr">
-<pre><code>[ Info: For silent loading, specify `verbosity=0`. </code></pre>
+<div class="callout-title-container flex-fill">
+info
 </div>
 </div>
-<div id="cab21fb3" class="cell" data-execution_count="2">
-<div class="cell-output cell-output-display" data-execution_count="82">
-  <script type="text/javascript" id="MathJax-script" async="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
-  </script>
-  <button class="btn btn-info rounded-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Gaussian Mixture Model Regression doc  </button>
-  <div class="offcanvas offcanvas-end " tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
- <div class="offcanvas-header">
- <h5 id="offcanvasRightLabel" class="anchored">GMR</h5>
- <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
- </div>
-  <div class="offcanvas-body">
-  <div class="markdown"><pre><code>LinearRegressor</code></pre>
-<p>A model type for constructing a linear regressor, based on <a href="https://github.com/alan-turing-institute/MLJLinearModels.jl">MLJLinearModels.jl</a>, and implementing the MLJ model interface.</p>
-<p>From MLJ, the type can be imported using</p>
-<pre><code>LinearRegressor = @load LinearRegressor pkg=MLJLinearModels</code></pre>
-<p>Do <code>model = LinearRegressor()</code> to construct an instance with default hyper-parameters.</p>
-<p>This model provides standard linear regression with objective function</p>
-<p>$|Xθ - y|₂²/2$</p>
-<p>Different solver options exist, as indicated under "Hyperparameters" below. </p>
-<h1>Training data</h1>
-<p>In MLJ or MLJBase, bind an instance <code>model</code> to data with</p>
-<pre><code>mach = machine(model, X, y)</code></pre>
-<p>where:</p>
-<ul>
-<li><p><code>X</code> is any table of input features (eg, a <code>DataFrame</code>) whose columns have <code>Continuous</code> scitype; check column scitypes with <code>schema(X)</code></p>
-</li>
-<li><p><code>y</code> is the target, which can be any <code>AbstractVector</code> whose element scitype is <code>Continuous</code>; check the scitype with <code>scitype(y)</code></p>
-</li>
-</ul>
-<p>Train the machine using <code>fit!(mach, rows=...)</code>.</p>
-<h1>Hyperparameters</h1>
-<ul>
-<li><p><code>fit_intercept::Bool</code>: whether to fit the intercept or not. Default: true</p>
-</li>
-<li><p><code>solver::Union{Nothing, MLJLinearModels.Solver}</code>: "any instance of <code>MLJLinearModels.Analytical</code>. Use <code>Analytical()</code> for Cholesky and <code>CG()=Analytical(iterative=true)</code> for conjugate-gradient.</p>
-<p>If <code>solver = nothing</code> (default) then <code>Analytical()</code> is used.  Default: nothing</p>
-</li>
-</ul>
-<h2 class="anchored">Example</h2>
-<pre><code>using MLJ
-X, y = make_regression()
-mach = fit!(machine(LinearRegressor(), X, y))
-predict(mach, X)
-fitted_params(mach)</code></pre>
-
-
-</div>
-</div>
- </div>
-</div>
-</div>
-<section id="tailwind-and-daisyui" class="level2">
-<h2 class="anchored" data-anchor-id="tailwind-and-daisyui">tailwind and daisyui</h2>
-<div id="c45f5b2b" class="cell" data-execution_count="3">
-<div class="cell-output cell-output-display" data-execution_count="83">
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2/dist/tailwind.min.css" rel="stylesheet" type="text/css">
-  <link href="https://cdn.jsdelivr.net/npm/daisyui@1.24.3/dist/full.css" rel="stylesheet" type="text/css">
-</div>
-</div>
-<div id="1c857876" class="cell" data-execution_count="4">
-<div class="cell-output cell-output-display" data-execution_count="84">
-<div class="badge">neutral</div> 
-<div class="badge badge-primary">primary</div> 
-<div class="badge badge-secondary">secondary</div> 
-<div class="badge badge-accent">accent</div> 
-<div class="badge badge-ghost">ghost</div>
-</div>
-</div>
-<div id="c8d66713" class="cell" data-execution_count="5">
-<div class="cell-output cell-output-display" data-execution_count="85">
-  <div class="badge badge-primary">在这里拷贝样式模板</div> 
-  <a class="link link-primary" href="https://daisyui.com/">组件样式在这里有介绍</a>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li>stacking ref: <a href="https://burakhimmetoglu.com/2016/12/01/stacking-models-for-improved-predictions/">Stacking models for improved&nbsp;predictions</a></li>
+</ol>
 </div>
 </div>
 

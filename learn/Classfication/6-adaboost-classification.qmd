@@ -1,0 +1,46 @@
+---
+title: "6-adaboost-classification"
+---
+
+:::{.callout-note title="info"}
+  ref: [adaboost-classifier-python](https://www.datacamp.com/tutorial/adaboost-classifier-python)
+:::
+
+## 1. load package
+```{julia}
+ using Pipe
+ using CairoMakie,AlgebraOfGraphics,MakieThemes
+ using MLJ,MLJModelInterface,Random
+ import MLJ:transform,predict
+ #Makie.set_theme!(ggthemr(:flat))
+```
+
+## 2. load data
+```{julia}
+X,y=@load_iris()
+```
+
+## 3. machine learning workflow
+### 3.1 load model
+```{julia}
+AdaBoostClassifier = @load AdaBoostClassifier pkg=MLJScikitLearnInterface
+model=AdaBoostClassifier(;n_estimators=100)
+```
+```{julia}
+#| echo: false
+ include("../../components/off-canvas.jl")
+ show_doc_offcanvas("AdaBoostClassifier",@doc(AdaBoostClassifier))
+
+```
+
+
+### 3.2 fitting model
+```{julia}
+mach=machine(model2,X,y)|> fit!
+```
+
+### 3.3  evaulate model
+```{julia}
+evaluate!(mach; resampling=Holdout(), measure=accuracy)
+```
+

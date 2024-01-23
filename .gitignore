@@ -12,3 +12,5 @@ mnist_train.csv
 /lwface-csv/
 data/lwface-csv
 data/lwface-csv.zip
+
+/.luarc.json

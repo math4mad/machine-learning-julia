@@ -6,7 +6,7 @@ title: "Learning Network 1"
 ## 1. load package
 ```{julia}
     using MLJ
-    using MLJ
+    
     X, y = make_blobs(cluster_std=10.0, rng=123) 
     Xnew, _ = make_blobs(3) 
 ```

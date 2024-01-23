@@ -30,7 +30,7 @@ css:
 </div>
 </div>
 </div>
-<div class="g-col-4 border mx-auto">
+<div class="g-col-4">
 <div class="card mb-3 border-primary rounded-2 shadow" style="width: 18rem; height: 24rem">
   <img src="../imgs/iris-svm.png" class="card-img-top rounded-2 max-auto" alt="..." style="width:200px; height:200px;">
   <div class="card-body">
@@ -54,9 +54,9 @@ css:
 <div class="card mb-3 border-primary rounded-2 shadow" style="width: 18rem; height: 24rem">
   <img src="../imgs/iris-svm.png" class="card-img-top rounded-2" alt="...">
   <div class="card-body">
-  <h5 class="card-title">Ensemble</h5>
+  <h5 class="card-title">Composing</h5>
   <p class="card-text">Automatic grouping of similar objects into sets.</p>
-  <a href="./Ensemble/index.qmd" class="btn btn-primary rounded-2">Example</a>
+  <a href="./Composing/index.qmd" class="btn btn-primary rounded-2">Example</a>
   </div>
 </div>
 </div>
